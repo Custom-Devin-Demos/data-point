@@ -15,7 +15,7 @@
 const express = require("express");
 const DataPoint = require("data-point");
 const hash = require("object-hash");
-const Ajv = require("ajv");
+const Ajv = require("ajv").default || require("ajv");
 
 const DataPointService = require("../lib");
 

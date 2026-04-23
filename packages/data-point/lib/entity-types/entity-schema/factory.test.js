@@ -10,9 +10,7 @@ test("Factory#create", () => {
         bar: { type: "string" }
       }
     },
-    options: {
-      v5: false
-    }
+    options: {}
   });
 
   expect(obj).toHaveProperty("schema");

@@ -12,8 +12,6 @@ module.exports = {
       },
       required: ["foo", "bar"]
     },
-    options: {
-      v5: false
-    }
+    options: {}
   }
 };
