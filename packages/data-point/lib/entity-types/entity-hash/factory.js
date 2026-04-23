@@ -1,4 +1,4 @@
-const deepFreeze = require("deep-freeze");
+const deepFreeze = require("deep-freeze-strict");
 const constant = require("lodash/constant");
 const defaultTo = require("lodash/defaultTo");
 

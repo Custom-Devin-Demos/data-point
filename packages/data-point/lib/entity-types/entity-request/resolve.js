@@ -1,6 +1,6 @@
 const _ = require("lodash");
 const fp = require("lodash/fp");
-const rp = require("request-promise");
+const axios = require("axios");
 
 const utils = require("../../utils");
 
@@ -91,9 +91,55 @@ async function resolveOptions(accumulator, resolveReducer) {
 module.exports.resolveOptions = resolveOptions;
 
 /**
- * @param {Accumulator} acc
+ * Convert internal options format to axios config
+ * @param {Object} options
+ * @return {Object}
  */
-function inspect(acc, request) {
+function toAxiosConfig(options) {
+  const config = {
+    method: options.method || "GET",
+    url: options.url,
+    headers: options.headers
+  };
+
+  if (options.baseUrl) {
+    config.baseURL = options.baseUrl;
+    config.url = options.uri || options.url;
+  }
+
+  if (options.qs) {
+    config.params = options.qs;
+  }
+
+  if (options.body) {
+    config.data = options.body;
+  }
+
+  if (options.auth) {
+    config.auth = {
+      username: options.auth.user,
+      password: options.auth.pass
+    };
+  }
+
+  if (options.timeout) {
+    config.timeout = options.timeout;
+  }
+
+  if (options.json === true) {
+    config.responseType = "json";
+  }
+
+  return config;
+}
+
+module.exports.toAxiosConfig = toAxiosConfig;
+
+/**
+ * @param {Accumulator} acc
+ * @param {Object} axiosRequest - axios promise
+ */
+function inspect(acc, axiosRequest) {
   const paramInspect = acc.params && acc.params.inspect;
   if (paramInspect === true) {
     utils.inspect(acc, {
@@ -104,38 +150,38 @@ function inspect(acc, request) {
   }
 
   if (typeof paramInspect === "function") {
-    // some of this logic borrows from https://github.com/request/request-debug
     debugIdCounter += 1;
     const debugId = debugIdCounter;
     const data = {
       debugId,
       type: "request",
-      uri: request.uri.href,
-      method: request.method,
-      headers: _.cloneDeep(request.headers)
+      uri: acc.options.url || acc.options.uri || "",
+      method: (acc.options.method || "GET").toUpperCase(),
+      headers: _.cloneDeep(acc.options.headers || {})
     };
-    if (request.body) {
-      data.body = request.body.toString("utf8");
+    if (acc.options.body) {
+      data.body =
+        typeof acc.options.body === "string"
+          ? acc.options.body
+          : JSON.stringify(acc.options.body);
     }
     _.attempt(paramInspect, acc, data);
-    // This promise chain should not be returned,
-    // because it is only being used to trigger
-    // the paramInspect callback
-    request
+    axiosRequest
       .then(res => {
         _.attempt(paramInspect, acc, {
           debugId,
           type: "response",
-          statusCode: res.statusCode,
+          statusCode: res.status,
           headers: res.headers
         });
       })
       .catch(error => {
+        const statusCode = error.response ? error.response.status : undefined;
         _.attempt(paramInspect, acc, {
           debugId,
           type: "error",
-          statusCode: error.statusCode,
-          headers: error.headers
+          statusCode,
+          headers: error.response ? error.response.headers : undefined
         });
       });
     return true;
@@ -152,20 +198,27 @@ module.exports.inspect = inspect;
  * @return {Promise<Accumulator>}
  */
 async function resolveRequest(acc) {
-  const options = Object.assign({}, acc.options, {
-    resolveWithFullResponse: true
-  });
+  const axiosConfig = toAxiosConfig(acc.options);
 
   try {
-    const request = rp(options);
+    const request = axios(axiosConfig);
     inspect(acc, request);
 
     const response = await request;
-    return response.body;
+    return response.data;
   } catch (error) {
-    // remove auth objects from acc and error for printing to console
+    const statusCode = error.response ? error.response.status : undefined;
+    const responseBody = error.response ? error.response.data : undefined;
+
+    // remove auth objects from acc for printing to console
     const redactedAcc = fp.set("options.auth", "[omitted]", acc);
-    const redactedError = fp.set("options.auth", "[omitted]", error);
+
+    const errorForDisplay = {
+      message: error.message,
+      statusCode,
+      options: Object.assign({}, acc.options, { auth: "[omitted]" }),
+      body: responseBody
+    };
 
     const message = [
       "Entity info:",
@@ -179,11 +232,17 @@ async function resolveRequest(acc) {
       ),
       "\n  Request:\n",
       utils.inspectProperties(
-        redactedError,
+        errorForDisplay,
         ["error", "message", "statusCode", "options", "body"],
         "  "
       )
     ].join("");
+
+    // preserve statusCode on the error for downstream consumers
+    error.statusCode = statusCode;
+    // preserve original options with auth for error handlers
+    error.options = acc.options;
+    error.body = responseBody;
 
     // attaching to error so it can be exposed by a handler outside datapoint
     // eslint-disable-next-line no-param-reassign

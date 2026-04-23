@@ -1,6 +1,6 @@
 const Ajv = require("ajv").default || require("ajv");
 const _ = require("lodash");
-const deepFreeze = require("deep-freeze");
+const deepFreeze = require("deep-freeze-strict");
 const { resolve } = require("./resolve");
 const BaseEntity = require("../base-entity");
 const { validateModifiers } = require("../validate-modifiers");

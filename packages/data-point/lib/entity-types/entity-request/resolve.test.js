@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 const _ = require("lodash");
-const rp = require("request-promise");
+const axios = require("axios");
 const nock = require("nock");
 let Resolve = require("./resolve");
 
@@ -304,9 +304,14 @@ describe("resolveRequest", () => {
       value: "foo"
     };
     _.set(acc, "reducer.spec.id", "test:test");
-    await expect(
-      Resolve.resolveRequest(acc)
-    ).rejects.toThrowErrorMatchingSnapshot();
+    try {
+      await Resolve.resolveRequest(acc);
+      throw new Error("should have thrown");
+    } catch (err) {
+      expect(err.statusCode).toEqual(404);
+      expect(err.message).toContain("Entity info:");
+      expect(err.message).toContain("test:test");
+    }
   });
 });
 
@@ -329,10 +334,14 @@ describe("inspect", () => {
     utilsInspectSpy.mockRestore();
   });
 
-  function createAcc({ inspect }) {
+  function createAcc({ inspect, method, body }) {
     return {
       value: "boomerang",
-      options: {},
+      options: {
+        url: "http://remote.test",
+        method: (method || "GET").toUpperCase(),
+        body
+      },
       params: {
         inspect
       },
@@ -340,28 +349,27 @@ describe("inspect", () => {
     };
   }
   function createMockRequest(options) {
-    const { statusCode, requestType, rpOptions } = options;
+    const { statusCode, requestType } = options;
     const nockInstance = nock("http://remote.test");
     nockInstance[requestType]("/").reply(statusCode, { statusCode });
-    return rp[requestType]({
-      uri: "http://remote.test",
-      resolveWithFullResponse: true,
-      ...rpOptions
+    return axios({
+      method: requestType.toUpperCase(),
+      url: "http://remote.test"
     });
   }
 
   test("It should ignore params.inspect and utils.inspect when params.inspect === undefined", async () => {
     const acc = createAcc({ inspect: undefined });
     const request = createMockRequest({ statusCode: 200, requestType: "get" });
-    await expect(request).resolves.toBeTruthy();
     Resolve.inspect(acc, request);
+    await expect(request).resolves.toBeTruthy();
     expect(utilsInspectSpy).not.toBeCalled();
   });
   test("It should ignore params.inspect and utils.inspect when params.inspect === false", async () => {
     const acc = createAcc({ inspect: false });
     const request = createMockRequest({ statusCode: 200, requestType: "get" });
-    await expect(request).resolves.toBeTruthy();
     Resolve.inspect(acc, request);
+    await expect(request).resolves.toBeTruthy();
     expect(utilsInspectSpy).not.toBeCalled();
   });
   test("It should execute utils.inspect when params.inspect === true", async () => {
@@ -377,7 +385,7 @@ describe("inspect", () => {
       })
     );
   });
-  test("It should execute params.inspect when rp.then is called", async () => {
+  test("It should execute params.inspect when axios.then is called", async () => {
     const acc = createAcc({
       inspect: jest.fn(() => {
         // This helps verify that _.attempt is used when calling inspect
@@ -411,7 +419,7 @@ describe("inspect", () => {
       ]
     ]);
   });
-  test("It should execute params.inspect when rp.catch is called", async () => {
+  test("It should execute params.inspect when axios.catch is called", async () => {
     const acc = createAcc({
       inspect: jest.fn(() => {
         // This helps verify that _.attempt is used when calling inspect
@@ -446,14 +454,11 @@ describe("inspect", () => {
     ]);
   });
   test("It should pass the body option to params.inspect", async () => {
-    const acc = createAcc({ inspect: jest.fn() });
     const bodyData = JSON.stringify({ test: true });
+    const acc = createAcc({ inspect: jest.fn(), method: "POST", body: bodyData });
     const request = createMockRequest({
       statusCode: 200,
-      requestType: "post",
-      rpOptions: {
-        body: bodyData
-      }
+      requestType: "post"
     });
     Resolve.inspect(acc, request);
     await expect(request).resolves.toBeTruthy();
@@ -618,7 +623,8 @@ describe("resolve", () => {
     }
 
     expect(error.statusCode).toEqual(404);
-    expect(error.message).toMatchSnapshot();
+    expect(error.message).toContain("Entity info:");
+    expect(error.message).toContain("request:a9");
     // credentials are still available in the raw error.options
     expect(error.options.auth).toEqual({
       user: "cool_user",
