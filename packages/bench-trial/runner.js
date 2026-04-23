@@ -3,9 +3,8 @@
 /* eslint-disable no-console */
 
 const path = require("path");
-const program = require("commander");
+const { program } = require("commander");
 const Benchmark = require("benchmark");
-const Promise = require("bluebird");
 const chalk = require("chalk");
 
 const pkg = require("./package.json");
@@ -23,6 +22,7 @@ program
 
 program.parse(process.argv);
 
+const opts = program.opts();
 const filePath = program.args[0];
 
 // eslint-disable-next-line import/no-dynamic-require
@@ -30,7 +30,7 @@ const testSuite = require(path.resolve(filePath));
 
 const testSuites = Array.isArray(testSuite) ? testSuite : [testSuite];
 
-const iterations = program.iterations || 10;
+const iterations = opts.iterations || 10;
 
 function sum(values) {
   return values.reduce((acc, val) => acc + val);
@@ -84,12 +84,21 @@ function listBySpeed(suites) {
   });
 }
 
+function promiseFromCallback(fn) {
+  return new Promise((resolve, reject) => {
+    fn((err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+}
+
 function runTest(suite) {
   const isAsync = !!suite.async;
 
   if (typeof suite.test === "function") {
     if (isAsync) {
-      return Promise.fromCallback(suite.test);
+      return promiseFromCallback(suite.test);
     }
 
     return suite.test();
@@ -99,7 +108,7 @@ function runTest(suite) {
     const { test, expected } = suite.test;
 
     if (isAsync) {
-      return Promise.fromCallback(lib.test.async(test, expected));
+      return promiseFromCallback(lib.test.async(test, expected));
     }
 
     return lib.test.sync(test, expected)();
@@ -108,29 +117,28 @@ function runTest(suite) {
   throw new Error("Test was not provided or has invalid form");
 }
 
-function runTests(suites) {
-  if (program.skipTests) {
+async function runTests(suites) {
+  if (opts.skipTests) {
     console.warn("%s Tests are skipped\n", chalk.yellow("WARNING:"));
-    return Promise.resolve(suites);
+    return suites;
   }
 
   console.log(chalk.white.bold("Test suite(s):"));
-  return Promise.each(suites, suite => {
-    return Promise.resolve(suite)
-      .then(runTest)
-      .then(() => {
-        console.log(" %s %s", chalk.green(" ✔ "), suite.name);
-      })
-      .catch(err => {
-        console.error(
-          "%s %s Error: %s",
-          chalk.red(" ✕ "),
-          suite.name,
-          chalk.red(err.toString())
-        );
-        throw err;
-      });
-  }).return(suites);
+  for (const suite of suites) {
+    try {
+      await runTest(suite);
+      console.log(" %s %s", chalk.green(" ✔ "), suite.name);
+    } catch (err) {
+      console.error(
+        "%s %s Error: %s",
+        chalk.red(" ✕ "),
+        suite.name,
+        chalk.red(err.toString())
+      );
+      throw err;
+    }
+  }
+  return suites;
 }
 
 function runGC(val) {
@@ -204,31 +212,21 @@ function runBenchmark(suiteBenchmark) {
   });
 }
 
-function runBenchmarks(suites) {
-  return Promise.reduce(
-    suites,
-    (acc, suite) => {
-      return runGC(suite)
-        .then(currentSuite => {
-          // eslint-disable-next-line no-param-reassign
-          currentSuite.memoryBefore = process.memoryUsage().heapUsed;
-          return runBenchmark(currentSuite);
-        })
-        .then(currentSuite => {
-          // eslint-disable-next-line no-param-reassign
-          currentSuite.memoryAfter = process.memoryUsage().heapUsed;
-          // eslint-disable-next-line no-param-reassign
-          currentSuite.memoryEfficiency =
-            currentSuite.memoryAfter - currentSuite.memoryBefore;
-          return currentSuite;
-        })
-        .then(currentSuite => {
-          acc.push(currentSuite);
-          return acc;
-        });
-    },
-    []
-  );
+async function runBenchmarks(suites) {
+  const results = [];
+  for (const suite of suites) {
+    const currentSuite = await runGC(suite);
+    // eslint-disable-next-line no-param-reassign
+    currentSuite.memoryBefore = process.memoryUsage().heapUsed;
+    const benchmarked = await runBenchmark(currentSuite);
+    // eslint-disable-next-line no-param-reassign
+    benchmarked.memoryAfter = process.memoryUsage().heapUsed;
+    // eslint-disable-next-line no-param-reassign
+    benchmarked.memoryEfficiency =
+      benchmarked.memoryAfter - benchmarked.memoryBefore;
+    results.push(benchmarked);
+  }
+  return results;
 }
 
 function reportFinal(suites) {
