@@ -9,7 +9,7 @@
     "url": "https://github.com/ViacomInc/data-point/tree/master/packages/bench-trial"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=18"
   },
   "bin": {
     "bench-trial": "runner.js"

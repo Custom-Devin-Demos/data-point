@@ -8,7 +8,7 @@
     "url": "https://github.com/ViacomInc/data-point/tree/master/packages/data-point-codemods"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=18"
   },
   "author": {
     "name": "Acatl Pacheco",

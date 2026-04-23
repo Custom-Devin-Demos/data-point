@@ -13,8 +13,8 @@
     "url": "https://github.com/ViacomInc/data-point/issues"
   },
   "engines": {
-    "node": ">=8",
-    "npm": ">=2"
+    "node": ">=18",
+    "npm": ">=8"
   },
   "author": {
     "name": "Acatl Pacheco",
