@@ -9,5 +9,5 @@ module.exports = Object.assign(
   require("./requests"),
   require("./control"),
   require("./integrations"),
-  require("./reducer")
+  require("./reducer"),
 );

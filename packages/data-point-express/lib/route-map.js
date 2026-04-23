@@ -17,35 +17,33 @@ function sortByPriority(list) {
 }
 
 function filterEnabled(list) {
-  return _.filter(list, route => {
-    return route.enabled !== false;
-  });
+  return _.filter(list, (route) => route.enabled !== false);
 }
 
 function normalizeRoutesMiddleware(routes) {
-  return routes.map(route => {
-    return Object.assign({}, route, {
-      middleware: _.castArray(route.middleware)
-    });
-  });
+  return routes.map((route) =>
+    Object.assign({}, route, {
+      middleware: _.castArray(route.middleware),
+    }),
+  );
 }
 
 function verifyMiddlewareFormat(route) {
   const middleware = _.castArray(route.middleware);
   if (middleware.length === 0) {
     throw new Error(
-      `Route ${route.id} - middleware property must not be empty`
+      `Route ${route.id} - middleware property must not be empty`,
     );
   }
 
-  const entityIds = middleware.filter(item => typeof item === "string");
+  const entityIds = middleware.filter((item) => typeof item === "string");
   if (entityIds.length > 1) {
     throw new Error(
       `Route ${
         route.id
       } - middleware should only map to 1 entityId, found: ${entityIds.join(
-        ","
-      )}`
+        ",",
+      )}`,
     );
   }
 
@@ -53,7 +51,7 @@ function verifyMiddlewareFormat(route) {
     const entityIdIndex = middleware.indexOf(entityIds[0]);
     if (entityIdIndex !== middleware.length - 1) {
       throw new Error(
-        `Route ${route.id} - entityId middleware may only be at the end of the chain`
+        `Route ${route.id} - entityId middleware may only be at the end of the chain`,
       );
     }
   }
@@ -66,12 +64,12 @@ function normalize(routes = []) {
     toCollection,
     filterEnabled,
     sortByPriority,
-    normalizeRoutesMiddleware
+    normalizeRoutesMiddleware,
   ])(routes);
 }
 
 function normalizeMiddleware(middlewareList, dataPointMiddleware) {
-  return middlewareList.map(middleware => {
+  return middlewareList.map((middleware) => {
     if (_.isString(middleware)) {
       return dataPointMiddleware(middleware);
     }
@@ -115,7 +113,7 @@ function addRoute(app, rootPath, route, dataPointMiddleware) {
 
   if (method === false) {
     throw new Error(
-      `Route ${route.id} has an invalid method (${route.method}), try using GET, POST, DELETE or PUT instead.`
+      `Route ${route.id} has an invalid method (${route.method}), try using GET, POST, DELETE or PUT instead.`,
     );
   }
 
@@ -142,8 +140,8 @@ function addRoute(app, rootPath, route, dataPointMiddleware) {
  */
 function createRoutes(app, rootPath, routes, dataPointMiddleware) {
   const normalizedRoutes = normalize(routes);
-  normalizedRoutes.forEach(route =>
-    addRoute(app, rootPath, route, dataPointMiddleware)
+  normalizedRoutes.forEach((route) =>
+    addRoute(app, rootPath, route, dataPointMiddleware),
   );
 
   return app;
@@ -160,5 +158,5 @@ module.exports = {
   sendResponseFromValue,
   getRouteMethod,
   addRoute,
-  createRoutes
+  createRoutes,
 };

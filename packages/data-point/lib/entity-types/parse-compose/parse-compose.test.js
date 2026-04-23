@@ -16,7 +16,7 @@ describe("createComposeReducer", () => {
 describe("parseModifierSpec", () => {
   test("it should parse a modifier spec", () => {
     const result = parseCompose.parseModifierSpec("id", ["map"], {
-      map: "$a"
+      map: "$a",
     });
     expectModifier(result);
   });
@@ -29,9 +29,9 @@ describe("parseComposeSpec", () => {
       ["map"],
       [
         {
-          map: "$a"
-        }
-      ]
+          map: "$a",
+        },
+      ],
     );
 
     expect(result).toHaveLength(1);
@@ -52,69 +52,64 @@ describe("parseComposeSpec", () => {
         [
           {
             map: "$a",
-            filter: "$a"
-          }
-        ]
+            filter: "$a",
+          },
+        ],
       );
     }).toThrowErrorMatchingSnapshot();
   });
 });
 
 describe("parse", () => {
-  test("should parse a single key", () => {
-    return expect(
+  test("should parse a single key", () =>
+    expect(
       parseCompose.parse("id", ["map"], {
-        map: "$a"
-      })
-    ).toMatchSnapshot();
-  });
+        map: "$a",
+      }),
+    ).toMatchSnapshot());
 
-  test("should parse multiple keys inside of compose", () => {
-    return expect(
+  test("should parse multiple keys inside of compose", () =>
+    expect(
       parseCompose.parse("id", ["map", "find"], {
         compose: [
           {
-            map: "$a"
+            map: "$a",
           },
           {
-            find: "$b"
-          }
-        ]
-      })
-    ).toMatchSnapshot();
-  });
+            find: "$b",
+          },
+        ],
+      }),
+    ).toMatchSnapshot());
 
-  test("should throw error for invalid key inside compose", () => {
-    return expect(() =>
+  test("should throw error for invalid key inside compose", () =>
+    expect(() =>
       parseCompose.parse("id", ["map"], {
         compose: [
           {
-            find: "$a"
-          }
-        ]
-      })
-    ).toThrowErrorMatchingSnapshot();
-  });
+            find: "$a",
+          },
+        ],
+      }),
+    ).toThrowErrorMatchingSnapshot());
 
-  test("should throw error when multiple keys are not inside compose", () => {
-    return expect(() =>
+  test("should throw error when multiple keys are not inside compose", () =>
+    expect(() =>
       parseCompose.parse("id", ["map", "find"], {
         map: "$a",
-        find: "$a"
-      })
-    ).toThrowErrorMatchingSnapshot();
-  });
+        find: "$a",
+      }),
+    ).toThrowErrorMatchingSnapshot());
 
-  test("should throw error when the compose key and individual modifier keys are used together", () => {
-    return expect(() =>
+  test("should throw error when the compose key and individual modifier keys are used together", () =>
+    expect(() =>
       parseCompose.parse("id", ["map", "find"], {
         map: "$a",
         compose: [
           {
-            find: "$a"
-          }
-        ]
-      })
-    ).toThrowErrorMatchingSnapshot();
-  });
+            find: "$a",
+          },
+        ],
+      }),
+    ).toThrowErrorMatchingSnapshot());
 });

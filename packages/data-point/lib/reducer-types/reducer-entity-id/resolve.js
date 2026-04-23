@@ -16,7 +16,7 @@ function resolve(manager, resolveReducer, accumulator, reducer) {
     resolveReducer,
     accumulator,
     reducer,
-    entity
+    entity,
   );
 }
 

@@ -77,7 +77,7 @@ module.exports.add = add;
  */
 function create(spec) {
   const manager = {
-    store: {}
+    store: {},
   };
 
   manager.getStore = getStore.bind(null, manager);

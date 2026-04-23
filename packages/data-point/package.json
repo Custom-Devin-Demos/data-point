@@ -13,8 +13,8 @@
     "url": "https://github.com/ViacomInc/data-point/issues"
   },
   "engines": {
-    "node": ">=8",
-    "npm": ">=2"
+    "node": ">=18",
+    "npm": ">=8"
   },
   "author": {
     "name": "Acatl Pacheco",
@@ -48,16 +48,15 @@
     "lib/"
   ],
   "dependencies": {
-    "ajv": "5.2.3",
-    "debug": "3.x",
-    "deep-freeze": "0.0.1",
+    "ajv": "^8.12.0",
+    "axios": "^1.7.0",
+    "debug": "^4.3.0",
+    "deep-freeze-strict": "^1.1.0",
     "json-stringify-safe": "^5.0.1",
-    "lodash": "^4.17.20",
-    "request": "2.82.0",
-    "request-promise": "4.2.2"
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "benchmark": "2.1.4",
-    "nock": "^8.0.0"
+    "nock": "^13.0.0"
   }
 }

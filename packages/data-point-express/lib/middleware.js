@@ -17,15 +17,15 @@ function buildTransformOptions(req, options = {}) {
       pathname: options.pathname,
       resetCache: req.query.resetCache === "true",
       queryParams: _.defaults({}, query, params),
-      paramsQuery: _.defaults({}, params, query)
+      paramsQuery: _.defaults({}, params, query),
     },
-    trace: false
+    trace: false,
   };
 }
 
 function getErrorOwnKeys(err) {
   const cleanObject = _.omit(err, ["name", "message"]);
-  return _.mapValues(cleanObject, value => {
+  return _.mapValues(cleanObject, (value) => {
     const stringifyError = _.attempt(JSON.stringify, value);
     if (stringifyError instanceof Error) {
       return stringifyError.toString();
@@ -38,7 +38,7 @@ function createErrorMessage(err) {
   return {
     type: err.name,
     message: err.message,
-    info: getErrorOwnKeys(err)
+    info: getErrorOwnKeys(err),
   };
 }
 
@@ -47,7 +47,7 @@ async function resolveReducer(
   reducer,
   options,
   res,
-  initialValue = {}
+  initialValue = {},
 ) {
   try {
     const acc = await dataPoint.transform(reducer, initialValue, options);
@@ -65,5 +65,5 @@ module.exports = {
   getErrorOwnKeys,
   resolveReducer,
   createErrorMessage,
-  buildTransformOptions
+  buildTransformOptions,
 };

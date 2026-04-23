@@ -15,17 +15,15 @@ function createNode(index) {
     parent: null,
     reducer: {
       id: `reducerId${index}`,
-      name: `reducerName${index}`
-    }
+      name: `reducerName${index}`,
+    },
   };
 }
 
 function createTraceGraph() {
   const traceGraph = Array(4)
     .fill(null)
-    .map((val, index) => {
-      return createNode(index);
-    });
+    .map((val, index) => createNode(index));
 
   traceGraph[1].parent = traceGraph[0];
   traceGraph[2].parent = traceGraph[0];
@@ -41,7 +39,7 @@ function createGraph() {
   TraceGraph.createTree(root, traceGraph, 0, graphAcc);
   return {
     root,
-    graphAcc
+    graphAcc,
   };
 }
 
@@ -50,25 +48,25 @@ describe("createReducerSummary", () => {
     const reducer = {
       id: "id",
       type: "ReducerObject",
-      name: "name"
+      name: "name",
     };
     expect(TraceGraph.createReducerSummary(reducer)).toEqual({
       body: "",
       id: "id",
       name: "name",
-      type: "ReducerObject"
+      type: "ReducerObject",
     });
   });
 
   it("should create summary for reducer with no id or name", () => {
     const reducer = {
-      type: "ReducerObject"
+      type: "ReducerObject",
     };
     expect(TraceGraph.createReducerSummary(reducer)).toEqual({
       body: "",
       id: "",
       name: "",
-      type: "ReducerObject"
+      type: "ReducerObject",
     });
   });
 
@@ -77,13 +75,13 @@ describe("createReducerSummary", () => {
       id: "id",
       type: "ReducerFunction",
       name: "name",
-      body: function namedFunction() {}
+      body: function namedFunction() {},
     };
     expect(TraceGraph.createReducerSummary(reducer)).toEqual({
       id: "id",
       name: reducer.body.name,
       type: "ReducerFunction",
-      body: reducer.body.toString()
+      body: reducer.body.toString(),
     });
   });
 
@@ -94,13 +92,13 @@ describe("createReducerSummary", () => {
       id: "id",
       type: "ReducerFunction",
       name: "name",
-      body: createFunction()
+      body: createFunction(),
     };
     expect(TraceGraph.createReducerSummary(reducer)).toEqual({
       id: "id",
       name: "anonymous",
       type: "ReducerFunction",
-      body: reducer.body.toString()
+      body: reducer.body.toString(),
     });
   });
 });
@@ -163,14 +161,10 @@ describe("writeTraceGraph", () => {
   let mockDateNow;
   let mockWriteFileP;
   beforeEach(() => {
-    mockDateNow = jest.spyOn(Date, "now").mockImplementation(() => {
-      return 123;
-    });
+    mockDateNow = jest.spyOn(Date, "now").mockImplementation(() => 123);
     mockWriteFileP = jest
       .spyOn(TraceGraph, "writeFileP")
-      .mockImplementation(() => {
-        return Promise.resolve(true);
-      });
+      .mockImplementation(() => Promise.resolve(true));
   });
   afterEach(() => {
     mockDateNow.mockRestore();

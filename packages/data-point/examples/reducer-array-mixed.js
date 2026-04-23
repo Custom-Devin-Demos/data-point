@@ -1,19 +1,17 @@
 /* eslint-disable no-console */
 const assert = require("assert");
 
-const dataPoint = require("../").create();
+const dataPoint = require("..").create();
 
 const input = {
   a: {
-    b: "Hello World"
-  }
+    b: "Hello World",
+  },
 };
 
-const toUpperCase = value => {
-  return value.toUpperCase();
-};
+const toUpperCase = (value) => value.toUpperCase();
 
-dataPoint.resolve(["$a.b", toUpperCase], input).then(output => {
+dataPoint.resolve(["$a.b", toUpperCase], input).then((output) => {
   assert.strictEqual(output, "HELLO WORLD");
   console.log(output);
 });

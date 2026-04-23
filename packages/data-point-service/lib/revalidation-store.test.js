@@ -1,17 +1,11 @@
 /* eslint-env jest */
 
 const mockDebug = jest.fn();
-jest.mock("debug", () => {
-  return () => mockDebug;
-});
+jest.mock("debug", () => () => mockDebug);
 
-const mockThrottle = jest.fn(fn => fn);
-jest.mock("lodash/throttle", () => {
-  return mockThrottle;
-});
-jest.mock("lodash/throttle", () => {
-  return mockThrottle;
-});
+const mockThrottle = jest.fn((fn) => fn);
+jest.mock("lodash/throttle", () => mockThrottle);
+jest.mock("lodash/throttle", () => mockThrottle);
 
 const RevalidationStore = require("./revalidation-store");
 

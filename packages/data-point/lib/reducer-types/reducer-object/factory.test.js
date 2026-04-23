@@ -16,7 +16,7 @@ describe("ReducerObject.factory#getProps", () => {
     const reducer = factory.getProps(createReducer, {});
     expect(reducer).toEqual({
       constants: {},
-      reducers: []
+      reducers: [],
     });
   });
   it("should accept a non-empty object", () => {
@@ -28,16 +28,16 @@ describe("ReducerObject.factory#getProps", () => {
           {
             a3: "reducer:entity-name",
             b3: "$b1.b2.b3",
-            c3: constant("CONSTANT")
-          }
+            c3: constant("CONSTANT"),
+          },
         ],
-        c2: constant(1)
+        c2: constant(1),
       },
       c1: constant({
         a: 1,
-        b: 2
+        b: 2,
       }),
-      d1: constant(5)
+      d1: constant(5),
     });
     expect(props).toMatchSnapshot();
   });
@@ -49,8 +49,8 @@ describe("ReducerObject.factory#getSourceFunction", () => {
       a: 1,
       b: {
         c: "1",
-        d: () => true
-      }
+        d: () => true,
+      },
     };
     const fn = factory.getSourceFunction(input);
     const output = fn();
@@ -72,7 +72,7 @@ describe("ReducerObject.factory#create", () => {
     const reducer = factory.create(createReducer, {
       a: "$a",
       b: "$b",
-      c: constant("c")
+      c: constant("c"),
     });
     expect(reducer).toMatchSnapshot();
     expect(reducer.source()).toEqual({ c: "c" });

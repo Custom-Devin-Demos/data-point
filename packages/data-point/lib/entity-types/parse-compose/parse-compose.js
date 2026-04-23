@@ -29,7 +29,7 @@ function parseModifierSpec(entityId, validKeys, modifierSpec) {
     throw new Error(
       `Compose Modifiers may only contain one key, but found ${keys.length}${
         keys.length ? ` (${keys.join(", ")})` : ""
-      }`
+      }`,
     );
   }
 
@@ -37,8 +37,8 @@ function parseModifierSpec(entityId, validKeys, modifierSpec) {
   if (!validKeys.includes(type)) {
     throw new Error(
       `Modifier '${type}' in "${entityId}" does not match any of the valid modifiers: ${validKeys.join(
-        ", "
-      )}`
+        ", ",
+      )}`,
     );
   }
 
@@ -54,9 +54,9 @@ module.exports.parseModifierSpec = parseModifierSpec;
  * @returns {Array<Object>}
  */
 function parseComposeSpec(entityId, modifierKeys, composeSpec) {
-  return composeSpec.map(modifierSpec => {
-    return parseModifierSpec(entityId, modifierKeys, modifierSpec);
-  });
+  return composeSpec.map((modifierSpec) =>
+    parseModifierSpec(entityId, modifierKeys, modifierSpec),
+  );
 }
 
 module.exports.parseComposeSpec = parseComposeSpec;
@@ -76,8 +76,8 @@ function parse(entityId, validKeys, spec) {
         'Entity "%s" has invalid modifiers, when using multiple keys they should be added through the "compose" property.\nValid modifiers: %s.\nFor more info: %s',
         entityId,
         specKeys.join(", "),
-        composeLink
-      )
+        composeLink,
+      ),
     );
   }
 
@@ -88,10 +88,10 @@ function parse(entityId, validKeys, spec) {
           'Entity "%s" compose property is expected to be an instance of Array, but found: %s\nFor more info: %s',
           entityId,
           _.truncate(inspect(spec.compose, { breakLength: Infinity }), {
-            length: 30
+            length: 30,
           }),
-          composeLink
-        )
+          composeLink,
+        ),
       );
     }
 
@@ -101,8 +101,8 @@ function parse(entityId, validKeys, spec) {
           'Entity "%s" is invalid; when "compose" is defined the keys: %s should be inside compose.\nFor more info: %s',
           entityId,
           specKeys.join(", "),
-          composeLink
-        )
+          composeLink,
+        ),
       );
     }
 

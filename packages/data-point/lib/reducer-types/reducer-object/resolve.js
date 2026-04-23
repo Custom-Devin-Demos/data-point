@@ -18,7 +18,7 @@ async function resolve(manager, resolveReducer, accumulator, reducer) {
     async ({ reducer: itemReducer, path }) => {
       const value = await resolveReducer(manager, accumulator, itemReducer);
       return set(result, path, value);
-    }
+    },
   );
 
   await Promise.all(promises);

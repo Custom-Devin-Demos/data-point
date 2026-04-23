@@ -2,9 +2,7 @@ const _ = require("lodash");
 
 const utils = require("../../lib/utils");
 
-module.exports.passThrough = () => value => {
-  return value;
-};
+module.exports.passThrough = () => (value) => value;
 
 module.exports.throwError = () => () => {
   throw new Error("unexpected");
@@ -20,74 +18,57 @@ module.exports.invalidReducerArity = () => () => {
   // return method should have acc and callback as arguments
 };
 
-module.exports.isEqualTo = compareTo => value => {
-  return compareTo === value;
-};
+module.exports.isEqualTo = (compareTo) => (value) => compareTo === value;
 
-module.exports.addKeyValue = (key, val) => value => {
-  return utils.set(value, key, val);
-};
+module.exports.addKeyValue = (key, val) => (value) =>
+  utils.set(value, key, val);
 
-module.exports.getKeyValue = key => value => {
-  return _.get(value, key);
-};
+module.exports.getKeyValue = (key) => (value) => _.get(value, key);
 
-module.exports.addCollectionValues = () => value => {
-  return value.reduce(_.add);
-};
+module.exports.addCollectionValues = () => (value) => value.reduce(_.add);
 
-module.exports.timesArg1 = factor => value => {
-  return value * factor;
-};
+module.exports.timesArg1 = (factor) => (value) => value * factor;
 
 module.exports.multiplyBy = module.exports.timesArg1;
 
-module.exports.addString = string => value => {
-  return value + string;
-};
+module.exports.addString = (string) => (value) => value + string;
 
-module.exports.useDataacc = () => (value, acc) => {
-  return value + acc.initialValue.itemPath;
-};
+module.exports.useDataacc = () => (value, acc) =>
+  value + acc.initialValue.itemPath;
 
-module.exports.addQueryVar = (key, val) => value => {
-  return utils.set(value, `qs.${key}`, val);
-};
+module.exports.addQueryVar = (key, val) => (value) =>
+  utils.set(value, `qs.${key}`, val);
 
-module.exports.fromMetaToData = key => (value, acc) => {
+module.exports.fromMetaToData = (key) => (value, acc) => {
   const initialValue = value;
   const val = _.get(acc, `params.${key}`);
   const result = utils.set(initialValue, key, val);
   return result;
 };
 
-module.exports.addStringFromMeta = key => (value, acc) => {
+module.exports.addStringFromMeta = (key) => (value, acc) => {
   const val = _.get(acc, `params.${key}`);
   return value + val;
 };
 
-module.exports.setDataFromRequest = key => (value, acc) => {
+module.exports.setDataFromRequest = (key) => (value, acc) => {
   const initialValue = value;
   const val = _.get(acc, `locals.${key}`);
   return utils.set(initialValue, key, val);
 };
 
-module.exports.addStringFromRequest = key => (value, acc) => {
+module.exports.addStringFromRequest = (key) => (value, acc) => {
   const val = _.get(acc, `locals.${key}`);
   return acc.value + val;
 };
 
-module.exports.sourceErrorDoNothing = () => value => {
-  return value;
-};
+module.exports.sourceErrorDoNothing = () => (value) => value;
 
-module.exports.sourceErrorGraceful = () => () => {
-  return {
-    noData: true
-  };
-};
+module.exports.sourceErrorGraceful = () => () => ({
+  noData: true,
+});
 
-module.exports.addStringFromaccKey = key => (value, acc) => {
+module.exports.addStringFromaccKey = (key) => (value, acc) => {
   const val = _.get(acc, key);
   return value + val;
 };

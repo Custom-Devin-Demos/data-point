@@ -1,6 +1,6 @@
-const Ajv = require("ajv");
+const Ajv = require("ajv").default;
 const _ = require("lodash");
-const deepFreeze = require("deep-freeze");
+const deepFreeze = require("deep-freeze-strict");
 const { resolve } = require("./resolve");
 const BaseEntity = require("../base-entity");
 const { validateModifiers } = require("../validate-modifiers");
@@ -12,13 +12,13 @@ const { validateModifiers } = require("../validate-modifiers");
  * @return {boolean}
  */
 function validateSchema(schema, options) {
-  const ajv = new Ajv(options);
-  ajv.validateSchema(schema);
-  if (ajv.errors) {
+  const ajv = new Ajv({ allErrors: true, strict: false, ...options });
+  const valid = ajv.validateSchema(schema);
+  if (!valid && ajv.errors) {
     const msg = `Schema validation failed with the following errors:\n${JSON.stringify(
       ajv.errors,
       null,
-      2
+      2,
     )}`;
     throw new Error(msg);
   }

@@ -30,7 +30,7 @@ it("values#add", () => {
 
 it("values#get", () => {
   values.add("abc", {
-    b: 1
+    b: 1,
   });
   const result = values.get("abc.b");
   expect(result).toBe(1);

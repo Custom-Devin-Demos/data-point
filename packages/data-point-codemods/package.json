@@ -8,7 +8,7 @@
     "url": "https://github.com/ViacomInc/data-point/tree/master/packages/data-point-codemods"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=18"
   },
   "author": {
     "name": "Acatl Pacheco",
@@ -18,7 +18,7 @@
     "data-point-codemods": "data-point-codemods.js"
   },
   "dependencies": {
-    "jscodeshift": "0.x",
+    "jscodeshift": "^0.15.0",
     "lib-upgrader": "1.x",
     "lodash": "^4.17.20"
   },

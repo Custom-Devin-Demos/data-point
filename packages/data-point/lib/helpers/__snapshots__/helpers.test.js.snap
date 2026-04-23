@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`helpers API check what methods are exported in the helpers modules 1`] = `
-Object {
+{
   "createAccumulator": [Function],
   "createEntity": [Function],
   "createReducer": [Function],
   "createReducerResolver": [Function],
-  "entityFactories": Object {
+  "entityFactories": {
     "Collection": [Function],
     "Control": [Function],
     "Entry": [Function],
@@ -16,7 +16,7 @@ Object {
     "Request": [Function],
     "Schema": [Function],
   },
-  "helpers": Object {
+  "helpers": {
     "assign": [Function],
     "constant": [Function],
     "filter": [Function],

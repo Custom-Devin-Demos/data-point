@@ -2,102 +2,100 @@ const reducers = require("../utils/reducers");
 
 module.exports = {
   "hash:noValue": {
-    value: (value, acc, next) => {
-      return next(null, "invalid");
-    }
+    value: (value, acc, next) => next(null, "invalid"),
   },
   "hash:arraysNotAllowed": {
-    value: "$a.b.c"
+    value: "$a.b.c",
   },
   "hash:asIs": {
-    value: "$"
+    value: "$",
   },
   "hash:CustomOutputType": {
-    value: input => input,
+    value: (input) => input,
     outputType: () => {
       throw new Error("custom type check failed");
-    }
+    },
   },
   "hash:a.1": {
-    value: "$a.h"
+    value: "$a.h",
   },
   "hash:b.1": {
     value: "$a.h",
     mapKeys: {
-      h: ["$h1", reducers.multiplyBy(2)]
-    }
+      h: ["$h1", reducers.multiplyBy(2)],
+    },
   },
   "hash:b.2": {
     value: "$a.g",
-    mapKeys: {}
+    mapKeys: {},
   },
   "hash:c.1": {
     value: "$a.h",
     addKeys: {
-      h4: ["$h1", reducers.multiplyBy(4)]
-    }
+      h4: ["$h1", reducers.multiplyBy(4)],
+    },
   },
   "hash:c.2": {
     value: "$a.g",
-    addKeys: {}
+    addKeys: {},
   },
   "hash:d.1": {
     value: "$a.h",
-    omitKeys: ["h1", "h2"]
+    omitKeys: ["h1", "h2"],
   },
   "hash:d.2": {
     value: "$a.g",
-    omitKeys: []
+    omitKeys: [],
   },
   "hash:e.1": {
     value: "$a.h",
-    pickKeys: ["h1", "h2"]
+    pickKeys: ["h1", "h2"],
   },
   "hash:e.2": {
     value: "$a.g",
-    pickKeys: []
+    pickKeys: [],
   },
   "hash:f.1": {
     value: "$a.h",
     addValues: {
-      h0: 0
-    }
+      h0: 0,
+    },
   },
   "hash:f.2": {
     value: "$a.g",
-    addValues: {}
+    addValues: {},
   },
   "hash:g.1": {
     value: "$a.g",
     compose: [
       {
         mapKeys: {
-          g: ["$g2", reducers.multiplyBy(2)]
-        }
+          g: ["$g2", reducers.multiplyBy(2)],
+        },
       },
       {
         addValues: {
-          g4: 4
-        }
+          g4: 4,
+        },
       },
       {
         addKeys: {
-          g4: ["$g1", reducers.multiplyBy(4)]
-        }
-      }
-    ]
+          g4: ["$g1", reducers.multiplyBy(4)],
+        },
+      },
+    ],
   },
   "hash:h.1": {
     value: "$a.e.e1",
     compose: [
       {
         addValues: {
-          e3: "eThree"
-        }
+          e3: "eThree",
+        },
       },
       {
-        pickKeys: ["e3"]
-      }
-    ]
-  }
+        pickKeys: ["e3"],
+      },
+    ],
+  },
 };

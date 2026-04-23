@@ -2,24 +2,20 @@
 const _ = require("lodash");
 
 const mockDebug = jest.fn();
-jest.mock("debug", () => {
-  return () => mockDebug;
-});
+jest.mock("debug", () => () => mockDebug);
 
 const mockLocalAdd = jest.fn();
 const mockLocalRemove = jest.fn();
 
 require("./revalidation-store");
 
-jest.mock("./revalidation-store", () => {
-  return {
-    create: () => ({
-      add: mockLocalAdd,
-      remove: mockLocalRemove,
-      clear: () => {}
-    })
-  };
-});
+jest.mock("./revalidation-store", () => ({
+  create: () => ({
+    add: mockLocalAdd,
+    remove: mockLocalRemove,
+    clear: () => {},
+  }),
+}));
 
 const RedisController = require("./redis-controller");
 
@@ -37,16 +33,15 @@ describe("revalidationExternalFactory", () => {
         .spyOn(RedisController, "setSWRControlEntry")
         .mockImplementation(() => true);
 
-      const external = StaleWhileRevalidate.revalidationExternalFactory(
-        "service"
-      );
+      const external =
+        StaleWhileRevalidate.revalidationExternalFactory("service");
 
       expect(external.add("entryKey", "ttl")).toEqual(true);
       expect(mockSetSWRControlEntry).toBeCalledWith(
         "service",
         "entryKey",
         "ttl",
-        StaleWhileRevalidate.SWR_CONTROL_REVALIDATING
+        StaleWhileRevalidate.SWR_CONTROL_REVALIDATING,
       );
     });
   });
@@ -57,9 +52,8 @@ describe("revalidationExternalFactory", () => {
         .spyOn(RedisController, "deleteSWRControlEntry")
         .mockImplementation(() => true);
 
-      const external = StaleWhileRevalidate.revalidationExternalFactory(
-        "service"
-      );
+      const external =
+        StaleWhileRevalidate.revalidationExternalFactory("service");
 
       expect(external.remove("entryKey", "ttl")).toEqual(true);
       expect(mockDeleteSWRControlEntry).toBeCalledWith("service", "entryKey");
@@ -72,11 +66,10 @@ describe("revalidationExternalFactory", () => {
         .spyOn(RedisController, "getSWRControlEntry")
         .mockImplementation(() => Promise.resolve("foo"));
 
-      const external = StaleWhileRevalidate.revalidationExternalFactory(
-        "service"
-      );
+      const external =
+        StaleWhileRevalidate.revalidationExternalFactory("service");
 
-      return external.exists("entryKey").then(result => {
+      return external.exists("entryKey").then((result) => {
         expect(result).toEqual(true);
         expect(mockGetSWRControlEntry).toBeCalledWith("service", "entryKey");
       });
@@ -87,11 +80,10 @@ describe("revalidationExternalFactory", () => {
         .spyOn(RedisController, "getSWRControlEntry")
         .mockImplementation(() => Promise.resolve(undefined));
 
-      const external = StaleWhileRevalidate.revalidationExternalFactory(
-        "service"
-      );
+      const external =
+        StaleWhileRevalidate.revalidationExternalFactory("service");
 
-      return external.exists("entryKey").then(result => {
+      return external.exists("entryKey").then((result) => {
         expect(result).toEqual(false);
       });
     });
@@ -110,26 +102,26 @@ describe("addEntry", () => {
 
     const cache = {
       ttl: "10s",
-      staleWhileRevalidateTtl: "20s"
+      staleWhileRevalidateTtl: "20s",
     };
 
     return StaleWhileRevalidate.addEntry(
       "service",
       "entryKey",
       "value",
-      cache
+      cache,
     ).then(() => {
       expect(mockSetSWRStaleEntry).toBeCalledWith(
         "service",
         "entryKey",
         "value",
-        cache.staleWhileRevalidateTtl
+        cache.staleWhileRevalidateTtl,
       );
       expect(mockSetSWRControlEntry).toBeCalledWith(
         "service",
         "entryKey",
         cache.ttl,
-        StaleWhileRevalidate.SWR_CONTROL_STALE
+        StaleWhileRevalidate.SWR_CONTROL_STALE,
       );
     });
   });
@@ -144,7 +136,7 @@ describe("getEntry", () => {
     return StaleWhileRevalidate.getEntry("service", "entryKey", "value").then(
       () => {
         expect(getSWRStaleEntry).toBeCalledWith("service", "entryKey");
-      }
+      },
     );
   });
 });
@@ -153,12 +145,16 @@ describe("addRevalidationFlags", () => {
   it("should add local and external flags", () => {
     const revalidation = {};
     _.set(revalidation, "local.add", jest.fn());
-    _.set(revalidation, "external.add", jest.fn(() => Promise.resolve(true)));
+    _.set(
+      revalidation,
+      "external.add",
+      jest.fn(() => Promise.resolve(true)),
+    );
 
     return StaleWhileRevalidate.addRevalidationFlags(
       revalidation,
       "entryKey",
-      "10s"
+      "10s",
     ).then(() => {
       expect(revalidation.local.add).toBeCalledWith("entryKey", "10s");
       expect(revalidation.external.add).toBeCalledWith("entryKey", "10s");
@@ -173,12 +169,12 @@ describe("clearAllRevalidationFlags", () => {
     _.set(
       revalidation,
       "external.remove",
-      jest.fn(() => Promise.resolve(true))
+      jest.fn(() => Promise.resolve(true)),
     );
 
     return StaleWhileRevalidate.clearAllRevalidationFlags(
       revalidation,
-      "entryKey"
+      "entryKey",
     ).then(() => {
       expect(revalidation.local.remove).toBeCalledWith("entryKey");
       expect(revalidation.external.remove).toBeCalledWith("entryKey");
@@ -189,17 +185,21 @@ describe("clearAllRevalidationFlags", () => {
 describe("getRevalidationState", () => {
   it("should get local and external flag states", () => {
     const revalidation = {};
-    _.set(revalidation, "local.exists", jest.fn(() => "localState"));
+    _.set(
+      revalidation,
+      "local.exists",
+      jest.fn(() => "localState"),
+    );
     _.set(
       revalidation,
       "external.exists",
-      jest.fn(() => Promise.resolve(false))
+      jest.fn(() => Promise.resolve(false)),
     );
 
     return StaleWhileRevalidate.getRevalidationState(
       revalidation,
-      "entryKey"
-    ).then(result => {
+      "entryKey",
+    ).then((result) => {
       expect(result.hasExternalEntryExpired).toEqual(true);
       expect(result.isRevalidatingLocally).toBeInstanceOf(Function);
       expect(result.isRevalidatingLocally()).toEqual("localState");
@@ -208,17 +208,21 @@ describe("getRevalidationState", () => {
 
   it("should return hasExternalEntryExpired === true if exists == false", () => {
     const revalidation = {};
-    _.set(revalidation, "local.exists", jest.fn(() => "localState"));
+    _.set(
+      revalidation,
+      "local.exists",
+      jest.fn(() => "localState"),
+    );
     _.set(
       revalidation,
       "external.exists",
-      jest.fn(() => Promise.resolve(true))
+      jest.fn(() => Promise.resolve(true)),
     );
 
     return StaleWhileRevalidate.getRevalidationState(
       revalidation,
-      "entryKey"
-    ).then(result => {
+      "entryKey",
+    ).then((result) => {
       expect(result.hasExternalEntryExpired).toEqual(false);
       expect(result.isRevalidatingLocally).toBeInstanceOf(Function);
       expect(result.isRevalidatingLocally()).toEqual("localState");

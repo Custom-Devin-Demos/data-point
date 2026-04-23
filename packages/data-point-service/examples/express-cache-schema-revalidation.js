@@ -15,12 +15,12 @@
 const express = require("express");
 const DataPoint = require("data-point");
 const hash = require("object-hash");
-const Ajv = require("ajv");
+const Ajv = require("ajv").default;
 
 const DataPointService = require("../lib");
 
 const ajv = new Ajv({
-  allErrors: true
+  allErrors: true,
 });
 
 const Schema = {
@@ -33,14 +33,14 @@ const Schema = {
         throw new TypeError(
           `Failed schema validation for "${
             ctx.reducer.spec.id
-          }", errors:\n ${ajv.errorsText(schemaValidate.errors)}\n`
+          }", errors:\n ${ajv.errorsText(schemaValidate.errors)}\n`,
         );
       }
     };
   },
   hash(jsonSchema) {
     return hash(jsonSchema);
-  }
+  },
 };
 
 const jsonSchema = {
@@ -52,13 +52,13 @@ const jsonSchema = {
     id: {
       $id: "#/properties/id",
       type: "string",
-      pattern: "a$"
+      pattern: "a$",
     },
     phone: {
       $id: "#/properties/phone",
-      type: "string"
-    }
-  }
+      type: "string",
+    },
+  },
 };
 
 const HelloWorld = DataPoint.Model("HelloWorld", {
@@ -67,7 +67,7 @@ const HelloWorld = DataPoint.Model("HelloWorld", {
     const phone = acc.locals.query.phone;
     return {
       id,
-      phone
+      phone,
     };
   },
   outputType: Schema.validate(jsonSchema),
@@ -75,11 +75,9 @@ const HelloWorld = DataPoint.Model("HelloWorld", {
     cache: {
       ttl: "2m",
       staleWhileRevalidate: "4m",
-      cacheKey: () => {
-        return `SH-${Schema.hash(jsonSchema)}`;
-      }
-    }
-  }
+      cacheKey: () => `SH-${Schema.hash(jsonSchema)}`,
+    },
+  },
 });
 
 function server(dataPoint) {
@@ -90,15 +88,15 @@ function server(dataPoint) {
       // exposing query to locals will make this object available to all
       // reducers
       locals: {
-        query: req.query
-      }
+        query: req.query,
+      },
     };
     dataPoint
       .resolve(HelloWorld, {}, options)
-      .then(value => {
+      .then((value) => {
         res.send(value);
       })
-      .catch(error => {
+      .catch((error) => {
         res.status(500).send(error.toString());
       });
   });
@@ -111,10 +109,8 @@ function server(dataPoint) {
 
 function createService() {
   return DataPointService.create({
-    DataPoint
-  }).then(service => {
-    return service.dataPoint;
-  });
+    DataPoint,
+  }).then((service) => service.dataPoint);
 }
 
 createService().then(server);

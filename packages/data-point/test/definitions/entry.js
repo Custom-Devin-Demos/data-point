@@ -1,8 +1,8 @@
 module.exports = {
   "entry:a0": {
-    value: ""
+    value: "",
   },
   "entry:a1": {
-    value: "$foo"
-  }
+    value: "$foo",
+  },
 };

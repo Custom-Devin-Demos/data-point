@@ -26,7 +26,7 @@ function createReducerSummary(reducer) {
     id: reducer.id || "",
     type: reducer.type,
     name: functionName || reducer.name || "",
-    body: functionBody || ""
+    body: functionBody || "",
   };
 }
 
@@ -63,9 +63,9 @@ function createTree(currentNode, traceGraph, nestingLevel, accumulator) {
 
   currentNode.reducerSummary = createReducerSummary(currentNode.reducer);
 
-  const children = traceGraph.filter(node => {
-    return node.parent && node.parent.id === currentNode.id;
-  });
+  const children = traceGraph.filter(
+    (node) => node.parent && node.parent.id === currentNode.id,
+  );
 
   currentNode.children = children;
 
@@ -76,7 +76,7 @@ function createTree(currentNode, traceGraph, nestingLevel, accumulator) {
     accumulator.maxNestingLevel = nestingLevel;
   }
 
-  children.forEach(node => {
+  children.forEach((node) => {
     createTree(node, traceGraph, nestingLevel, accumulator);
   });
 }
@@ -95,9 +95,9 @@ function logGraph(node) {
     node.nestingLevel,
     node.label,
     (node.timelineStartNs / NS_PER_SEC).toFixed(3),
-    (node.durationNs / NS_PER_SEC).toFixed(3)
+    (node.durationNs / NS_PER_SEC).toFixed(3),
   );
-  node.children.forEach(child => {
+  node.children.forEach((child) => {
     logGraph(child);
   });
 }
@@ -108,7 +108,7 @@ module.exports.logGraph = logGraph;
  * @param {Array<TraceNode>} traceGraph raw stack to write to disk
  */
 function writeTraceGraph(traceGraph) {
-  const root = traceGraph.find(node => !node.parent);
+  const root = traceGraph.find((node) => !node.parent);
   const graphAcc = { timeStartNs: root.timeStartNs, maxNestingLevel: 0 };
   createTree(root, traceGraph, 0, graphAcc);
   root.maxNestingLevel = graphAcc.maxNestingLevel;
@@ -117,7 +117,7 @@ function writeTraceGraph(traceGraph) {
   return module.exports.writeFileP(
     `data-point-trace-${date}.json`,
     stringify(root, null, "  "),
-    "utf8"
+    "utf8",
   );
 }
 

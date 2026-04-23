@@ -23,19 +23,17 @@ module.exports.parseCaseStatement = parseCaseStatement;
  */
 function parseCaseStatements(spec) {
   return _(spec)
-    .remove(statement => !_.isUndefined(statement.case))
+    .remove((statement) => !_.isUndefined(statement.case))
     .map(parseCaseStatement)
     .value();
 }
 module.exports.parseCaseStatements = parseCaseStatements;
 
 function parseDefaultStatement(id, select) {
-  const defaultCase = select.find(statement => {
-    return statement.default;
-  });
+  const defaultCase = select.find((statement) => statement.default);
   if (!defaultCase) {
     throw new Error(
-      `It seems ${id} is missing its default case, Control entities must have their default case handled.`
+      `It seems ${id} is missing its default case, Control entities must have their default case handled.`,
     );
   }
   return defaultCase.default;
@@ -51,7 +49,7 @@ function parseSwitch(spec) {
   const defaultStatement = parseDefaultStatement(spec.id, select);
   return {
     cases: parseCaseStatements(select),
-    default: createReducer(defaultStatement)
+    default: createReducer(defaultStatement),
   };
 }
 module.exports.parseSwitch = parseSwitch;

@@ -15,8 +15,8 @@ function getErrorMessage(value, expectedType) {
   }Actual type: ${utils.typeOf(value)}\nInput value: ${truncate(
     Util.inspect(value, { breakLength: Infinity }),
     {
-      length: 30
-    }
+      length: 30,
+    },
   )}`;
 }
 
@@ -47,23 +47,23 @@ module.exports = {
   createTypeCheckReducer,
   defaults: {
     isString: createTypeCheckReducer(
-      value => typeof value === "string",
-      "string"
+      (value) => typeof value === "string",
+      "string",
     ),
     isNumber: createTypeCheckReducer(
-      value => typeof value === "number",
-      "number"
+      (value) => typeof value === "number",
+      "number",
     ),
     isBoolean: createTypeCheckReducer(
-      value => typeof value === "boolean",
-      "boolean"
+      (value) => typeof value === "boolean",
+      "boolean",
     ),
     isFunction: createTypeCheckReducer(
-      value => typeof value === "function",
-      "function"
+      (value) => typeof value === "function",
+      "function",
     ),
-    isError: createTypeCheckReducer(value => value instanceof Error, "error"),
-    isArray: createTypeCheckReducer(value => Array.isArray(value), "array"),
-    isObject: createTypeCheckReducer(value => isPlainObject(value), "object")
-  }
+    isError: createTypeCheckReducer((value) => value instanceof Error, "error"),
+    isArray: createTypeCheckReducer((value) => Array.isArray(value), "array"),
+    isObject: createTypeCheckReducer((value) => isPlainObject(value), "object"),
+  },
 };

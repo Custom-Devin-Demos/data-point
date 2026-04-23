@@ -25,11 +25,11 @@ function createEntityFactory(_type) {
   }
 
   Object.defineProperty(Factory, "name", {
-    value: `${capitalize(type)}Factory`
+    value: `${capitalize(type)}Factory`,
   });
 
   Object.defineProperty(Factory, "type", {
-    value: type
+    value: type,
   });
 
   return Factory;

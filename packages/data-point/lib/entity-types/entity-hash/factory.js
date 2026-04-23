@@ -1,4 +1,4 @@
-const deepFreeze = require("deep-freeze");
+const deepFreeze = require("deep-freeze-strict");
 const constant = require("lodash/constant");
 const defaultTo = require("lodash/defaultTo");
 
@@ -9,7 +9,7 @@ const parseCompose = require("../parse-compose");
 const BaseEntity = require("../base-entity");
 const { validateModifiers } = require("../validate-modifiers");
 const {
-  getTypeCheckSourceWithDefault
+  getTypeCheckSourceWithDefault,
 } = require("../../helpers/type-check-helpers");
 
 const modifierKeys = [
@@ -17,14 +17,14 @@ const modifierKeys = [
   "pickKeys",
   "mapKeys",
   "addValues",
-  "addKeys"
+  "addKeys",
 ];
 
 const modifiers = {
   omit: reducerHelpers.stubFactories.omit,
   pick: reducerHelpers.stubFactories.pick,
   map: reducerHelpers.stubFactories.map,
-  assign: reducerHelpers.stubFactories.assign
+  assign: reducerHelpers.stubFactories.assign,
 };
 
 /**
@@ -32,7 +32,7 @@ const modifiers = {
  * @return {Reducer}
  */
 function createCompose(composeSpec) {
-  const specList = composeSpec.map(modifier => {
+  const specList = composeSpec.map((modifier) => {
     let spec;
     // eslint-disable-next-line default-case
     switch (modifier.type) {
@@ -73,7 +73,7 @@ function create(id, spec) {
   const outputType = getTypeCheckSourceWithDefault(
     "hash",
     "object",
-    spec.outputType
+    spec.outputType,
   );
 
   const entity = {};

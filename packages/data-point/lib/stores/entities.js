@@ -21,7 +21,7 @@ module.exports.createEntity = createEntity;
 function errorInfoCbGet(id) {
   return {
     message: `Entity id '${id}' is not defined`,
-    name: "InvalidId"
+    name: "InvalidId",
   };
 }
 
@@ -32,7 +32,7 @@ function errorInfoCbGet(id) {
 function errorInfoCbAdd(id) {
   return {
     message: `Entity with id '${id}' already exists`,
-    name: "InvalidId"
+    name: "InvalidId",
   };
 }
 
@@ -44,7 +44,7 @@ function create(entityTypes) {
   return storeManager.create({
     errorInfoCbGet,
     errorInfoCbAdd,
-    create: createEntity.bind(null, entityTypes)
+    create: createEntity.bind(null, entityTypes),
   });
 }
 

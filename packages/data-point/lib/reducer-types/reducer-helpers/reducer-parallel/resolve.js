@@ -6,9 +6,9 @@
  * @returns {Promise}
  */
 function resolve(manager, resolveReducer, accumulator, reducerParallel) {
-  const promises = reducerParallel.reducers.map(reducer => {
-    return resolveReducer(manager, accumulator, reducer);
-  });
+  const promises = reducerParallel.reducers.map((reducer) =>
+    resolveReducer(manager, accumulator, reducer),
+  );
 
   return Promise.all(promises);
 }

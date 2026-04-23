@@ -7,7 +7,7 @@ const ObjectStoreManager = require("./object-store-manager");
 function errorInfoCbGet(path) {
   return {
     message: `Value in '${path}' is undefined`,
-    name: "InvalidPath"
+    name: "InvalidPath",
   };
 }
 
@@ -18,7 +18,7 @@ function errorInfoCbGet(path) {
 function errorInfoCbAdd(path) {
   return {
     message: `Value '${path}' already exists`,
-    name: "InvalidPath"
+    name: "InvalidPath",
   };
 }
 
@@ -29,7 +29,7 @@ function errorInfoCbAdd(path) {
 function create() {
   return ObjectStoreManager.create({
     errorInfoCbGet,
-    errorInfoCbAdd
+    errorInfoCbAdd,
   });
 }
 

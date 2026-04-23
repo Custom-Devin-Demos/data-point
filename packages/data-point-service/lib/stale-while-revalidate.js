@@ -1,5 +1,5 @@
 const debug = require("debug")(
-  "data-point-service:cache:stale-while-revalidate"
+  "data-point-service:cache:stale-while-revalidate",
 );
 
 const revalidationStoreFactory = require("./revalidation-store").create;
@@ -30,29 +30,29 @@ function revalidationExternalFactory(service) {
         "Setting control to status: %s (%sms ttl) - %s",
         SWR_CONTROL_REVALIDATING,
         ttl,
-        entryKey
+        entryKey,
       );
       return RedisController.setSWRControlEntry(
         service,
         entryKey,
         ttl,
-        SWR_CONTROL_REVALIDATING
+        SWR_CONTROL_REVALIDATING,
       );
     },
-    remove: entryKey => {
+    remove: (entryKey) => {
       debug("Removing external Control - %s", entryKey);
       return RedisController.deleteSWRControlEntry(service, entryKey);
     },
-    exists: async entryKey => {
+    exists: async (entryKey) => {
       const controlEntryValue = await RedisController.getSWRControlEntry(
         service,
-        entryKey
+        entryKey,
       );
 
       const entryExists = typeof controlEntryValue !== "undefined";
       debug("External control exists: %s - %s", entryExists, entryKey);
       return entryExists;
-    }
+    },
   };
 }
 
@@ -69,7 +69,7 @@ async function addEntry(service, entryKey, value, cache) {
     service,
     entryKey,
     value,
-    cache.staleWhileRevalidateTtl
+    cache.staleWhileRevalidateTtl,
   );
 
   debug("Setting control to status: %s - %s", SWR_CONTROL_STALE, entryKey);
@@ -77,7 +77,7 @@ async function addEntry(service, entryKey, value, cache) {
     service,
     entryKey,
     cache.ttl,
-    SWR_CONTROL_STALE
+    SWR_CONTROL_STALE,
   );
 }
 
@@ -102,7 +102,7 @@ function addRevalidationFlags(revalidation, entryKey, revalidateTimeout) {
   debug(
     "Add revalidation control flags - timeout: %sms - %s",
     revalidateTimeout,
-    entryKey
+    entryKey,
   );
   // local (node instance) flag is set to immediately prevent concurrent calls
   revalidation.local.add(entryKey, revalidateTimeout);
@@ -139,7 +139,7 @@ async function getRevalidationState(revalidation, entryKey) {
   const hasExternalEntryExpired = externalEntryExists === false;
   return {
     hasExternalEntryExpired,
-    isRevalidatingLocally: () => revalidation.local.exists(entryKey)
+    isRevalidatingLocally: () => revalidation.local.exists(entryKey),
   };
 }
 
@@ -155,7 +155,7 @@ async function getRevalidationState(revalidation, entryKey) {
 function createRevalidationManager(service) {
   return {
     local: revalidationStoreFactory(),
-    external: revalidationExternalFactory(service)
+    external: revalidationExternalFactory(service),
   };
 }
 
@@ -171,11 +171,11 @@ function create(service) {
     addRevalidationFlags: addRevalidationFlags.bind(null, revalidation),
     clearAllRevalidationFlags: clearAllRevalidationFlags.bind(
       null,
-      revalidation
+      revalidation,
     ),
     invalidateLocalFlags: revalidation.local.clear,
     removeLocalRevalidationFlag: revalidation.local.remove,
-    getRevalidationState: getRevalidationState.bind(null, revalidation)
+    getRevalidationState: getRevalidationState.bind(null, revalidation),
   };
 }
 
@@ -189,5 +189,5 @@ module.exports = {
   createRevalidationManager,
   addEntry,
   getEntry,
-  create
+  create,
 };

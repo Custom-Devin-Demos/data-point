@@ -15,11 +15,11 @@ beforeAll(() => {
 describe("ReducerPath#resolve", () => {
   function resolve(value, reducerSource) {
     const locals = {
-      a: ["testA"]
+      a: ["testA"],
     };
     const accumulator = AccumulatorFactory.create({
       value,
-      locals
+      locals,
     });
 
     const reducer = reducerPath.create(createReducer, reducerSource);
@@ -28,14 +28,14 @@ describe("ReducerPath#resolve", () => {
 
   test("resolve current value", () => {
     const expected = {
-      a: 1
+      a: 1,
     };
     expect(resolve(expected, "$")).toBe(expected);
   });
 
   test("resolve to context scope", () => {
     const expected = {
-      a: 1
+      a: 1,
     };
 
     expect(resolve(expected, "$..value")).toBe(expected);

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ReducerParallel#factory It should create a ReducerParallel object 1`] = `
-Array [
+[
   ReducerPath {
     "asCollection": false,
     "body": [Function],

@@ -2,75 +2,73 @@ const reducers = require("../utils/reducers");
 
 module.exports = {
   "collection:noValue": {
-    value: (value, acc, next) => {
-      return next(null, "invalid");
-    }
+    value: (value, acc, next) => next(null, "invalid"),
   },
   "collection:ObjectsNotAllowed": {
-    value: "$a.b"
+    value: "$a.b",
   },
   "collection:CustomOutputType": {
-    value: input => input,
+    value: (input) => input,
     outputType: () => {
       throw new Error("custom type check failed");
-    }
+    },
   },
   "collection:a.1": {
-    value: "$a.d"
+    value: "$a.d",
   },
   "collection:b.1": {
     value: "$a.d",
-    map: "$d1"
+    map: "$d1",
   },
   "collection:b.2": {
     value: "$a.b.c",
-    map: []
+    map: [],
   },
   "collection:c.1": {
     value: "$a.d",
-    filter: ["$d1", reducers.isEqualTo(2)]
+    filter: ["$d1", reducers.isEqualTo(2)],
   },
   "collection:c.2": {
     value: "$a.b.c",
-    filter: value => value % 2
+    filter: (value) => value % 2,
   },
   "collection:c.3": {
     value: "$a.b.c",
-    filter: []
+    filter: [],
   },
   "collection:d.1": {
     value: "$a.b.c",
-    find: value => value % 2
+    find: (value) => value % 2,
   },
   "collection:d.2": {
     value: "$a.b.c",
-    find: value => value === 0
+    find: (value) => value === 0,
   },
   "collection:d.3": {
     value: "$a.b.c",
-    find: []
+    find: [],
   },
   "collection:j.1": {
     value: "$a.d",
-    compose: [{ map: "$d1" }]
+    compose: [{ map: "$d1" }],
   },
   "collection:j.2": {
     value: "$a.d",
     compose: [
       { map: ["$d1", reducers.multiplyBy(5)] },
-      { find: [reducers.isEqualTo(10)] }
-    ]
+      { find: [reducers.isEqualTo(10)] },
+    ],
   },
   "collection:j.3": {
     value: "$a.d",
-    compose: [{ find: [reducers.isEqualTo(10)] }, { map: "$d1" }]
+    compose: [{ find: [reducers.isEqualTo(10)] }, { map: "$d1" }],
   },
   "collection:j.4": {
     value: "$a.d",
-    compose: [{ find: [reducers.isEqualTo(10)] }, { find: "$d1" }]
+    compose: [{ find: [reducers.isEqualTo(10)] }, { find: "$d1" }],
   },
   "collection:j.5": {
     value: "$a.d",
-    compose: [{ find: [reducers.isEqualTo(10)] }, { filter: "$d1" }]
-  }
+    compose: [{ find: [reducers.isEqualTo(10)] }, { filter: "$d1" }],
+  },
 };

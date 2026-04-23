@@ -34,7 +34,7 @@ function reducerPredicateIsTruthy(reducerPredicate, output) {
   // output is truthy when all the values are truthy
   if (reducer && reducer.type === "ReducerObject") {
     const keys = Object.keys(output);
-    return !!keys.length && keys.every(key => !isFalsy(output[key]));
+    return !!keys.length && keys.every((key) => !isFalsy(output[key]));
   }
 
   return !!output;

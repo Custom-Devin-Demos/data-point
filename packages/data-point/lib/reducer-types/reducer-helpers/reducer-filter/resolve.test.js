@@ -24,7 +24,7 @@ describe("ReducerFilter#resolve", () => {
       manager,
       Reducer.resolve,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual([]);
   });
@@ -32,24 +32,24 @@ describe("ReducerFilter#resolve", () => {
   test("It should filter an array of objects", async () => {
     const value = [
       {
-        a: 1
+        a: 1,
       },
       {
-        a: 2
-      }
+        a: 2,
+      },
     ];
     const accumulator = AccumulatorFactory.create({ value });
-    const reducer = Factory.create(Reducer.create, ["$a", a => a > 1]);
+    const reducer = Factory.create(Reducer.create, ["$a", (a) => a > 1]);
     const result = await Resolve.resolve(
       manager,
       Reducer.resolve,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual([
       {
-        a: 2
-      }
+        a: 2,
+      },
     ]);
   });
 
@@ -57,65 +57,65 @@ describe("ReducerFilter#resolve", () => {
     test("it should filter values that resolve with falsy keys", async () => {
       const value = [
         {
-          a: undefined
+          a: undefined,
         },
         {
-          a: "undefined"
+          a: "undefined",
         },
         {
-          a: null
+          a: null,
         },
         {
-          a: ""
+          a: "",
         },
         {
-          a: 0
+          a: 0,
         },
         {
-          a: "hello"
+          a: "hello",
         },
         {
-          a: 5
+          a: 5,
         },
         {
-          a: NaN
+          a: NaN,
         },
         {
-          a: []
+          a: [],
         },
         {
-          a: {}
-        }
+          a: {},
+        },
       ];
       const accumulator = AccumulatorFactory.create({ value });
       const reducer = Factory.create(Reducer.create, {
-        a: "$a"
+        a: "$a",
       });
       const result = await Resolve.resolve(
         manager,
         Reducer.resolve,
         accumulator,
-        reducer
+        reducer,
       );
       expect(result).toEqual([
         {
-          a: "undefined"
+          a: "undefined",
         },
         {
-          a: 0
+          a: 0,
         },
         {
-          a: "hello"
+          a: "hello",
         },
         {
-          a: 5
+          a: 5,
         },
         {
-          a: []
+          a: [],
         },
         {
-          a: {}
-        }
+          a: {},
+        },
       ]);
     });
   });

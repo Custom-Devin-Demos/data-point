@@ -25,13 +25,13 @@ const MyModel = DataPoint.Model("MyModel", {
     // this will not be executed because the entity was hijacked
     console.log("processing");
     return "hello";
-  }
+  },
 });
 
 dp.resolve(MyModel, true)
   // console output:
   // Entity model:MyModel is being called
   // hijacking
-  .then(value => {
+  .then((value) => {
     assert.strictEqual(value, "hijacked");
   });

@@ -19,8 +19,8 @@ function validateProperties(id, spec, validKeys) {
         differentKeys.join(", "),
         validKeys.join(", "),
         id,
-        stringify(spec, null, 2)
-      )
+        stringify(spec, null, 2),
+      ),
     );
   }
 
@@ -40,7 +40,7 @@ const baseModifiers = [
   "after",
   "outputType",
   "error",
-  "params"
+  "params",
 ];
 
 /**

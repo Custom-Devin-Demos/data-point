@@ -16,16 +16,16 @@ beforeAll(() => {
     entities: {
       "reducer:a": () => ({
         b: 22,
-        c: 33
-      })
-    }
+        c: 33,
+      }),
+    },
   });
 });
 
 describe("ReducerAssign#resolve", () => {
   test("It should work for empty objects", async () => {
     const accumulator = AccumulatorFactory.create({
-      value: {}
+      value: {},
     });
 
     const reducer = Factory.create(Reducer.create, () => ({}));
@@ -33,7 +33,7 @@ describe("ReducerAssign#resolve", () => {
       manager,
       Reducer.resolve,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual({});
   });
@@ -42,8 +42,8 @@ describe("ReducerAssign#resolve", () => {
     const accumulator = AccumulatorFactory.create({
       value: {
         a: 1,
-        b: 2
-      }
+        b: 2,
+      },
     });
 
     const reducer = Factory.create(Reducer.create, "reducer:a");
@@ -51,12 +51,12 @@ describe("ReducerAssign#resolve", () => {
       manager,
       Reducer.resolve,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual({
       a: 1,
       b: 22,
-      c: 33
+      c: 33,
     });
   });
 
@@ -65,29 +65,29 @@ describe("ReducerAssign#resolve", () => {
       value: {
         a: 1,
         b: {
-          a: 1
-        }
-      }
+          a: 1,
+        },
+      },
     });
 
     const reducer = Factory.create(Reducer.create, () => ({
       a: 1,
       b: {
-        b: 2
-      }
+        b: 2,
+      },
     }));
 
     const result = await Resolve.resolve(
       manager,
       Reducer.resolve,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual({
       a: 1,
       b: {
-        b: 2
-      }
+        b: 2,
+      },
     });
   });
 });

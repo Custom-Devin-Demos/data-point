@@ -37,11 +37,7 @@ module.exports.getUID = getUID;
  * @param {*} value
  */
 function typeOf(value) {
-  return {}.toString
-    .call(value)
-    .split(" ")[1]
-    .slice(0, -1)
-    .toLowerCase();
+  return {}.toString.call(value).split(" ")[1].slice(0, -1).toLowerCase();
 }
 
 module.exports.typeOf = typeOf;
@@ -53,7 +49,7 @@ module.exports.typeOf = typeOf;
 function inspect(acc, data = {}) {
   const log = [];
   log.push("\n\x1b[33minspect\x1b[0m:", _.get(acc, "reducer.spec.id"));
-  Object.keys(data).forEach(key => {
+  Object.keys(data).forEach((key) => {
     const value = data[key];
     log.push(`\n${key}:`, stringify(value, null, 2));
   });

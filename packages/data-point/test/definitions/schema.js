@@ -4,16 +4,14 @@ module.exports = {
       type: "object",
       properties: {
         foo: {
-          type: "integer"
+          type: "integer",
         },
         bar: {
-          type: "string"
-        }
+          type: "string",
+        },
       },
-      required: ["foo", "bar"]
+      required: ["foo", "bar"],
     },
-    options: {
-      v5: false
-    }
-  }
+    options: {},
+  },
 };

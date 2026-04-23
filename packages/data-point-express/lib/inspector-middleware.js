@@ -18,12 +18,12 @@ function dataPointInspectRoute(dataPoint, req, res) {
 
   const augmentedReq = Object.assign({}, req, {
     query,
-    params
+    params,
   });
 
   const transformOptions = Middleware.buildTransformOptions(augmentedReq, {
     routeRequestType: "api",
-    pathname
+    pathname,
   });
 
   Middleware.resolveReducer(dataPoint, entityId, transformOptions, res, value);
@@ -55,5 +55,5 @@ function create(dataPoint) {
 
 module.exports = {
   dataPointInspectRoute,
-  create
+  create,
 };

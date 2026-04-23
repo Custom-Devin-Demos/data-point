@@ -13,9 +13,9 @@ module.exports = (file, api) => {
   const root = j(file.source);
 
   function updateEntity(node, keys) {
-    const entityProps = partition(node.value.properties, prop => {
-      return isMatchingKey(prop.key, keys);
-    });
+    const entityProps = partition(node.value.properties, (prop) =>
+      isMatchingKey(prop.key, keys),
+    );
 
     let props = entityProps[0];
     const otherProps = entityProps[1];
@@ -25,7 +25,7 @@ module.exports = (file, api) => {
     }
 
     props = keys.reduce((acc, key) => {
-      const prop = props.find(p => isMatchingKey(p.key, [key]));
+      const prop = props.find((p) => isMatchingKey(p.key, [key]));
       if (prop) {
         acc.push(prop);
       }
@@ -36,16 +36,12 @@ module.exports = (file, api) => {
     const composeProp = j.property(
       "init",
       j.identifier("compose"),
-      j.arrayExpression(
-        props.map(prop => {
-          return j.objectExpression([prop]);
-        })
-      )
+      j.arrayExpression(props.map((prop) => j.objectExpression([prop]))),
     );
 
-    const index = findLastIndex(otherProps, prop => {
-      return isMatchingKey(prop.key, ["inputType", "before", "value"]);
-    });
+    const index = findLastIndex(otherProps, (prop) =>
+      isMatchingKey(prop.key, ["inputType", "before", "value"]),
+    );
 
     if (index === -1) {
       // eslint-disable-next-line no-param-reassign
@@ -59,8 +55,8 @@ module.exports = (file, api) => {
 
   function execute(entityId, keys) {
     const nodes = getEntityObjects(entityId, j, root);
-    nodes[0].forEach(node => updateEntity(node, keys));
-    nodes[1].forEach(node => updateEntity(node, keys));
+    nodes[0].forEach((node) => updateEntity(node, keys));
+    nodes[1].forEach((node) => updateEntity(node, keys));
   }
 
   execute("collection", ["filter", "map", "find"]);

@@ -6,10 +6,10 @@ const request = require("supertest");
 
 const Factory = require("./factory");
 
-jest.mock("../../data-point-cache/lib/io-redis", () => {
+jest.mock("../../data-point-cache/lib/io-redis", () =>
   // eslint-disable-next-line global-require
-  return require("ioredis-mock");
-});
+  require("ioredis-mock"),
+);
 
 describe("create - all middleware", () => {
   let service;
@@ -19,9 +19,9 @@ describe("create - all middleware", () => {
     const options = {
       entities: {
         "reducer:hello": (value, acc) => ({
-          message: `Hello ${acc.locals.params.name}`
-        })
-      }
+          message: `Hello ${acc.locals.params.name}`,
+        }),
+      },
     };
     service = await Factory.create(options);
   });
@@ -30,51 +30,51 @@ describe("create - all middleware", () => {
     console.warn = consoleWarn;
   });
 
-  test("create inspect service", done => {
+  test("create inspect service", (done) => {
     const app = new Express();
     app.use("/inspect", service.inspector());
     request(app)
       .get("/inspect")
       .expect("Content-Type", /html/)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toContain("inspect");
       })
       .expect(200)
       .end(done);
   });
 
-  test("create middleware", done => {
+  test("create middleware", (done) => {
     const app = new Express();
     app.get("/hello/:name", service.mapTo("reducer:hello"));
     request(app)
       .get("/hello/darek")
       .expect("Content-Type", /json/)
-      .expect(response => {
+      .expect((response) => {
         expect(response.body).toEqual({
-          message: "Hello darek"
+          message: "Hello darek",
         });
       })
       .expect(200)
       .end(done);
   });
 
-  test("it should create router", done => {
+  test("it should create router", (done) => {
     const app = new Express();
     app.use(
       "/api/",
       service.router({
         helloWorld: {
           path: "/hello/:name",
-          middleware: "reducer:hello"
-        }
-      })
+          middleware: "reducer:hello",
+        },
+      }),
     );
     request(app)
       .get("/api/hello/darek")
       .expect("Content-Type", /json/)
-      .expect(response => {
+      .expect((response) => {
         expect(response.body).toEqual({
-          message: "Hello darek"
+          message: "Hello darek",
         });
       })
       .expect(200)

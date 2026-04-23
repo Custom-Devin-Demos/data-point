@@ -9,14 +9,14 @@ function create(entitySpec, id) {
   if (!_.isFunction(entitySpec)) {
     throw new Error(
       `Entity Factory '${id}' should be a function: ${JSON.stringify(
-        entitySpec
-      )}`
+        entitySpec,
+      )}`,
     );
   }
 
   if (entitySpec.length !== 2) {
     throw new Error(
-      `Entity Factory '${id}' method should have an arity of 2, instead got: ${entitySpec.length}`
+      `Entity Factory '${id}' method should have an arity of 2, instead got: ${entitySpec.length}`,
     );
   }
 

@@ -8,7 +8,7 @@ const settings = {
   libraryName: "data-point",
   releases,
   pkg,
-  dirname: __dirname
+  dirname: __dirname,
 };
 
 upgrader(settings)
@@ -17,7 +17,7 @@ upgrader(settings)
   .then(upgrader.prompt)
   .then(upgrader.applyCodemods)
   .then(upgrader.printTip)
-  .catch(err => {
+  .catch((err) => {
     // eslint-disable-next-line no-console
     console.error(err.message);
     process.exit(1);

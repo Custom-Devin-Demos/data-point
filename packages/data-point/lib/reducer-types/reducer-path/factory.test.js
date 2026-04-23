@@ -13,16 +13,16 @@ describe("ReducerPath getters", () => {
   beforeEach(() => {
     acc = {
       params: {
-        a: [2, 4]
+        a: [2, 4],
       },
       value: [
         {
-          a: 2
+          a: 2,
         },
         {
-          a: 4
-        }
-      ]
+          a: 4,
+        },
+      ],
     };
   });
 
@@ -108,7 +108,7 @@ describe("reducer/reducer-path#create", () => {
 describe("ReducerPath#body", () => {
   test('resolve "empty" jsonpath to entire value', () => {
     const acc = {
-      value: "test"
+      value: "test",
     };
     const result = factory.create(createReducer, "$").body(acc);
     expect(result).toBe("test");
@@ -116,7 +116,7 @@ describe("ReducerPath#body", () => {
 
   test('resolve "$." to entire value', () => {
     const acc = {
-      value: "test"
+      value: "test",
     };
     const result = factory.create(createReducer, "$").body(acc);
     expect(result).toBe("test");
@@ -125,9 +125,9 @@ describe("ReducerPath#body", () => {
   test('resolve prefix ".." with valid jsonpath to resolved value', () => {
     const acc = {
       value: {
-        a: ["test"]
+        a: ["test"],
       },
-      locals: "test2"
+      locals: "test2",
     };
     let result = factory.create(createReducer, "$..value.a[0]").body(acc);
     expect(result).toBe("test");
@@ -138,8 +138,8 @@ describe("ReducerPath#body", () => {
   test("resolve valid jsonpath to resolved value", () => {
     const acc = {
       value: {
-        a: ["test"]
-      }
+        a: ["test"],
+      },
     };
     const result = factory.create(createReducer, "$a[0]").body(acc);
     expect(result).toBe("test");
@@ -151,25 +151,25 @@ describe("ReducerPath#body", () => {
         {
           a: {
             b: {
-              c: 1
-            }
-          }
+              c: 1,
+            },
+          },
         },
         {
           a: {
             b: {
-              c: 2
-            }
-          }
+              c: 2,
+            },
+          },
         },
         {
           a: {
             b: {
-              c: 3
-            }
-          }
-        }
-      ]
+              c: 3,
+            },
+          },
+        },
+      ],
     };
     const result = factory.create(createReducer, "$a.b.c[]").body(acc);
     expect(result).toEqual([1, 2, 3]);
@@ -181,25 +181,25 @@ describe("ReducerPath#body", () => {
         {
           a: {
             b: {
-              c: 1
-            }
-          }
+              c: 1,
+            },
+          },
         },
         {
           a: {
             b: {
-              c: 2
-            }
-          }
+              c: 2,
+            },
+          },
         },
         {
           a: {
             b: {
-              c: 3
-            }
-          }
-        }
-      ]
+              c: 3,
+            },
+          },
+        },
+      ],
     };
     const result = factory.create(createReducer, "$a.b.d[]").body(acc);
     expect(result).toEqual([undefined, undefined, undefined]);
@@ -209,9 +209,9 @@ describe("ReducerPath#body", () => {
     const acc = {
       value: {
         a: {
-          b: "c"
-        }
-      }
+          b: "c",
+        },
+      },
     };
     const result = factory.create(createReducer, "$a.b.c[]").body(acc);
     expect(result).toBe(undefined);

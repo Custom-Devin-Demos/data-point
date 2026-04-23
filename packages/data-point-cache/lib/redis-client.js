@@ -9,7 +9,7 @@ function reconnectOnError(err) {
 
 function redisDecorator(redis, resolve, reject) {
   let wasConnected = false;
-  redis.on("error", error => {
+  redis.on("error", (error) => {
     console.error("ioredis - error", error.toString());
     if (!wasConnected) {
       redis.disconnect();
@@ -37,7 +37,7 @@ function redisDecorator(redis, resolve, reject) {
 function factory(options) {
   return new Promise((resolve, reject) => {
     const opts = Object.assign({}, options, {
-      reconnectOnError
+      reconnectOnError,
     });
     const redis = new IORedis(opts);
     redisDecorator(redis, resolve, reject);
@@ -74,30 +74,21 @@ function getFromRedisResult(res) {
 
 async function get(cache, key) {
   const redis = cache.redis;
-  const res = await redis
-    .pipeline()
-    .get(key)
-    .exec();
+  const res = await redis.pipeline().get(key).exec();
 
   return getFromRedisResult(res);
 }
 
 async function exists(cache, key) {
   const redis = cache.redis;
-  const res = await redis
-    .pipeline()
-    .exists(key)
-    .exec();
+  const res = await redis.pipeline().exists(key).exec();
 
   return res[0][1] === 1;
 }
 
 function del(cache, key) {
   const redis = cache.redis;
-  return redis
-    .pipeline()
-    .del(key)
-    .exec();
+  return redis.pipeline().del(key).exec();
 }
 
 function bootstrap(cache) {
@@ -117,7 +108,7 @@ async function create(options = {}) {
     get: null,
     del: null,
     exists: null,
-    options
+    options,
   };
 
   const redis = await factory(cache.options.redis);
@@ -139,5 +130,5 @@ module.exports = {
   del,
   exists,
   encode,
-  decode
+  decode,
 };

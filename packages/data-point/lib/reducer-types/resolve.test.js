@@ -37,12 +37,12 @@ describe("reducer#resolve", () => {
 
   test("It should throw error for invalid input", async () => {
     const accumulator = AccumulatorFactory.create({
-      value: testData.a.b.c
+      value: testData.a.b.c,
     });
 
     const reducer = { type: "INVALID TYPE" };
     await expect(
-      Resolve.resolve(manager, accumulator, reducer)
+      Resolve.resolve(manager, accumulator, reducer),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 

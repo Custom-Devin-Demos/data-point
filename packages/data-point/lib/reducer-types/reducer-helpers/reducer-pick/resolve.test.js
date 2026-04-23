@@ -19,7 +19,7 @@ describe("ReducerPick#resolve", () => {
   test("It should return an empty object when no keys are provided", () => {
     const value = {
       a: 1,
-      b: 2
+      b: 2,
     };
     const accumulator = AccumulatorFactory.create({ value });
     const reducer = Factory.create(Reducer.create, []);
@@ -27,7 +27,7 @@ describe("ReducerPick#resolve", () => {
       manager,
       Reducer.resolve,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual({});
   });
@@ -36,7 +36,7 @@ describe("ReducerPick#resolve", () => {
     const value = {
       a: 1,
       b: 2,
-      c: 3
+      c: 3,
     };
     const accumulator = AccumulatorFactory.create({ value });
     const reducer = Factory.create(Reducer.create, ["c", "q"]);
@@ -44,11 +44,11 @@ describe("ReducerPick#resolve", () => {
       manager,
       Reducer.resolve,
       accumulator,
-      reducer
+      reducer,
     );
 
     expect(result).toEqual({
-      c: 3
+      c: 3,
     });
   });
 });

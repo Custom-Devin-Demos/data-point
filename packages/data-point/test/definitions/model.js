@@ -1,12 +1,12 @@
 module.exports = {
   "model:asIs": {
-    value: "$"
+    value: "$",
   },
   "model:traced": {
     value: "$",
     params: {
-      trace: true
-    }
+      trace: true,
+    },
   },
   "model:lifecycles": {
     inputType: "array",
@@ -14,53 +14,51 @@ module.exports = {
     value: (input, context) => context.locals.value(input),
     after: (input, context) => context.locals.after(input),
     error: (input, context) => context.locals.error(input),
-    outputType: "array"
+    outputType: "array",
   },
 
   "model:a.0": {},
   "model:a.1": {
-    value: value => value + 5
+    value: (value) => value + 5,
   },
   "model:a.2": {
-    value: value => value + 5
+    value: (value) => value + 5,
   },
 
   // entities c.* are for testing
   // inputType and outputType.
   "model:c.0": {
-    inputType: "number"
+    inputType: "number",
   },
 
   "model:c.1": {
-    outputType: "string"
+    outputType: "string",
   },
 
   "model:c.2": {
     // test that its immutable
-    outputType: () => {
-      return "cant happen";
-    }
+    outputType: () => "cant happen",
   },
 
   "model:c.3": {
     // custom type checking
-    inputType: value => {
+    inputType: (value) => {
       if (typeof value !== "string") {
         throw new Error("custom type error");
       }
 
       return value;
-    }
+    },
   },
 
   "model:c.4": {
     after: () => 1,
-    outputType: "string"
+    outputType: "string",
   },
 
   "model:c.5": {
     before: () => 1,
-    outputType: "string"
+    outputType: "string",
   },
 
   "model:c.6": {
@@ -68,7 +66,7 @@ module.exports = {
       throw new Error();
     },
     error: () => "error string",
-    outputType: "string"
+    outputType: "string",
   },
 
   "model:c.7": {
@@ -76,37 +74,35 @@ module.exports = {
       throw new Error();
     },
     error: () => 1,
-    outputType: "string"
+    outputType: "string",
   },
 
   "model:c.8": {
     before: () => {
       throw new Error("error from before method");
     },
-    error: error => {
+    error: (error) => {
       throw error;
     },
-    outputType: "string"
+    outputType: "string",
   },
 
   "model:c.9": {
     before: () => 1,
     error: () => "string from error",
-    outputType: "string"
+    outputType: "string",
   },
 
   "model:c.10": {
     before: () => 1,
     error: () => 2,
-    outputType: "string"
+    outputType: "string",
   },
 
   "model:c.11": {
     value: () => {
       throw new Error("no outputType check");
     },
-    error: () => {
-      return "all good";
-    }
-  }
+    error: () => "all good",
+  },
 };

@@ -8,7 +8,7 @@ function getParentSpec(spec, specs) {
   const parentSpec = specs[parentId];
   if (!parentSpec) {
     throw new Error(
-      `Could not extend ${spec.id}, parent ${parentId} does not exist.`
+      `Could not extend ${spec.id}, parent ${parentId} does not exist.`,
     );
   }
   return parentSpec;
@@ -22,7 +22,7 @@ function getAncestors(spec, specs) {
   while (parent) {
     if (parent.id === spec.id || ancestors.indexOf(parent.id) >= 0) {
       throw new Error(
-        `Could not extend ${spec.id}, parent chain creates a circle reference with ${parent.id}`
+        `Could not extend ${spec.id}, parent chain creates a circle reference with ${parent.id}`,
       );
     }
     ancestors.push(parent.id);
@@ -37,9 +37,7 @@ function extendSpec(spec, ancestors, sources) {
   if (ancestors.length === 0) {
     return spec;
   }
-  const ancestorSpecs = ancestors.map(parentId => {
-    return sources[parentId].spec;
-  });
+  const ancestorSpecs = ancestors.map((parentId) => sources[parentId].spec);
   ancestorSpecs.reverse();
   return _.assign.apply(null, [{}].concat(ancestorSpecs, spec));
 }
@@ -54,7 +52,7 @@ function normalizeSpec(specItemId, source) {
     id,
     parentId,
     spec: source[specItemId],
-    ancestors: []
+    ancestors: [],
   };
 }
 
@@ -77,16 +75,16 @@ function extendSpecItem(specItem, normalizedSpecs) {
   const spec = extendSpec(specItem.spec, ancestors, normalizedSpecs);
   return _.assign({}, specItem, {
     ancestors,
-    spec
+    spec,
   });
 }
 
 module.exports.extendSpecItem = extendSpecItem;
 
 function extendSpecs(normalizedSpecs) {
-  return _.mapValues(normalizedSpecs, specItem => {
-    return extendSpecItem(specItem, normalizedSpecs);
-  });
+  return _.mapValues(normalizedSpecs, (specItem) =>
+    extendSpecItem(specItem, normalizedSpecs),
+  );
 }
 
 module.exports.extendSpecs = extendSpecs;

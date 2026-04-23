@@ -20,5 +20,5 @@ async function create(options) {
 module.exports = {
   verify,
   createDataPoint,
-  create
+  create,
 };

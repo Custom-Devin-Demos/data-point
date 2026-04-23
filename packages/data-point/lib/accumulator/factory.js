@@ -27,7 +27,7 @@ function create(spec) {
   accumulator.value = spec.value;
   accumulator.context = spec.context;
   accumulator.reducer = {
-    spec: spec.context
+    spec: spec.context,
   };
   accumulator.entityOverrides = merge({}, spec.entityOverrides);
   accumulator.locals = merge({}, spec.locals);

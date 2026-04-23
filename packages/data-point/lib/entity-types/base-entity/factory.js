@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 const defaultTo = require("lodash/defaultTo");
 const {
-  normalizeTypeCheckSource
+  normalizeTypeCheckSource,
 } = require("../../helpers/type-check-helpers");
 
 const createReducer = require("../../reducer-types").create;
@@ -14,13 +14,13 @@ const createReducer = require("../../reducer-types").create;
 function validateResolve(resolve) {
   if (typeof resolve !== "function") {
     throw new Error(
-      `"resolve" must be a function, create(type:String, factory:Function, resolve:Function)`
+      `"resolve" must be a function, create(type:String, factory:Function, resolve:Function)`,
     );
   }
 
   if (resolve.length !== 2) {
     throw new Error(
-      '"resolve" function must have an arity of 2, resolve(accumulator:Accumulator, resolveReducer:Function)'
+      '"resolve" function must have an arity of 2, resolve(accumulator:Accumulator, resolveReducer:Function)',
     );
   }
 
@@ -35,12 +35,12 @@ function validateResolve(resolve) {
 function validateFactory(factory) {
   if (typeof factory !== "function") {
     throw new Error(
-      '"factory" argument must be a function, create(type:String, factory:Function, resolve:Function)'
+      '"factory" argument must be a function, create(type:String, factory:Function, resolve:Function)',
     );
   }
   if (factory.length !== 2) {
     throw new Error(
-      '"factory" function must have an arity of 2, factory(name:String, spec:Object)'
+      '"factory" function must have an arity of 2, factory(name:String, spec:Object)',
     );
   }
   return true;
@@ -66,7 +66,7 @@ function setReducerIfTruthy(name, target, spec) {
 function createEntityInstance(entity) {
   function EntityFactory() {}
   Object.defineProperty(EntityFactory, "name", {
-    value: entity.id
+    value: entity.id,
   });
 
   return Object.assign(new EntityFactory(), entity);
@@ -115,12 +115,12 @@ function createEntityType(type, name, entity) {
 function create(type, factory, resolve) {
   if (arguments.length !== 3) {
     throw new Error(
-      "Received wrong number of arguments. Try passing create(type:String, factory:Function, resolve:Function)"
+      "Received wrong number of arguments. Try passing create(type:String, factory:Function, resolve:Function)",
     );
   }
   if (typeof type !== "string") {
     throw new Error(
-      '"type" argument must be a string create(type:String, factory:Function, resolve:Function)'
+      '"type" argument must be a string create(type:String, factory:Function, resolve:Function)',
     );
   }
 
@@ -151,5 +151,5 @@ module.exports = {
   validateFactory,
   createEntityType,
   createEntityInstance,
-  create
+  create,
 };

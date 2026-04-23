@@ -12,8 +12,8 @@ describe("ReducerConstant#resolve", () => {
       a: "$a",
       b: 1,
       c: {
-        a: "$c.a"
-      }
+        a: "$c.a",
+      },
     };
     const input = {};
 
@@ -39,16 +39,16 @@ describe("ReducerConstant#resolve", () => {
       a: "$a",
       b: "$b",
       c: constant({
-        a: "$c.a"
+        a: "$c.a",
       }),
-      d: constant(1)
+      d: constant(1),
     };
     const input = {
       a: 1,
       b: 2,
       c: {
-        a: 1
-      }
+        a: 1,
+      },
     };
 
     const result = await dataPoint.transform(source, input);
@@ -56,9 +56,9 @@ describe("ReducerConstant#resolve", () => {
       a: 1,
       b: 2,
       c: {
-        a: "$c.a"
+        a: "$c.a",
       },
-      d: 1
+      d: 1,
     });
   });
 });

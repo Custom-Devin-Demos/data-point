@@ -3,7 +3,7 @@ function set(cache, key, value, ttl) {
   cache.entries[key] = {
     value,
     ttl,
-    created: Date.now()
+    created: Date.now(),
   };
   return true;
 }
@@ -27,7 +27,7 @@ function swipeTick(cache) {
     cache.entries = {};
     // eslint-disable-next-line no-console
     console.warn(
-      "Cache inMemory reached max (10000) number of entries, all keys now being deleted."
+      "Cache inMemory reached max (10000) number of entries, all keys now being deleted.",
     );
     return;
   }
@@ -64,7 +64,7 @@ function create() {
     set: null,
     get: null,
     del: null,
-    swipe: null
+    swipe: null,
   };
   return bootstrap(Cache);
 }
@@ -76,5 +76,5 @@ module.exports = {
   swipeTick,
   swipe,
   create,
-  bootstrap
+  bootstrap,
 };

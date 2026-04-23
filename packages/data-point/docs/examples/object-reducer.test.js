@@ -11,7 +11,7 @@ function getMonth(rawDate) {
 const Card = {
   id: "$uid",
   title: "$shortTitle",
-  monthCreated: ["$dateCreated", getMonth]
+  monthCreated: ["$dateCreated", getMonth],
 };
 
 // getMonth unit tests are omitted for the purpose of the example
@@ -23,7 +23,7 @@ describe("Card Object Reducer", () => {
     const input = {
       uid: 123,
       shortTitle: "Some Title",
-      dateCreated: "2018-12-04T03:24:00"
+      dateCreated: "2018-12-04T03:24:00",
     };
 
     const result = await dataPoint.resolve(Card, input);
@@ -31,7 +31,7 @@ describe("Card Object Reducer", () => {
     expect(result).toEqual({
       id: 123,
       title: "Some Title",
-      monthCreated: 12
+      monthCreated: 12,
     });
   });
 });

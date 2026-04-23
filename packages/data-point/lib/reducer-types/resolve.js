@@ -15,7 +15,7 @@ const reducers = Object.assign({}, ReducerHelpers, {
   [ReducerFunction.type]: ReducerFunction,
   [ReducerList.type]: ReducerList,
   [ReducerObject.type]: ReducerObject,
-  [ReducerPath.type]: ReducerPath
+  [ReducerPath.type]: ReducerPath,
 });
 
 /**

@@ -1,10 +1,6 @@
 module.exports = {
-  "reducer:HelloWorld": () => {
-    return "Hello World!!";
-  },
-  "reducer:greet": (input, acc) => {
-    return `Hello ${acc.locals.params.name}!!`;
-  },
+  "reducer:HelloWorld": () => "Hello World!!",
+  "reducer:greet": (input, acc) => `Hello ${acc.locals.params.name}!!`,
   "entry:getPerson": {
     before: (input, acc) => {
       // check params is not missing
@@ -15,24 +11,24 @@ module.exports = {
     value: "$..locals.params.personId | request:getPersonById | hash:Person",
     params: {
       ttl: "5m",
-      cacheKey: (input, acc) => `entry:getPerson:${acc.locals.params.personId}`
-    }
+      cacheKey: (input, acc) => `entry:getPerson:${acc.locals.params.personId}`,
+    },
   },
   "request:getPersonById": {
-    url: "https://swapi.co/api/people/{value}"
+    url: "https://swapi.co/api/people/{value}",
   },
   "request:getHomeWorldByUrl": {
-    url: "{value}"
+    url: "{value}",
   },
   "model:getHomeWorldByUrl": {
-    value: "request:getHomeWorldByUrl | $name"
+    value: "request:getHomeWorldByUrl | $name",
   },
   "hash:Person": {
     mapKeys: {
       name: "$name",
       gender: "$gender",
       hairColor: "$hair_color",
-      homeworld: "$homeworld | model:getHomeWorldByUrl"
-    }
-  }
+      homeworld: "$homeworld | model:getHomeWorldByUrl",
+    },
+  },
 };

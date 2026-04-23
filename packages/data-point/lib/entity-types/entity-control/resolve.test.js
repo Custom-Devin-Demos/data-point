@@ -16,10 +16,10 @@ function transform(entityId, value, options) {
     value,
     Object.assign(
       {
-        context: reducer
+        context: reducer,
       },
-      options
-    )
+      options,
+    ),
   );
   return resolveControlEntity(accumulator, resolveReducerBound);
 }
@@ -46,7 +46,7 @@ describe("entity-control#resolve", () => {
   // README: reducer could skip it if not setup correctly
   test("test error gets rethrown", async () => {
     await expect(
-      transform("control:a.2", testData)
+      transform("control:a.2", testData),
     ).rejects.toThrowErrorMatchingInlineSnapshot(`"test"`);
   });
 });

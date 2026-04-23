@@ -3,9 +3,7 @@
 const _ = require("lodash");
 
 const mockDebug = jest.fn();
-jest.mock("debug", () => {
-  return () => mockDebug;
-});
+jest.mock("debug", () => () => mockDebug);
 
 jest.mock("./stale-while-revalidate");
 jest.mock("./entity-cache-params");
@@ -33,17 +31,17 @@ function createContext() {
     locals: {
       req: {
         app: {
-          locals: {}
-        }
-      }
+          locals: {},
+        },
+      },
     },
     context: {
       params: {},
-      id: "model:Foo"
+      id: "model:Foo",
     },
     reducer: {
-      spec: {}
-    }
+      spec: {},
+    },
   };
 
   return ctx;
@@ -64,9 +62,7 @@ describe("generateKey", () => {
   it("should generate a key using cacheKey parameter", () => {
     const ctx = createContext();
 
-    const cacheKey = acc => {
-      return `custom:${acc.context.id}`;
-    };
+    const cacheKey = (acc) => `custom:${acc.context.id}`;
 
     const result = CacheMiddleware.generateKey(cacheKey, ctx);
     expect(result).toEqual("custom:model:Foo");
@@ -79,7 +75,7 @@ describe("revalidateSuccess", () => {
     const service = _.set(
       {},
       "staleWhileRevalidate.removeLocalRevalidationFlag",
-      mockRemoveLocalRevalidationFlag
+      mockRemoveLocalRevalidationFlag,
     );
     CacheMiddleware.revalidateSuccess(service, "entityId", "entryKey")();
     expect(mockRemoveLocalRevalidationFlag).toBeCalledWith("entryKey");
@@ -105,7 +101,7 @@ describe("catchRevalidateError", () => {
     const service = _.set(
       {},
       "staleWhileRevalidate.clearAllRevalidationFlags",
-      mockClearAllRevalidationFlags
+      mockClearAllRevalidationFlags,
     );
 
     const error = new Error("test");
@@ -113,7 +109,7 @@ describe("catchRevalidateError", () => {
     return CacheMiddleware.catchRevalidateError(
       service,
       "entityId",
-      "entryKey"
+      "entryKey",
     )(error).then(() => {
       expect(mockClearAllRevalidationFlags).toBeCalledWith("entryKey");
       expect(spyConsoleError.mock.calls).toMatchSnapshot();
@@ -122,13 +118,13 @@ describe("catchRevalidateError", () => {
 
   it("should log errors when clearing flags fail", () => {
     const mockClearAllRevalidationFlags = jest.fn(() =>
-      Promise.reject(new Error("revalidation"))
+      Promise.reject(new Error("revalidation")),
     );
     const spyConsoleError = jest.spyOn(console, "error").mockImplementation();
     const service = _.set(
       {},
       "staleWhileRevalidate.clearAllRevalidationFlags",
-      mockClearAllRevalidationFlags
+      mockClearAllRevalidationFlags,
     );
 
     const error = new Error("test");
@@ -136,7 +132,7 @@ describe("catchRevalidateError", () => {
     return CacheMiddleware.catchRevalidateError(
       service,
       "entityId",
-      "entryKey"
+      "entryKey",
     )(error).then(() => {
       expect(mockClearAllRevalidationFlags).toBeCalledWith("entryKey");
       expect(spyConsoleError.mock.calls).toMatchSnapshot();
@@ -150,30 +146,30 @@ describe("shouldTriggerRevalidate", () => {
   });
   it("should return false if revalidationState.hasExternalEntryExpired is not true", () => {
     const revalidationState = {
-      hasExternalEntryExpired: false
+      hasExternalEntryExpired: false,
     };
     expect(
-      CacheMiddleware.shouldTriggerRevalidate(true, revalidationState)
+      CacheMiddleware.shouldTriggerRevalidate(true, revalidationState),
     ).toEqual(false);
   });
 
   it("should return false if revalidationState.isRevalidatingLocally() is true", () => {
     const revalidationState = {
       hasExternalEntryExpired: true,
-      isRevalidatingLocally: () => true
+      isRevalidatingLocally: () => true,
     };
     expect(
-      CacheMiddleware.shouldTriggerRevalidate(true, revalidationState)
+      CacheMiddleware.shouldTriggerRevalidate(true, revalidationState),
     ).toEqual(false);
   });
 
   it("should return true if revalidationState.isRevalidatingLocally() is true", () => {
     const revalidationState = {
       hasExternalEntryExpired: true,
-      isRevalidatingLocally: () => false
+      isRevalidatingLocally: () => false,
     };
     expect(
-      CacheMiddleware.shouldTriggerRevalidate(true, revalidationState)
+      CacheMiddleware.shouldTriggerRevalidate(true, revalidationState),
     ).toEqual(true);
   });
 });
@@ -182,7 +178,7 @@ describe("revalidateEntry", () => {
   const cache = {
     ttl: 200,
     staleWhileRevalidateTtl: 400,
-    revalidateTimeout: 5000
+    revalidateTimeout: 5000,
   };
 
   function createMocks() {
@@ -203,14 +199,14 @@ describe("revalidateEntry", () => {
     _.set(
       mocks.service,
       "staleWhileRevalidate.addRevalidationFlags",
-      mocks.addRevalidationFlags
+      mocks.addRevalidationFlags,
     );
 
     mocks.resolveFromAccumulator = jest.fn(() => Promise.resolve("resolved"));
     _.set(
       mocks.service,
       "dataPoint.resolveFromAccumulator",
-      mocks.resolveFromAccumulator
+      mocks.resolveFromAccumulator,
     );
 
     return mocks;
@@ -223,7 +219,7 @@ describe("revalidateEntry", () => {
       mocks.service,
       "entryKey",
       cache,
-      ctx
+      ctx,
     ).then(() => {
       expect(mockDebug.mock.calls).toMatchSnapshot();
     });
@@ -233,7 +229,7 @@ describe("revalidateEntry", () => {
     const mocks = createMocks();
     const error = new Error("resolved");
     mocks.resolveFromAccumulator.mockImplementation(() =>
-      Promise.reject(error)
+      Promise.reject(error),
     );
 
     const errorHandler = jest.fn(() => true);
@@ -245,12 +241,12 @@ describe("revalidateEntry", () => {
       mocks.service,
       "entryKey",
       cache,
-      ctx
+      ctx,
     ).then(() => {
       expect(mocks.catchRevalidateError).toBeCalledWith(
         mocks.service,
         "model:Foo",
-        "entryKey"
+        "entryKey",
       );
       expect(errorHandler).toBeCalledWith(error);
     });
@@ -263,7 +259,7 @@ describe("revalidateEntry", () => {
       mocks.service,
       "entryKey",
       cache,
-      ctx
+      ctx,
     ).then(() => {
       // original context should not be mutated
       expect(ctx).not.toHaveProperty("locals.revalidatingCache");
@@ -277,8 +273,8 @@ describe("revalidateEntry", () => {
         "locals.revalidatingCache",
         {
           entryKey: "entryKey",
-          entityId: "model:Foo"
-        }
+          entityId: "model:Foo",
+        },
       );
     });
   });
@@ -295,27 +291,27 @@ describe("revalidateEntry", () => {
       _.set(
         mocks.service,
         "dataPoint.resolveFromAccumulator",
-        mocks.resolveFromAccumulator
+        mocks.resolveFromAccumulator,
       );
 
       await CacheMiddleware.revalidateEntry(
         mocks.service,
         "entryKey",
         cache,
-        ctx
+        ctx,
       );
 
       // check outputType gets executed
       expect(mocks.resolveFromAccumulator).toBeCalledWith(
         ctx.reducer.spec.outputType,
-        ctx
+        ctx,
       );
 
       // check updateSWREntry is executed
       expect(mocks.updateSWREntry).toBeCalledWith(
         mocks.service,
         "entryKey",
-        cache
+        cache,
       );
     });
 
@@ -332,14 +328,14 @@ describe("revalidateEntry", () => {
       _.set(
         mocks.service,
         "dataPoint.resolveFromAccumulator",
-        mocks.resolveFromAccumulator
+        mocks.resolveFromAccumulator,
       );
 
       await CacheMiddleware.revalidateEntry(
         mocks.service,
         "entryKey",
         cache,
-        ctx
+        ctx,
       );
 
       // check outputType gets executed
@@ -352,7 +348,7 @@ describe("revalidateEntry", () => {
       expect(mocks.catchRevalidateError).toBeCalledWith(
         mocks.service,
         "model:Foo",
-        "entryKey"
+        "entryKey",
       );
     });
   });
@@ -364,12 +360,12 @@ describe("revalidateEntry", () => {
       mocks.service,
       "entryKey",
       cache,
-      ctx
+      ctx,
     ).then(() => {
       expect(mocks.updateSWREntry).toBeCalledWith(
         mocks.service,
         "entryKey",
-        cache
+        cache,
       );
     });
   });
@@ -381,12 +377,12 @@ describe("revalidateEntry", () => {
       mocks.service,
       "entryKey",
       cache,
-      ctx
+      ctx,
     ).then(() => {
       expect(mocks.revalidateSuccess).toBeCalledWith(
         mocks.service,
         "model:Foo",
-        "entryKey"
+        "entryKey",
       );
     });
   });
@@ -401,14 +397,14 @@ describe("isRevalidatingCacheKey", () => {
   it("should return false if revalidating key does not match current key", () => {
     const ctx = createContext();
     ctx.locals.revalidatingCache = {
-      entryKey: "otherKey"
+      entryKey: "otherKey",
     };
     expect(CacheMiddleware.isRevalidatingCacheKey(ctx, "key")).toEqual(false);
   });
   it("should return true if revalidating key matches current key", () => {
     const ctx = createContext();
     ctx.locals.revalidatingCache = {
-      entryKey: "key"
+      entryKey: "key",
     };
     expect(CacheMiddleware.isRevalidatingCacheKey(ctx, "key")).toEqual(true);
   });
@@ -417,7 +413,7 @@ describe("isRevalidatingCacheKey", () => {
 describe("resolveStaleWhileRevalidateEntry", () => {
   const cache = {
     ttl: 200,
-    staleWhileRevalidateTtl: 400
+    staleWhileRevalidateTtl: 400,
   };
 
   function createMocks() {
@@ -440,12 +436,12 @@ describe("resolveStaleWhileRevalidateEntry", () => {
     _.set(
       service,
       "staleWhileRevalidate.getRevalidationState",
-      jest.fn(() => "revalidationState")
+      jest.fn(() => "revalidationState"),
     );
     _.set(
       service,
       "staleWhileRevalidate.getEntry",
-      jest.fn(() => "staleEntry")
+      jest.fn(() => "staleEntry"),
     );
 
     mocks.service = service;
@@ -468,7 +464,7 @@ describe("resolveStaleWhileRevalidateEntry", () => {
       mocks.service,
       "entryKey",
       cache,
-      mocks.ctx
+      mocks.ctx,
     );
     expect(mocks.isRevalidatingCacheKey).toBeCalledWith(mocks.ctx, "entryKey");
     expect(result).toBeUndefined();
@@ -487,12 +483,12 @@ describe("resolveStaleWhileRevalidateEntry", () => {
       mocks.service,
       "entryKey",
       cache,
-      mocks.ctx
+      mocks.ctx,
     ).then(() => {
       expect(StaleWhileRevalidate.create).toBeCalledWith(mocks.service);
       expect(mocks.service).toHaveProperty(
         "staleWhileRevalidate",
-        staleWhileRevalidate
+        staleWhileRevalidate,
       );
     });
   });
@@ -511,14 +507,14 @@ describe("resolveStaleWhileRevalidateEntry", () => {
         mocks.service,
         "entryKey",
         cache,
-        mocks.ctx
+        mocks.ctx,
       ),
       CacheMiddleware.resolveStaleWhileRevalidateEntry(
         mocks.service,
         "entryKey",
         cache,
-        mocks.ctx
-      )
+        mocks.ctx,
+      ),
     ];
     return Promise.all(results).then(() => {
       expect(StaleWhileRevalidate.create).toHaveBeenCalledTimes(1);
@@ -531,11 +527,11 @@ describe("resolveStaleWhileRevalidateEntry", () => {
       mocks.service,
       "entryKey",
       cache,
-      mocks.ctx
+      mocks.ctx,
     ).then(() => {
       expect(mocks.setTimeout).toHaveBeenCalledWith(
         mocks.service.staleWhileRevalidate.invalidateLocalFlags,
-        0
+        0,
       );
     });
   });
@@ -548,11 +544,11 @@ describe("resolveStaleWhileRevalidateEntry", () => {
       mocks.service,
       "entryKey",
       cache,
-      mocks.ctx
-    ).then(result => {
+      mocks.ctx,
+    ).then((result) => {
       expect(mocks.shouldTriggerRevalidate).toHaveBeenCalledWith(
         "staleEntry",
-        "revalidationState"
+        "revalidationState",
       );
       expect(result).toEqual("staleEntry");
     });
@@ -566,13 +562,13 @@ describe("resolveStaleWhileRevalidateEntry", () => {
       mocks.service,
       "entryKey",
       cache,
-      mocks.ctx
-    ).then(result => {
+      mocks.ctx,
+    ).then((result) => {
       expect(mocks.revalidateEntry).toHaveBeenCalledWith(
         mocks.service,
         "entryKey",
         cache,
-        mocks.ctx
+        mocks.ctx,
       );
       expect(result).toEqual("staleEntry");
     });
@@ -583,14 +579,14 @@ describe("setStaleWhileRevalidateEntry", () => {
   it("should add entry to staleWhileRevalidate controller", () => {
     const mockAddEntry = jest.fn(() => Promise.resolve(true));
     jest.spyOn(CacheMiddleware, "resolveStaleWhileRevalidate").mockReturnValue({
-      addEntry: mockAddEntry
+      addEntry: mockAddEntry,
     });
     const service = {};
     return CacheMiddleware.setStaleWhileRevalidateEntry(
       service,
       "entryKey",
       "value",
-      "cache"
+      "cache",
     ).then(() => {
       expect(mockAddEntry).toBeCalledWith("entryKey", "value", "cache");
     });
@@ -605,7 +601,7 @@ describe("before", () => {
     mocks.cache = {
       ttl: "20m",
       cacheKey: () => true,
-      useStaleWhileRevalidate: true
+      useStaleWhileRevalidate: true,
     };
     mocks.next = jest.fn();
 
@@ -648,7 +644,7 @@ describe("before", () => {
     });
   });
 
-  it("should resolve to stale value if cache.useStaleWhileRevalidate is true and stale value exists", done => {
+  it("should resolve to stale value if cache.useStaleWhileRevalidate is true and stale value exists", (done) => {
     const mocks = createMocks();
 
     const next = createNext(done, () => {
@@ -657,7 +653,7 @@ describe("before", () => {
         mocks.service,
         "mockCacheKey",
         mocks.cache,
-        mocks.ctx
+        mocks.ctx,
       );
       expect(mocks.getEntry).not.toBeCalled();
     });
@@ -665,7 +661,7 @@ describe("before", () => {
     CacheMiddleware.before(mocks.service, mocks.ctx, next);
   });
 
-  it("should resolve to basic redis entry if cache.useStaleWhileRevalidate is false and value exists", done => {
+  it("should resolve to basic redis entry if cache.useStaleWhileRevalidate is false and value exists", (done) => {
     const mocks = createMocks();
 
     mocks.cache.useStaleWhileRevalidate = false;
@@ -679,7 +675,7 @@ describe("before", () => {
     CacheMiddleware.before(mocks.service, mocks.ctx, next);
   });
 
-  it("should not call ctx.resolve if stale value does not exists", done => {
+  it("should not call ctx.resolve if stale value does not exists", (done) => {
     const mocks = createMocks();
 
     const next = createNext(done, () => {
@@ -688,7 +684,7 @@ describe("before", () => {
         mocks.service,
         "mockCacheKey",
         mocks.cache,
-        mocks.ctx
+        mocks.ctx,
       );
     });
 
@@ -696,7 +692,7 @@ describe("before", () => {
     CacheMiddleware.before(mocks.service, mocks.ctx, next);
   });
 
-  it("should call next with error if revalidation fails", done => {
+  it("should call next with error if revalidation fails", (done) => {
     const revalidationError = new Error("revalidation failed");
     const mocks = createMocks();
 
@@ -718,7 +714,7 @@ describe("after", () => {
     mocks.cache = {
       ttl: "20m",
       cacheKey: () => true,
-      useStaleWhileRevalidate: true
+      useStaleWhileRevalidate: true,
     };
 
     mocks.next = jest.fn();
@@ -763,7 +759,7 @@ describe("after", () => {
   });
 
   describe("outputType check", () => {
-    it("check it runs outputType reducer if set", done => {
+    it("check it runs outputType reducer if set", (done) => {
       const mocks = createMocks();
 
       mocks.ctx.reducer.spec.outputType = "outputType";
@@ -775,20 +771,20 @@ describe("after", () => {
       _.set(
         mocks.service,
         "dataPoint.resolveFromAccumulator",
-        mocks.resolveFromAccumulator
+        mocks.resolveFromAccumulator,
       );
 
       const next = createNext(done, () => {
         expect(mocks.resolveFromAccumulator).toBeCalledWith(
           mocks.ctx.reducer.spec.outputType,
-          mocks.ctx
+          mocks.ctx,
         );
 
         expect(mocks.setStaleWhileRevalidateEntry).toBeCalledWith(
           mocks.service,
           "mockCacheKey",
           "resolvedValue",
-          mocks.cache
+          mocks.cache,
         );
         expect(mocks.setEntry).not.toBeCalled();
       });
@@ -797,7 +793,7 @@ describe("after", () => {
       CacheMiddleware.after(mocks.service, mocks.ctx, next);
     });
 
-    it("check it does not save entry if outputType does not pass", done => {
+    it("check it does not save entry if outputType does not pass", (done) => {
       const mocks = createMocks();
 
       const error = new TypeError("bad type");
@@ -807,7 +803,7 @@ describe("after", () => {
       _.set(
         mocks.service,
         "dataPoint.resolveFromAccumulator",
-        mocks.resolveFromAccumulator
+        mocks.resolveFromAccumulator,
       );
 
       mocks.ctx.reducer.spec.outputType = "outputType";
@@ -817,7 +813,7 @@ describe("after", () => {
 
         expect(mocks.resolveFromAccumulator).toBeCalledWith(
           mocks.ctx.reducer.spec.outputType,
-          mocks.ctx
+          mocks.ctx,
         );
 
         expect(mocks.setStaleWhileRevalidateEntry).not.toBeCalled();
@@ -829,7 +825,7 @@ describe("after", () => {
     });
   });
 
-  it("should set stale value if cache.useStaleWhileRevalidate is true", done => {
+  it("should set stale value if cache.useStaleWhileRevalidate is true", (done) => {
     const mocks = createMocks();
 
     const next = createNext(done, () => {
@@ -837,7 +833,7 @@ describe("after", () => {
         mocks.service,
         "mockCacheKey",
         "resolvedValue",
-        mocks.cache
+        mocks.cache,
       );
       expect(mocks.setEntry).not.toBeCalled();
     });
@@ -846,7 +842,7 @@ describe("after", () => {
     CacheMiddleware.after(mocks.service, mocks.ctx, next);
   });
 
-  it("should call next with only 1 argument to avoid exiting the middleware chain", done => {
+  it("should call next with only 1 argument to avoid exiting the middleware chain", (done) => {
     const mocks = createMocks();
 
     const next = createNext(done, () => {
@@ -857,7 +853,7 @@ describe("after", () => {
     CacheMiddleware.after(mocks.service, mocks.ctx, next);
   });
 
-  it("should set basic redis entry value if cache.useStaleWhileRevalidate is false", done => {
+  it("should set basic redis entry value if cache.useStaleWhileRevalidate is false", (done) => {
     const mocks = createMocks();
 
     const next = createNext(done, () => {
@@ -866,7 +862,7 @@ describe("after", () => {
         mocks.service,
         "mockCacheKey",
         "resolvedValue",
-        mocks.cache.ttl
+        mocks.cache.ttl,
       );
     });
 
@@ -875,12 +871,12 @@ describe("after", () => {
   });
 
   describe("handle error", () => {
-    it("should call next with error value if setStaleWhileRevalidateEntry fails", done => {
+    it("should call next with error value if setStaleWhileRevalidateEntry fails", (done) => {
       const mocks = createMocks();
 
       const error = new Error("failed");
       mocks.setStaleWhileRevalidateEntry.mockImplementation(() =>
-        Promise.reject(error)
+        Promise.reject(error),
       );
 
       const next = createNext(done, () => {
@@ -891,7 +887,7 @@ describe("after", () => {
       CacheMiddleware.after(mocks.service, mocks.ctx, next);
     });
 
-    it("should call next with error value if setEntry fails", done => {
+    it("should call next with error value if setEntry fails", (done) => {
       const mocks = createMocks();
 
       const error = new Error("failed");

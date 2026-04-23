@@ -9,10 +9,10 @@ module.exports = (file, api) => {
 
     quoteRoot
       .find(item.Literal, {
-        value: v => typeof v === "string",
-        raw: v => typeof v === "string"
+        value: (v) => typeof v === "string",
+        raw: (v) => typeof v === "string",
       })
-      .forEach(p => {
+      .forEach((p) => {
         // The raw value is from the original babel source
         if (p.value.raw[0] === "'") {
           detectedQuoting = "single";
@@ -42,7 +42,7 @@ module.exports = (file, api) => {
       // eslint-disable-next-line no-param-reassign
       node.value.value.raw = node.value.value.raw.replace(
         rootPathWithDotRegex,
-        "$$$1"
+        "$$$1",
       );
     }
   }

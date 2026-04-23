@@ -24,7 +24,7 @@ describe("ReducerMap#resolve", () => {
       manager,
       Reducer.resolve,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual([undefined, undefined]);
   });
@@ -32,19 +32,19 @@ describe("ReducerMap#resolve", () => {
   test("It should map an array of objects", async () => {
     const value = [
       {
-        a: 1
+        a: 1,
       },
       {
-        a: 2
-      }
+        a: 2,
+      },
     ];
     const accumulator = AccumulatorFactory.create({ value });
-    const reducer = Factory.create(Reducer.create, ["$a", a => a + 1]);
+    const reducer = Factory.create(Reducer.create, ["$a", (a) => a + 1]);
     const result = await Resolve.resolve(
       manager,
       Reducer.resolve,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual([2, 3]);
   });

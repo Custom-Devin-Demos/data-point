@@ -8,7 +8,7 @@ const storeManager = require("./store-manager");
 function errorInfoCbGet(id) {
   return {
     message: `Entity Module id '${id}' is not defined`,
-    name: "InvalidId"
+    name: "InvalidId",
   };
 }
 
@@ -19,7 +19,7 @@ function errorInfoCbGet(id) {
 function errorInfoCbAdd(id) {
   return {
     message: `Entity Module with id '${id}' already exists`,
-    name: "InvalidId"
+    name: "InvalidId",
   };
 }
 
@@ -31,7 +31,7 @@ function create() {
   return storeManager.create({
     errorInfoCbGet,
     errorInfoCbAdd,
-    create: createEntity
+    create: createEntity,
   });
 }
 

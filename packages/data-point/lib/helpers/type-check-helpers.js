@@ -8,7 +8,7 @@ const modifiers = {
   function: typeCheckFunctions.isFunction,
   error: typeCheckFunctions.isError,
   array: typeCheckFunctions.isArray,
-  object: typeCheckFunctions.isObject
+  object: typeCheckFunctions.isObject,
 };
 
 /**
@@ -17,7 +17,7 @@ const modifiers = {
  */
 function normalizeTypeCheckSource(source) {
   if (Array.isArray(source)) {
-    return source.map(r => normalizeTypeCheckSource(r));
+    return source.map((r) => normalizeTypeCheckSource(r));
   }
 
   return modifiers[source] || source;
@@ -38,7 +38,7 @@ function getTypeCheckSourceWithDefault(entityType, defaultType, specType) {
 
   if (modifiers[specType]) {
     throw new Error(
-      `${entityType} entities do not support the "${specType}" outputType!`
+      `${entityType} entities do not support the "${specType}" outputType!`,
     );
   }
 

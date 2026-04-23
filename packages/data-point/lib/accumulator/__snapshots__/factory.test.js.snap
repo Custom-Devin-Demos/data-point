@@ -6,7 +6,7 @@ Accumulator {
   "locals": undefined,
   "reducer": undefined,
   "trace": false,
-  "traceGraph": Array [],
+  "traceGraph": [],
   "value": undefined,
   "values": undefined,
 }

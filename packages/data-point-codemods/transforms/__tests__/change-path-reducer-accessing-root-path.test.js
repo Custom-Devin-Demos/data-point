@@ -7,7 +7,7 @@ defineTest(
   __dirname,
   "change-path-reducer-accessing-root-path",
   null,
-  "change-path-reducer-accessing-root-path-single-quote"
+  "change-path-reducer-accessing-root-path-single-quote",
 );
 
 // double quote
@@ -15,5 +15,5 @@ defineTest(
   __dirname,
   "change-path-reducer-accessing-root-path",
   null,
-  "change-path-reducer-accessing-root-path-double-quote"
+  "change-path-reducer-accessing-root-path-double-quote",
 );

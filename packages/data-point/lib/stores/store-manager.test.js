@@ -5,7 +5,7 @@ const ObjectStoreManager = require("./store-manager");
 
 function createManager() {
   return {
-    store: new Map()
+    store: new Map(),
   };
 }
 
@@ -14,7 +14,7 @@ describe("add", () => {
     const mgr = createManager();
     const errorInfoCb = () => ({
       name: "Foo",
-      message: "Bar"
+      message: "Bar",
     });
     const Factory = () => 1;
     ObjectStoreManager.add(mgr, errorInfoCb, Factory, "id1");
@@ -23,7 +23,7 @@ describe("add", () => {
       mgr,
       errorInfoCb,
       Factory,
-      "id1"
+      "id1",
     );
     expect(error).toBeInstanceOf(Error);
     expect(error).toHaveProperty("name", "Foo");
@@ -34,7 +34,7 @@ describe("add", () => {
     const mgr = createManager();
     const errorInfoCb = () => ({
       name: "Foo",
-      message: "Bar"
+      message: "Bar",
     });
     const Factory = () => {
       throw new Error("factory error");
@@ -46,7 +46,7 @@ describe("add", () => {
       errorInfoCb,
       Factory,
       "id1",
-      { spec: "mySpec" }
+      { spec: "mySpec" },
     );
 
     expect(error).toBeInstanceOf(Error);
@@ -58,12 +58,12 @@ describe("add", () => {
     const mgr = createManager();
     const errorInfoCb = () => ({
       name: "Foo",
-      message: "Bar"
+      message: "Bar",
     });
     const Factory = (spec, id) => `${id}:${spec.type}`;
 
     ObjectStoreManager.add(mgr, errorInfoCb, Factory, "id1", {
-      type: "myType"
+      type: "myType",
     });
 
     expect(mgr.store.get("id1")).toEqual("id1:myType");

@@ -103,5 +103,5 @@ module.exports = {
   getSWRStaleEntry,
   setEntry,
   setSWRControlEntry,
-  setSWRStaleEntry
+  setSWRStaleEntry,
 };

@@ -49,7 +49,7 @@ describe("helpers.reducifyAll", () => {
 
 describe("helpers.mockReducer", () => {
   test("test reducerTest", async () => {
-    const reducerTest = a => (value, acc, done) => {
+    const reducerTest = (a) => (value, acc, done) => {
       done(null, value * a);
     };
 
@@ -65,7 +65,7 @@ describe("helpers.createAccumulator", () => {
   });
   test("It should accept options to merge with value", () => {
     const acc = helpers.createAccumulator("foo", {
-      context: "bar"
+      context: "bar",
     });
     expect(acc).toHaveProperty("value", "foo");
     expect(acc).toHaveProperty("context", "bar");

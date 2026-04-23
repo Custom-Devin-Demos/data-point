@@ -7,8 +7,8 @@ test("Factory#create", () => {
     select: [
       { case: "$a", do: "$b" },
       { case: "$c", do: "$d" },
-      { default: "$e" }
-    ]
+      { default: "$e" },
+    ],
   });
 
   expect(control).not.toHaveProperty("before");
@@ -21,7 +21,10 @@ test("Factory#create", () => {
 test("Factory#create enforce default statement", () => {
   expect(() => {
     Factory.create("name", {
-      select: [{ case: "a()", do: "b()" }, { case: "c()", do: "d()" }]
+      select: [
+        { case: "a()", do: "b()" },
+        { case: "c()", do: "d()" },
+      ],
     });
   }).toThrow(/missing|default/);
 });

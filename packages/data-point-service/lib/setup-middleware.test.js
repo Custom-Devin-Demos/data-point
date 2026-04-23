@@ -8,11 +8,11 @@ describe("setupMiddleware", () => {
   test("It should setup middleware", () => {
     const service = {
       dataPoint: DataPoint.create(),
-      settings: {}
+      settings: {},
     };
     return SetupMiddleware.setupMiddleware(service)
-      .catch(err => err)
-      .then(s => {
+      .catch((err) => err)
+      .then((s) => {
         expect(s.dataPoint.middleware.store.size).toBe(2);
 
         const before = s.dataPoint.middleware.store.get("before");
@@ -32,12 +32,12 @@ describe("setupMiddleware", () => {
       dataPoint: DataPoint.create(),
       settings: {
         before: "before",
-        after: "after"
-      }
+        after: "after",
+      },
     };
     return SetupMiddleware.setupMiddleware(service)
-      .catch(err => err)
-      .then(s => {
+      .catch((err) => err)
+      .then((s) => {
         expect(s.dataPoint.middleware.store.get("before")).toEqual(["before"]);
         expect(s.dataPoint.middleware.store.get("after")).toEqual(["after"]);
       });

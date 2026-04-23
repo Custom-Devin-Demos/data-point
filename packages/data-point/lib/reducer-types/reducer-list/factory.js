@@ -54,10 +54,7 @@ module.exports.parseTokenExpression = parseTokenExpression;
  * @returns {Array}
  */
 function parseFromArray(source) {
-  return _.chain(source)
-    .map(parseTokenExpression)
-    .flatten()
-    .value();
+  return _.chain(source).map(parseTokenExpression).flatten().value();
 }
 
 module.exports.parseFromArray = parseFromArray;
@@ -79,7 +76,7 @@ module.exports.parse = parse;
  */
 function create(createReducer, source) {
   const tokens = parse(source);
-  const reducers = tokens.map(token => createReducer(token));
+  const reducers = tokens.map((token) => createReducer(token));
 
   const reducer = new ReducerList();
   reducer.reducers = reducers;

@@ -19,21 +19,21 @@ dataPoint.addEntities({
       qs: {
         // get path `searchTerm` from input
         // to dataPoint.resolve
-        search: "$searchTerm"
-      }
-    }
-  }
+        search: "$searchTerm",
+      },
+    },
+  },
 });
 
 // this will mock the remote service
 mock();
 
 const input = {
-  searchTerm: "r2"
+  searchTerm: "r2",
 };
 
 // the second parameter to transform is the input value
-dataPoint.resolve("request:searchPeople", input).then(output => {
+dataPoint.resolve("request:searchPeople", input).then((output) => {
   assert.strictEqual(output.results[0].name, "R2-D2");
   console.dir(output, { colors: true });
 });

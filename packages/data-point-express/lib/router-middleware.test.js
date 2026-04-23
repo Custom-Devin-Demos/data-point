@@ -13,8 +13,8 @@ describe("createRoutes", () => {
       a: {
         path: "/a",
         method: "get",
-        middleware: mid
-      }
+        middleware: mid,
+      },
     };
     const app = new Express();
     app.get = jest.fn();
@@ -37,12 +37,12 @@ describe("create - datapoint routes", () => {
     dataPoint = DataPoint.create({
       entities: {
         "reducer:Test": (value, acc) => ({
-          message: `Hello ${acc.locals.query.name}`
-        })
-      }
+          message: `Hello ${acc.locals.query.name}`,
+        }),
+      },
     });
   });
-  test("It should return 400 if entityId query is missing", done => {
+  test("It should return 400 if entityId query is missing", (done) => {
     const app = new Express();
     app.use(
       "/api",
@@ -50,9 +50,9 @@ describe("create - datapoint routes", () => {
         test: {
           priority: 100,
           path: "/test",
-          middleware: "reducer:Test"
-        }
-      })
+          middleware: "reducer:Test",
+        },
+      }),
     );
 
     request(app)
@@ -60,7 +60,7 @@ describe("create - datapoint routes", () => {
       .expect("Content-Type", /json/)
       .expect(({ body }) => {
         expect(body).toEqual({
-          message: "Hello test"
+          message: "Hello test",
         });
       })
       .expect(200)

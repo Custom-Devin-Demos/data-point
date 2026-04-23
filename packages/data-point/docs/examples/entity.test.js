@@ -3,16 +3,18 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const DataPoint = require("data-point");
 
-const checkCardInputSchema = DataPoint.createTypeCheckReducer(input => {
-  return typeof input.uid === "number" && typeof input.shortTitle === "string";
-}, "{uid:Number, shortTitle:String}");
+const checkCardInputSchema = DataPoint.createTypeCheckReducer(
+  (input) =>
+    typeof input.uid === "number" && typeof input.shortTitle === "string",
+  "{uid:Number, shortTitle:String}",
+);
 
 const CardModel = DataPoint.Model("Card", {
   inputType: checkCardInputSchema,
   value: {
     id: "$uid",
-    title: "$shortTitle"
-  }
+    title: "$shortTitle",
+  },
 });
 
 describe("Card Entity", () => {
@@ -20,12 +22,12 @@ describe("Card Entity", () => {
     const dataPoint = DataPoint.create();
     const input = {
       uid: 123,
-      shortTitle: "Some Title"
+      shortTitle: "Some Title",
     };
 
     await expect(dataPoint.resolve(CardModel, input)).resolves.toEqual({
       id: 123,
-      title: "Some Title"
+      title: "Some Title",
     });
   });
 
@@ -33,7 +35,7 @@ describe("Card Entity", () => {
     const dataPoint = DataPoint.create();
 
     const input = {
-      shortTitle: "Some Title"
+      shortTitle: "Some Title",
     };
 
     await expect(dataPoint.resolve(CardModel, input)).rejects.toMatchSnapshot();

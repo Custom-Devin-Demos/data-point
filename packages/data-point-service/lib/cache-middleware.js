@@ -28,7 +28,7 @@ function revalidateSuccess(service, entityId, entryKey) {
     debug(
       "Successful revalidation entityId: %s with cache key: %s",
       entityId,
-      entryKey
+      entryKey,
     );
     return true;
   };
@@ -44,7 +44,7 @@ function updateSWREntry(service, entryKey, cache) {
   /**
    * @param {Accumulator} acc
    */
-  return value => {
+  return (value) => {
     debug("Updating cache key: %s with new stale value", entryKey);
     return service.staleWhileRevalidate.addEntry(entryKey, value, cache);
   };
@@ -60,13 +60,13 @@ function catchRevalidateError(service, entityId, entryKey) {
   /**
    * @param {Error} error
    */
-  return error => {
+  return (error) => {
     // eslint-disable-next-line no-console
     console.error(
       "Could not revalidate entityId: %s with cache key: %s\n",
       entityId,
       entryKey,
-      error
+      error,
     );
 
     // remove revalidation flags to allow a new revalidation to happen
@@ -76,12 +76,12 @@ function catchRevalidateError(service, entityId, entryKey) {
     // any custom error handling. PRs welcomed
     return service.staleWhileRevalidate
       .clearAllRevalidationFlags(entryKey)
-      .catch(clearError => {
+      .catch((clearError) => {
         // eslint-disable-next-line no-console
         console.error(
           "Error while clearing revalidation flags for cache key: %s",
           entryKey,
-          clearError
+          clearError,
         );
       });
   };
@@ -106,7 +106,7 @@ function shouldTriggerRevalidate(staleEntry, revalidationState) {
 function addRevalidationFlags(service, entryKey, revalidateTimeout) {
   return service.staleWhileRevalidate.addRevalidationFlags(
     entryKey,
-    revalidateTimeout
+    revalidateTimeout,
   );
 }
 
@@ -129,14 +129,14 @@ async function revalidateEntry(service, entryKey, cache, ctx) {
 
   const revalidatingCache = {
     entityId,
-    entryKey
+    entryKey,
   };
 
   // this object serves as a flag is set to bypass cache middleware execution
   const revalidateContext = set(
     "locals.revalidatingCache",
     revalidatingCache,
-    ctx
+    ctx,
   );
 
   debug("Revalidating entityId: %s with cache key: %s", entityId, entryKey);
@@ -148,7 +148,7 @@ async function revalidateEntry(service, entryKey, cache, ctx) {
       service,
       entryKey,
       ctx.context,
-      revalidateContext
+      revalidateContext,
     )();
 
     // check that the value passes the outputType before adding the new entry
@@ -206,9 +206,8 @@ async function resolveStaleWhileRevalidateEntry(service, entryKey, cache, ctx) {
     return undefined;
   }
 
-  const staleWhileRevalidate = module.exports.resolveStaleWhileRevalidate(
-    service
-  );
+  const staleWhileRevalidate =
+    module.exports.resolveStaleWhileRevalidate(service);
 
   // cleanup on a new tick so it does not block current process, the clear
   // method is throttled for performance
@@ -216,7 +215,7 @@ async function resolveStaleWhileRevalidateEntry(service, entryKey, cache, ctx) {
 
   const tasks = [
     staleWhileRevalidate.getRevalidationState(entryKey),
-    staleWhileRevalidate.getEntry(entryKey)
+    staleWhileRevalidate.getEntry(entryKey),
   ];
 
   const results = await Promise.all(tasks);
@@ -241,9 +240,8 @@ async function resolveStaleWhileRevalidateEntry(service, entryKey, cache, ctx) {
  * @returns {Promise} Resolution of adding an entry to the cache
  */
 function setStaleWhileRevalidateEntry(service, entryKey, value, cache) {
-  const staleWhileRevalidate = module.exports.resolveStaleWhileRevalidate(
-    service
-  );
+  const staleWhileRevalidate =
+    module.exports.resolveStaleWhileRevalidate(service);
   return staleWhileRevalidate.addEntry(entryKey, value, cache);
 }
 
@@ -268,7 +266,7 @@ async function before(service, ctx, next) {
           service,
           entryKey,
           cache,
-          ctx
+          ctx,
         )
       : await RedisController.getEntry(service, entryKey);
 
@@ -316,7 +314,7 @@ async function after(service, ctx, next) {
         service,
         entryKey,
         ctx.value,
-        cache
+        cache,
       );
     } else {
       // adds a cache entry
@@ -343,5 +341,5 @@ module.exports = {
   catchRevalidateError,
   shouldTriggerRevalidate,
   before,
-  after
+  after,
 };

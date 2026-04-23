@@ -8,8 +8,8 @@ describe("verify", () => {
     const result = DataPointFactory.verify({
       DataPoint,
       entities: {
-        "reducer:foo": "$"
-      }
+        "reducer:foo": "$",
+      },
     });
     expect(result).toEqual(result);
   });
@@ -18,8 +18,8 @@ describe("verify", () => {
     expect(() => {
       DataPointFactory.verify({
         entities: {
-          "reducer:foo": "$"
-        }
+          "reducer:foo": "$",
+        },
       });
     }).toThrowError(/provided/);
   });
@@ -30,8 +30,8 @@ describe("createDataPoint", () => {
     const dp = DataPointFactory.createDataPoint({
       DataPoint,
       entities: {
-        "reducer:foo": "$"
-      }
+        "reducer:foo": "$",
+      },
     });
 
     expect(dp).toHaveProperty("transform");
@@ -39,14 +39,13 @@ describe("createDataPoint", () => {
 });
 
 describe("create", () => {
-  test("It should create a new DataPoint Instance", () => {
-    return DataPointFactory.create({
+  test("It should create a new DataPoint Instance", () =>
+    DataPointFactory.create({
       DataPoint,
       entities: {
-        "reducer:foo": "$"
-      }
-    }).then(dp => {
+        "reducer:foo": "$",
+      },
+    }).then((dp) => {
       expect(dp).toHaveProperty("transform");
-    });
-  });
+    }));
 });

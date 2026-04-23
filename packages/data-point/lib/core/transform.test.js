@@ -13,19 +13,19 @@ let dataPoint;
 beforeAll(() => {
   dataPoint = DataPoint.create({
     values: {
-      v1: "v1"
+      v1: "v1",
     },
     reducers: {
-      test: reducers
+      test: reducers,
     },
-    entities
+    entities,
   });
 });
 
 describe("transform", () => {
   test("transform - throw error in invalid id(promise)", async () => {
     await expect(
-      Transform.transform(dataPoint, "INVALID", TestData, {})
+      Transform.transform(dataPoint, "INVALID", TestData, {}),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
@@ -39,15 +39,15 @@ describe("transform", () => {
       ["false", false, false],
       ["true", true, true],
       ["array", ["a", "b"], ["a", "b"]],
-      ["Object", { a: true }, { a: true }]
+      ["Object", { a: true }, { a: true }],
     ];
 
     expectedReceivedMatrix.forEach(([type, input, output]) => {
       test(`passing ${type}`, async () => {
         const result = await Transform.transform(
           dataPoint,
-          value => value,
-          input
+          (value) => value,
+          input,
         );
         expect(result.value).toEqual(output);
       });
@@ -55,15 +55,13 @@ describe("transform", () => {
   });
 
   test("transform - single reducer", async () => {
-    const reducer = value => {
-      return `${value} World`;
-    };
+    const reducer = (value) => `${value} World`;
     const res = await Transform.transform(dataPoint, reducer, "Hello");
     expect(res.value).toEqual("Hello World");
   });
 
   test("transform - reducer chain", async () => {
-    const testReducers = [value => `${value} World`, value => `${value}!!`];
+    const testReducers = [(value) => `${value} World`, (value) => `${value}!!`];
     const res = await Transform.transform(dataPoint, testReducers, "Hello");
     expect(res.value).toEqual("Hello World!!");
   });
@@ -74,29 +72,25 @@ describe("transform", () => {
   });
 
   test("transform - reducer mixed", async () => {
-    const getMax = value => {
-      return Math.max.apply(null, value);
-    };
+    const getMax = (value) => Math.max.apply(null, value);
     const res = await Transform.transform(
       dataPoint,
       ["$a.b.c", getMax],
-      TestData
+      TestData,
     );
 
     expect(res.value).toEqual(3);
   });
 
-  test("should handle callback signature", done => {
-    const reducer = value => {
-      return `${value} World`;
-    };
+  test("should handle callback signature", (done) => {
+    const reducer = (value) => `${value} World`;
     Transform.transform(dataPoint, reducer, "Hello", null, (error, res) => {
       expect(res.value).toEqual("Hello World");
       done();
     });
   });
 
-  test("should handle callback signature with error", done => {
+  test("should handle callback signature with error", (done) => {
     const reducer = () => {
       throw new Error("test");
     };
@@ -110,14 +104,12 @@ describe("transform", () => {
 
 describe("options argument", () => {
   test("passing locals", async () => {
-    const reducer = (value, acc) => {
-      return `${acc.locals.greeting} World`;
-    };
+    const reducer = (value, acc) => `${acc.locals.greeting} World`;
 
     const options = {
       locals: {
-        greeting: "Hello"
-      }
+        greeting: "Hello",
+      },
     };
 
     const res = await Transform.transform(dataPoint, reducer, {}, options);
@@ -133,14 +125,14 @@ describe("resolve", () => {
   test("transform - options is last argument", async () => {
     const options = {
       locals: {
-        foo: "bar"
-      }
+        foo: "bar",
+      },
     };
     const value = await Transform.resolve(
       dataPoint,
       "$..locals.foo",
       {},
-      options
+      options,
     );
 
     expect(value).toEqual("bar");
@@ -148,7 +140,7 @@ describe("resolve", () => {
 
   test("transform - execute with 3 arguments", async () => {
     const value = {
-      foo: "bar"
+      foo: "bar",
     };
     const curried = Transform.resolve(dataPoint, "$foo");
     const resolvedValue = await curried(value);
@@ -158,7 +150,7 @@ describe("resolve", () => {
 
 describe("dataPoint.createReducer", () => {
   test("it should evaluate an existing reducer", async () => {
-    const reducer = DataPoint.createReducer(["$a", input => input + 1]);
+    const reducer = DataPoint.createReducer(["$a", (input) => input + 1]);
     const output = await dataPoint.resolve(reducer, { a: 5 });
     expect(output).toBe(6);
   });

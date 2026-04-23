@@ -5,7 +5,7 @@ const ms = require("ms");
 const looseCacheParamsDeprecationWarning = deprecate(
   () => {},
   `Usage of params.ttl, params.cacheKey and params.staleWhileRevalidate will \
-  be deprecated. Please configure through params.cache object instead`
+  be deprecated. Please configure through params.cache object instead`,
 );
 
 /**
@@ -64,18 +64,17 @@ function getCacheParams(params) {
   if (typeof ttl !== "undefined") {
     const staleWhileRevalidate = defaultTo(
       cache.staleWhileRevalidate,
-      params.staleWhileRevalidate
+      params.staleWhileRevalidate,
     );
 
-    useStaleWhileRevalidate = shouldUseStaleWhileRevalidate(
-      staleWhileRevalidate
-    );
+    useStaleWhileRevalidate =
+      shouldUseStaleWhileRevalidate(staleWhileRevalidate);
 
     // only calculate stale ttl if we need to
     if (useStaleWhileRevalidate) {
       staleWhileRevalidateTtl = getStaleWhileRevalidateTtl(
         staleWhileRevalidate,
-        ttl
+        ttl,
       );
 
       // 5 seconds default
@@ -88,7 +87,7 @@ function getCacheParams(params) {
     cacheKey: defaultTo(cache.cacheKey, params.cacheKey),
     useStaleWhileRevalidate,
     staleWhileRevalidateTtl,
-    revalidateTimeout
+    revalidateTimeout,
   };
 }
 
@@ -98,5 +97,5 @@ module.exports = {
   parseMs,
   getStaleWhileRevalidateTtl,
   shouldUseStaleWhileRevalidate,
-  getCacheParams
+  getCacheParams,
 };

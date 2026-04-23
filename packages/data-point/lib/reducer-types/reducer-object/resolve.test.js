@@ -22,17 +22,17 @@ describe("resolve#reducerObject.resolve", () => {
       value: {
         x: {
           y: {
-            z: 2
-          }
-        }
-      }
+            z: 2,
+          },
+        },
+      },
     });
 
     const result = await resolveReducerObject(
       dataPoint,
       resolveReducer,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual({});
   });
@@ -44,29 +44,29 @@ describe("resolve#reducerObject.resolve", () => {
         a: constant({
           p1: 1,
           p2: {
-            p3: 2
-          }
+            p3: 2,
+          },
         }),
-        b: "$x.y"
+        b: "$x.y",
       },
-      zPlusOne: ["$x.y.z", input => input + 1]
+      zPlusOne: ["$x.y.z", (input) => input + 1],
     });
 
     const accumulator = AccumulatorFactory.create({
       value: {
         x: {
           y: {
-            z: 2
-          }
-        }
-      }
+            z: 2,
+          },
+        },
+      },
     });
 
     const result = await resolveReducerObject(
       dataPoint,
       resolveReducer,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual({
       x: [1, 2],
@@ -74,14 +74,14 @@ describe("resolve#reducerObject.resolve", () => {
         a: {
           p1: 1,
           p2: {
-            p3: 2
-          }
+            p3: 2,
+          },
         },
         b: {
-          z: 2
-        }
+          z: 2,
+        },
       },
-      zPlusOne: 3
+      zPlusOne: 3,
     });
   });
 
@@ -95,11 +95,11 @@ describe("resolve#reducerObject.resolve", () => {
         c: constant({
           x: "$c.x",
           y: {
-            y2: "$c.y"
+            y2: "$c.y",
           },
-          z: ["$c.z"]
-        })
-      }
+          z: ["$c.z"],
+        }),
+      },
     });
 
     const accumulator = AccumulatorFactory.create({
@@ -108,16 +108,16 @@ describe("resolve#reducerObject.resolve", () => {
         b: "B",
         c: {
           x: "X",
-          y: "Y"
-        }
-      }
+          y: "Y",
+        },
+      },
     });
 
     const result = await resolveReducerObject(
       dataPoint,
       resolveReducer,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual({
       x: "X",
@@ -128,11 +128,11 @@ describe("resolve#reducerObject.resolve", () => {
         c: {
           x: "$c.x",
           y: {
-            y2: "$c.y"
+            y2: "$c.y",
           },
-          z: ["$c.z"]
-        }
-      }
+          z: ["$c.z"],
+        },
+      },
     });
   });
   it("should move object values to different levels of nesting", async () => {
@@ -140,40 +140,40 @@ describe("resolve#reducerObject.resolve", () => {
       value: {
         a: {
           a: 1,
-          b: 2
-        }
-      }
+          b: 2,
+        },
+      },
     });
 
     const reducer = createReducerObject(createReducer, {
       x: [
         "$a",
         {
-          a: "$a"
-        }
+          a: "$a",
+        },
       ],
       y: [
         {
-          a: "$a"
+          a: "$a",
         },
-        "$a"
-      ]
+        "$a",
+      ],
     });
 
     const result = await resolveReducerObject(
       dataPoint,
       resolveReducer,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual({
       x: {
-        a: 1
+        a: 1,
       },
       y: {
         a: 1,
-        b: 2
-      }
+        b: 2,
+      },
     });
   });
 });

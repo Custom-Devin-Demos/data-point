@@ -12,12 +12,12 @@ let instance;
 beforeAll(() => {
   instance = core.create({
     values: {
-      v1: "v1"
+      v1: "v1",
     },
     reducers: {
-      test: reducers
+      test: reducers,
     },
-    entities
+    entities,
   });
 });
 
@@ -36,8 +36,8 @@ test("setup", () => {
   expect(instance.entities.store.has("entry:a0")).toBeTruthy();
 });
 
-test("entry#transform - fail if id not found", done => {
-  instance.transform("entry:INVALID", {}, {}, err => {
+test("entry#transform - fail if id not found", (done) => {
+  instance.transform("entry:INVALID", {}, {}, (err) => {
     /* eslint handle-callback-err: 0 */
     expect(_.isError(err)).toBeTruthy();
     expect(err.name).toBe("InvalidId");
@@ -51,7 +51,7 @@ describe("addEntityType", () => {
     return {
       id,
       // eslint-disable-next-line no-unused-vars
-      resolve(accumulator, resolveReducer) {}
+      resolve(accumulator, resolveReducer) {},
     };
   }
 
@@ -69,7 +69,7 @@ describe("addEntityType", () => {
 
     dataPoint.addEntityTypes({
       foo: entityFactory,
-      bar: entityFactory
+      bar: entityFactory,
     });
 
     const store = dataPoint.entityTypes.store;

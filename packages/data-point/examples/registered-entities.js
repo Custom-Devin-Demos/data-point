@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const assert = require("assert");
 const mocks = require("./async-example.mocks");
-const DataPoint = require("../");
+const DataPoint = require("..");
 
 const dataPoint = DataPoint.create();
 
@@ -11,7 +11,7 @@ dataPoint.addEntities({
     // {value.planetId} injects the
     // value from the accumulator
     // creates: https://swapi.co/api/planets/1/
-    url: "https://swapi.co/api/planets/{value.planetId}"
+    url: "https://swapi.co/api/planets/{value.planetId}",
   },
 
   // model entity to resolve a Planet
@@ -29,9 +29,9 @@ dataPoint.addEntities({
         // eg. https://swapi.co/api/people/1/
         // where each url gets mapped
         // to a model:Resident
-        residents: ["$residents", DataPoint.map("model:Resident")]
-      }
-    ]
+        residents: ["$residents", DataPoint.map("model:Resident")],
+      },
+    ],
   },
 
   // model entity to resolve a Planet
@@ -44,15 +44,15 @@ dataPoint.addEntities({
       {
         name: "$name",
         gender: "$gender",
-        birthYear: "$birth_year"
-      }
-    ]
+        birthYear: "$birth_year",
+      },
+    ],
   },
 
   "request:Resident": {
     // check input is string
     inputType: "string",
-    url: "{value}"
+    url: "{value}",
   },
 
   // schema to verify data input
@@ -62,21 +62,21 @@ dataPoint.addEntities({
       properties: {
         planetId: {
           $id: "/properties/planet",
-          type: "integer"
-        }
-      }
-    }
-  }
+          type: "integer",
+        },
+      },
+    },
+  },
 });
 
 const input = {
-  planetId: 1
+  planetId: 1,
 };
 
 // mock actual calls to server
 mocks();
 
-dataPoint.resolve("model:Planet", input).then(output => {
+dataPoint.resolve("model:Planet", input).then((output) => {
   assert.strictEqual(output.name, "Tatooine");
   assert.strictEqual(output.population, "200000");
   assert.ok(output.residents.length > 0);
@@ -84,7 +84,7 @@ dataPoint.resolve("model:Planet", input).then(output => {
   assert.deepStrictEqual(output.residents[0], {
     name: "Luke Skywalker",
     gender: "male",
-    birthYear: "19BBY"
+    birthYear: "19BBY",
   });
 
   console.dir(output, { colors: true });

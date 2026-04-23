@@ -15,10 +15,10 @@ function transform(entityId, value, options) {
     value,
     Object.assign(
       {
-        context: reducer
+        context: reducer,
       },
-      options
-    )
+      options,
+    ),
   );
   return resolveSchemaEntity(accumulator, resolveReducerBound);
 }

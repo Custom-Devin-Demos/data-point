@@ -18,7 +18,7 @@ const reducerTypes = [
   ReducerHelpers,
   ReducerList,
   ReducerObject,
-  ReducerPath
+  ReducerPath,
 ];
 
 /**
@@ -59,7 +59,7 @@ function createReducer(source, options = {}) {
   }
 
   const normalizedSource = normalizeInput(source);
-  const reducerType = reducerTypes.find(r => r.isType(normalizedSource));
+  const reducerType = reducerTypes.find((r) => r.isType(normalizedSource));
 
   if (_.isUndefined(reducerType)) {
     const message = [
@@ -67,7 +67,7 @@ function createReducer(source, options = {}) {
       " Could not find a matching reducer type while parsing the value:\n ",
       _.attempt(util.inspect, normalizedSource),
       "\nTry using an Array, String, Object, or Function.\n",
-      "More info: https://github.com/ViacomInc/data-point/tree/master/packages/data-point#reducers\n"
+      "More info: https://github.com/ViacomInc/data-point/tree/master/packages/data-point#reducers\n",
     ].join("");
 
     throw new Error(message);
