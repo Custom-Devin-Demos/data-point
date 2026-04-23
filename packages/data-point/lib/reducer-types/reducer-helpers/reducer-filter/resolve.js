@@ -13,16 +13,16 @@ async function resolve(manager, resolveReducer, accumulator, reducerFilter) {
 
   if (!Array.isArray(accumulator.value)) {
     throw new Error(
-      `Expecting an array or an iterable object but got ${accumulator.value}`
+      `Expecting an array or an iterable object but got ${accumulator.value}`,
     );
   }
 
-  const promises = accumulator.value.map(async itemValue => {
+  const promises = accumulator.value.map(async (itemValue) => {
     const itemContext = utils.set(accumulator, "value", itemValue);
     const resolvedValue = await resolveReducer(manager, itemContext, reducer);
     return {
       value: itemValue,
-      match: reducerPredicateIsTruthy(reducer, resolvedValue)
+      match: reducerPredicateIsTruthy(reducer, resolvedValue),
     };
   });
 

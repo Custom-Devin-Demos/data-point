@@ -14,14 +14,12 @@ describe("augmentTraceNodeDuration", () => {
   it("should set duration", () => {
     mockGetDuration = jest
       .spyOn(TraceResolve, "getDurationNs")
-      .mockImplementation(t => {
-        return `${t}&duration`;
-      });
+      .mockImplementation((t) => `${t}&duration`);
     const traceNode = {
-      hrtime: "hrtime"
+      hrtime: "hrtime",
     };
     expect(TraceResolve.augmentTraceNodeDuration(traceNode)(true)).toEqual(
-      true
+      true,
     );
     expect(traceNode).toHaveProperty("durationNs", "hrtime&duration");
   });
@@ -33,9 +31,9 @@ describe("createTracedAccumulator", () => {
     mockhrTime.mockRestore();
   });
   it("should create new accumulator with traceNode appended", () => {
-    mockhrTime = jest.spyOn(process, "hrtime").mockImplementation(() => {
-      return mockedTime;
-    });
+    mockhrTime = jest
+      .spyOn(process, "hrtime")
+      .mockImplementation(() => mockedTime);
     const accumulator = {};
     const result = TraceResolve.createTracedAccumulator(accumulator, "reducer");
     expect(mockhrTime).toBeCalled();
@@ -53,14 +51,14 @@ describe("augmentAccumulatorTrace", () => {
   it("should create new accumulator with traceNode appended", () => {
     mockCreateTracedAccumulator = jest
       .spyOn(TraceResolve, "createTracedAccumulator")
-      .mockImplementation((input, reducer) => {
-        return Object.assign({}, input, {
+      .mockImplementation((input, reducer) =>
+        Object.assign({}, input, {
           traceNode: "traceNode",
-          reducer
-        });
-      });
+          reducer,
+        }),
+      );
     const acc = {
-      traceGraph: []
+      traceGraph: [],
     };
     const result = TraceResolve.augmentAccumulatorTrace(acc, "reducer");
     expect(result).toMatchSnapshot();

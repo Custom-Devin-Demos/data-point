@@ -9,8 +9,8 @@ test("isType", () => {
   expect(factory.isType({})).toBe(false);
   expect(
     factory.isType({
-      isEntityInstance: true
-    })
+      isEntityInstance: true,
+    }),
   ).toBe(true);
 });
 

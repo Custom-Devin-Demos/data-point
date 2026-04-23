@@ -45,31 +45,36 @@ fs.readdir(examplesFolder, (err, files) => {
 
   coloredLog("blue", `Executing all examples in ${examplesFolder}`, true);
 
-  const runExamples = files.map(file => {
-    return new Promise(resolve => {
-      const filename = examplesFolder + file;
-      exec(`node ${path.resolve(filename)}`, (executeError, stdout, stderr) => {
-        if (executeError) {
-          console.error(executeError);
-          return;
-        }
+  const runExamples = files.map(
+    (file) =>
+      new Promise((resolve) => {
+        const filename = examplesFolder + file;
+        exec(
+          `node ${path.resolve(filename)}`,
+          (executeError, stdout, stderr) => {
+            if (executeError) {
+              console.error(executeError);
+              return;
+            }
 
-        if (stderr) {
-          errorCount += 1;
-          coloredLog("red", `stderr from ${filename}`, true);
-          coloredLog("red", stderr);
-        }
+            if (stderr) {
+              errorCount += 1;
+              coloredLog("red", `stderr from ${filename}`, true);
+              coloredLog("red", stderr);
+            }
 
-        resolve();
-      });
-    });
-  });
+            resolve();
+          },
+        );
+      }),
+  );
 
   Promise.all(runExamples).then(() => {
     coloredLog(
       "green",
-      `${files.length} examples were run in ${(Date.now() - startTime) /
-        1000}s.`
+      `${files.length} examples were run in ${
+        (Date.now() - startTime) / 1000
+      }s.`,
     );
     coloredLog("red", `${errorCount} examples produced an error.`);
   });

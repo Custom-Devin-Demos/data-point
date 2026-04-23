@@ -17,7 +17,7 @@ describe("ReducerConstant#factory", () => {
     expect(Factory.create(createReducer, ["a", "b"]).value).toEqual(["a", "b"]);
     expect(Factory.create(createReducer, { a: 1, b: 2 }).value).toEqual({
       a: 1,
-      b: 2
+      b: 2,
     });
   });
 });

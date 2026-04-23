@@ -20,12 +20,12 @@ module.exports = [
     async: true,
     name: "promise",
     test: test(testPromise, expected),
-    benchmark: testPromise
+    benchmark: testPromise,
   },
   {
     async: true,
     name: "timeout",
     test: test(testSetTimeOut, expected),
-    benchmark: testSetTimeOut
-  }
+    benchmark: testSetTimeOut,
+  },
 ];

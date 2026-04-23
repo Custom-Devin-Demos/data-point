@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`catchRevalidateError should handle revalidation error 1`] = `
-Array [
-  Array [
+[
+  [
     "Could not revalidate entityId: %s with cache key: %s
 ",
     "entityId",
@@ -13,15 +13,15 @@ Array [
 `;
 
 exports[`catchRevalidateError should log errors when clearing flags fail 1`] = `
-Array [
-  Array [
+[
+  [
     "Could not revalidate entityId: %s with cache key: %s
 ",
     "entityId",
     "entryKey",
     [Error: test],
   ],
-  Array [
+  [
     "Error while clearing revalidation flags for cache key: %s",
     "entryKey",
     [Error: revalidation],
@@ -30,13 +30,13 @@ Array [
 `;
 
 exports[`revalidateEntry should log at debug level start and success 1`] = `
-Array [
-  Array [
+[
+  [
     "Revalidating entityId: %s with cache key: %s",
     "model:Foo",
     "entryKey",
   ],
-  Array [
+  [
     "Resolve entryKey: %s with entityId: %s",
     "entryKey",
     "model:Foo",
@@ -45,8 +45,8 @@ Array [
 `;
 
 exports[`revalidateSuccess should remove local flag and add debug log 1`] = `
-Array [
-  Array [
+[
+  [
     "Successful revalidation entityId: %s with cache key: %s",
     "entityId",
     "entryKey",
@@ -55,8 +55,8 @@ Array [
 `;
 
 exports[`updateSWREntry should add stale entry 1`] = `
-Array [
-  Array [
+[
+  [
     "Updating cache key: %s with new stale value",
     "entryKey",
   ],

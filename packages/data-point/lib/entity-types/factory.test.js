@@ -8,7 +8,7 @@ let instance;
 
 beforeAll(() => {
   factory = createEntityFactory("model");
-  spec = { value: input => input };
+  spec = { value: (input) => input };
   instance = factory("nuts", spec);
 });
 

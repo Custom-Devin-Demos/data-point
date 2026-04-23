@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`inspect It should log data 1`] = `
-Array [
+[
   "
 [33minspect[0m:",
   "test:test",
   "
 foo:",
-  "\\"bar\\"",
+  ""bar"",
 ]
 `;
 
@@ -20,8 +20,8 @@ exports[`inspectProperties It should add indent to keys 1`] = `
 exports[`inspectProperties It should inspect each property 1`] = `
 "- a: 1
 - b: {
-  \\"a\\": true,
-  \\"b\\": false
+  "a": true,
+  "b": false
 }
 "
 `;

@@ -38,7 +38,7 @@ function clear(store) {
   }
 
   debug(`local revalidation flags that timed out: ${forDeletion}`);
-  forDeletion.forEach(key => store.delete(key));
+  forDeletion.forEach((key) => store.delete(key));
   return forDeletionLength;
 }
 
@@ -99,7 +99,7 @@ function create() {
     add: add.bind(null, store, MAX_STORE_SIZE),
     remove: remove.bind(null, store),
     exists: exists.bind(null, store),
-    clear: throttle(clear.bind(null, store), THROTTLE_WAIT)
+    clear: throttle(clear.bind(null, store), THROTTLE_WAIT),
   };
 }
 
@@ -110,5 +110,5 @@ module.exports = {
   add,
   remove,
   exists,
-  create
+  create,
 };

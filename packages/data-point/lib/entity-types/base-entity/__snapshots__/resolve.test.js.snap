@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ResolveEntity.resolveEntity It should log trace calls when set to true 1`] = `
-Array [
-  Array [
+[
+  [
     "⧖ model:traced:3",
   ],
 ]
 `;
 
 exports[`ResolveEntity.resolveEntity It should log trace calls when set to true 2`] = `
-Array [
-  Array [
+[
+  [
     "⧖ model:traced:3",
   ],
 ]

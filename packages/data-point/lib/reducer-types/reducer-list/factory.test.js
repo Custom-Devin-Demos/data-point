@@ -28,7 +28,7 @@ describe("factory#create", () => {
   test("it should create a ReducerList with reducers using a piped reducer", () => {
     const result = factory.create(createReducer, [
       "$foo.bar | reducer:add",
-      () => true
+      () => true,
     ]);
 
     expect(result.reducers).toHaveLength(3);
@@ -40,7 +40,7 @@ describe("factory#create", () => {
   test("it should create a ReducerList with reducers using a piped reducer with multiple spaces", () => {
     const result = factory.create(createReducer, [
       "$foo.bar  |     reducer:add   ",
-      () => true
+      () => true,
     ]);
 
     expect(result.reducers).toHaveLength(3);
@@ -53,7 +53,7 @@ describe("factory#create", () => {
     const result = factory.create(createReducer, [
       "$foo.bar",
       "reducer:add",
-      () => true
+      () => true,
     ]);
 
     expect(result.reducers).toHaveLength(3);
@@ -70,7 +70,7 @@ describe("factory#create", () => {
   });
 
   test("factory#create reducer from single function", () => {
-    const result = factory.create(createReducer, value => value);
+    const result = factory.create(createReducer, (value) => value);
     expect(result.reducers).toHaveLength(1);
     expect(result.reducers[0].type).toBe("ReducerFunction");
   });
@@ -92,7 +92,7 @@ describe("factory#create", () => {
 
   test("factory#create reducer from grouped reducers with multiple leading/trailing spaces", () => {
     const result = factory.create(createReducer, [
-      "     $foo    |    $bar    |     $baz    "
+      "     $foo    |    $bar    |     $baz    ",
     ]);
     expect(result.reducers).toHaveLength(3);
     expect(result.reducers[0].type).toBe("ReducerPath");
@@ -110,7 +110,7 @@ describe("factory#create", () => {
     const result = factory.create(createReducer, [
       "$foo.bar",
       "reducer:add | $foo.bar.zeta",
-      value => value
+      (value) => value,
     ]);
 
     expect(result.reducers).toHaveLength(4);
@@ -122,37 +122,37 @@ describe("factory#create", () => {
 
   test("should throw error if reducer is false", () => {
     expect(() =>
-      factory.create(createReducer, [false])
+      factory.create(createReducer, [false]),
     ).toThrowErrorMatchingSnapshot();
   });
 
   test("should throw error if reducer is empty string", () => {
     expect(() =>
-      factory.create(createReducer, "")
+      factory.create(createReducer, ""),
     ).toThrowErrorMatchingSnapshot();
   });
 
   test("should throw error if reducer is non-empty string with no matching reducer", () => {
     expect(() =>
-      factory.create(createReducer, "asdf")
+      factory.create(createReducer, "asdf"),
     ).toThrowErrorMatchingSnapshot();
   });
 
   test("should throw error if one of two reducers is false", () => {
     expect(() =>
-      factory.create(createReducer, ["$foo.bar", false])
+      factory.create(createReducer, ["$foo.bar", false]),
     ).toThrowErrorMatchingSnapshot();
   });
 
   test("should throw error if reducer is undefined", () => {
     expect(() =>
-      factory.create(createReducer, [undefined])
+      factory.create(createReducer, [undefined]),
     ).toThrowErrorMatchingSnapshot();
   });
 
   test("should throw error if reducer is zero", () => {
     expect(() =>
-      factory.create(createReducer, [0])
+      factory.create(createReducer, [0]),
     ).toThrowErrorMatchingSnapshot();
   });
 });

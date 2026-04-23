@@ -9,11 +9,11 @@ const { createTypeCheckReducer } = require("./helpers/type-check-functions");
 
 const deprecatedEntitiesTypesAccess = util.deprecate(
   () => entityTypes,
-  "DataPoint.entities is being deprecated, please access entity factories directly from DataPoint. (e.g. DataPoint.Model"
+  "DataPoint.entities is being deprecated, please access entity factories directly from DataPoint. (e.g. DataPoint.Model",
 );
 const deprecatedHelpersAccess = util.deprecate(
   () => helpers.helpers,
-  "DataPoint.helpers is being deprecated, please access helper methods directly from DataPoint. (e.g. DataPoint.map"
+  "DataPoint.helpers is being deprecated, please access helper methods directly from DataPoint. (e.g. DataPoint.map",
 );
 
 module.exports = {
@@ -33,5 +33,5 @@ module.exports = {
   reducifyAll: helpers.reducifyAll,
   createReducer: helpers.createReducer,
   createReducerResolver: helpers.reducifyAll,
-  createTypeCheckReducer
+  createTypeCheckReducer,
 };

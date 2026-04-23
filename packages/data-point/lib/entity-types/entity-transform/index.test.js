@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 const core = require("../../core");
-const factory = require("../entity-transform/factory");
+const factory = require("./factory");
 const transformIndex = require("./index");
 
 describe("API", () => {
@@ -16,7 +16,7 @@ describe("integration", () => {
     const dataPoint = core.create();
     const fooReducer = factory.create("$greeting");
     const input = {
-      greeting: "HelloWorld"
+      greeting: "HelloWorld",
     };
     const value = await dataPoint.resolve(fooReducer, input);
     expect(value).toEqual("HelloWorld");

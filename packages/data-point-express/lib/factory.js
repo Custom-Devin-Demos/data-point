@@ -23,13 +23,13 @@ function createMiddleware(service) {
     },
     inspector() {
       return InspectorMiddleware.create(dataPoint);
-    }
+    },
   });
 }
 
 async function create(options) {
   const dpInjection = {
-    DataPoint
+    DataPoint,
   };
   const dpOptions = Object.assign({}, options, dpInjection);
 
@@ -39,5 +39,5 @@ async function create(options) {
 
 module.exports = {
   createMiddleware,
-  create
+  create,
 };

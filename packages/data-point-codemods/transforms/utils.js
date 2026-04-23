@@ -1,6 +1,6 @@
 function getEntityKeyRegexFn(entityId) {
   const r = new RegExp(`^${entityId}:.+`);
-  return key => r.test(key);
+  return (key) => r.test(key);
 }
 
 /*
@@ -22,10 +22,10 @@ function getEntityObjectFromProperties(entityId, j, root) {
     .find(j.Property, {
       key: {
         type: "Literal",
-        value: getEntityKeyRegexFn(entityId)
-      }
+        value: getEntityKeyRegexFn(entityId),
+      },
     })
-    .map(node => node.get("value"));
+    .map((node) => node.get("value"));
 }
 
 /*
@@ -42,17 +42,17 @@ function getEntityObjectFromAssignments(entityId, j, root) {
       left: {
         type: "MemberExpression",
         property: {
-          value: getEntityKeyRegexFn(entityId)
-        }
-      }
+          value: getEntityKeyRegexFn(entityId),
+        },
+      },
     })
-    .map(path => path.get("right"));
+    .map((path) => path.get("right"));
 }
 
 function getEntityObjects(entityId, j, root) {
   return [
     getEntityObjectFromProperties(entityId, j, root),
-    getEntityObjectFromAssignments(entityId, j, root)
+    getEntityObjectFromAssignments(entityId, j, root),
   ];
 }
 

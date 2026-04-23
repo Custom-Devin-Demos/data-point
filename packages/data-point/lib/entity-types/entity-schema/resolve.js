@@ -1,8 +1,12 @@
 const _ = require("lodash");
-const Ajv = require("ajv").default || require("ajv");
+const Ajv = require("ajv").default;
 
 async function validateContext(acc) {
-  const ajv = new Ajv({ allErrors: true, strict: false, ...acc.reducer.spec.options });
+  const ajv = new Ajv({
+    allErrors: true,
+    strict: false,
+    ...acc.reducer.spec.options,
+  });
   const validate = ajv.compile(acc.reducer.spec.schema);
 
   const valid = await validate(acc.value);

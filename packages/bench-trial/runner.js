@@ -16,7 +16,7 @@ program
   .option(
     "-i, --iterations [count]",
     "Number of iterations, defaults to 10",
-    parseInt
+    parseInt,
   )
   .option("-s, --skip-tests", "skip tests");
 
@@ -69,7 +69,7 @@ function reportFasterOpsperSec(suites) {
     chalk.yellow(first.name),
     chalk.white.bold(`${diffMedian.toFixed(2)}%`),
     chalk.yellow(`${fnumber(first.median)}Hz`),
-    chalk.yellow(`${fnumber(second.median)}Hz`)
+    chalk.yellow(`${fnumber(second.median)}Hz`),
   );
 }
 
@@ -87,7 +87,10 @@ function listBySpeed(suites) {
 function promiseFromCallback(fn) {
   return new Promise((resolve, reject) => {
     fn((err, result) => {
-      if (err) return reject(err);
+      if (err) {
+        reject(err);
+        return;
+      }
       resolve(result);
     });
   });
@@ -124,16 +127,17 @@ async function runTests(suites) {
   }
 
   console.log(chalk.white.bold("Test suite(s):"));
+  // eslint-disable-next-line no-restricted-syntax
   for (const suite of suites) {
     try {
-      await runTest(suite);
+      await runTest(suite); // eslint-disable-line no-await-in-loop
       console.log(" %s %s", chalk.green(" ✔ "), suite.name);
     } catch (err) {
       console.error(
         "%s %s Error: %s",
         chalk.red(" ✕ "),
         suite.name,
-        chalk.red(err.toString())
+        chalk.red(err.toString()),
       );
       throw err;
     }
@@ -142,7 +146,7 @@ async function runTests(suites) {
 }
 
 function runGC(val) {
-  return Promise.resolve(val).then(r => {
+  return Promise.resolve(val).then((r) => {
     global.gc();
     return r;
   });
@@ -157,7 +161,7 @@ function runBenchmark(suiteBenchmark) {
       "\n%s %s [%s]\n",
       chalk.white.bold("Benchmarking:"),
       chalk.bold(suiteBenchmark.name),
-      asyncLabel
+      asyncLabel,
     );
 
     const isAsync = !!suiteBenchmark.async;
@@ -169,20 +173,20 @@ function runBenchmark(suiteBenchmark) {
     for (let index = 0; index < iterations; index += 1) {
       suite.add(`${index + 1} ${suiteBenchmark.name}`, {
         defer: isAsync,
-        fn: benchmarkMethod
+        fn: benchmarkMethod,
       });
     }
 
     // add listeners
     suite
-      .on("cycle", event => {
+      .on("cycle", (event) => {
         console.log("", String(event.target));
       })
       .on("error", reject)
       .on("complete", () => {
         const benchmarks = Array.from(this);
         const hzSet = benchmarks
-          .map(benchmark => benchmark.hz)
+          .map((benchmark) => benchmark.hz)
           .sort((a, b) => a - b);
         const hzSum = sum(hzSet);
 
@@ -193,7 +197,7 @@ function runBenchmark(suiteBenchmark) {
           "\n Ran %s (%s times) with an average of %s ops/sec",
           chalk.yellow(suiteBenchmark.name),
           chalk.yellow(iterations),
-          chalk.yellow(fnumber(average))
+          chalk.yellow(fnumber(average)),
         );
         console.log("  Fastest: %s ops/sec", fnumber(Math.max(...hzSet)));
         console.log("  Average: %s ops/sec", chalk.bold(fnumber(average)));
@@ -203,8 +207,8 @@ function runBenchmark(suiteBenchmark) {
         resolve(
           Object.assign({}, suiteBenchmark, {
             average,
-            median
-          })
+            median,
+          }),
         );
       })
       // run async
@@ -214,11 +218,12 @@ function runBenchmark(suiteBenchmark) {
 
 async function runBenchmarks(suites) {
   const results = [];
+  // eslint-disable-next-line no-restricted-syntax
   for (const suite of suites) {
-    const currentSuite = await runGC(suite);
+    const currentSuite = await runGC(suite); // eslint-disable-line no-await-in-loop
     // eslint-disable-next-line no-param-reassign
     currentSuite.memoryBefore = process.memoryUsage().heapUsed;
-    const benchmarked = await runBenchmark(currentSuite);
+    const benchmarked = await runBenchmark(currentSuite); // eslint-disable-line no-await-in-loop
     // eslint-disable-next-line no-param-reassign
     benchmarked.memoryAfter = process.memoryUsage().heapUsed;
     // eslint-disable-next-line no-param-reassign
@@ -240,10 +245,10 @@ function reportFinal(suites) {
     listBySpeed(suites);
   }
 
-  const hzSet = suites.map(suite => suite.median);
+  const hzSet = suites.map((suite) => suite.median);
   console.log(
     "\n Total number of operations per second: %s",
-    chalk.yellow(`${fnumber(sum(hzSet))}Hz`)
+    chalk.yellow(`${fnumber(sum(hzSet))}Hz`),
   );
 
   return suites;
@@ -253,12 +258,12 @@ function start(suites) {
   console.log(
     "Running %s suite(s) with %s iterations each\n",
     chalk.yellow(suites.length),
-    chalk.yellow(iterations)
+    chalk.yellow(iterations),
   );
   return runTests(suites)
     .then(runBenchmarks)
     .then(reportFinal)
-    .catch(err => {
+    .catch((err) => {
       console.error(chalk.red("\nFailed to run benchmark\n"));
       console.log(err.stack);
       process.exit(1);
@@ -275,7 +280,7 @@ function listByMemoryEfficiency(suites) {
     console.log(
       " %s: %s",
       name,
-      chalk.yellow(`${fnumber(bytesToKb(suite.memoryEfficiency))}Kb`)
+      chalk.yellow(`${fnumber(bytesToKb(suite.memoryEfficiency))}Kb`),
     );
   });
 }
@@ -286,14 +291,14 @@ function reportSuiteMemory(suite) {
     "  Memory: not freed %s (before %s after %s)",
     chalk.red.bold(`${fnumber(bytesToKb(memoryAfter - memoryBefore))}Kb`),
     chalk.white.bold(`${fnumber(bytesToKb(memoryBefore))}Kb`),
-    chalk.white.bold(`${fnumber(bytesToKb(memoryAfter))}Kb`)
+    chalk.white.bold(`${fnumber(bytesToKb(memoryAfter))}Kb`),
   );
   return suite;
 }
 
 function reportMemoryEfficincy(suites) {
   const sortedSuites = suites.sort(
-    (a, b) => a.memoryEfficiency - b.memoryEfficiency
+    (a, b) => a.memoryEfficiency - b.memoryEfficiency,
   );
   const first = sortedSuites[0];
   const second = sortedSuites[1];
@@ -308,7 +313,7 @@ function reportMemoryEfficincy(suites) {
     chalk.yellow(first.name),
     chalk.white.bold(`${diffMemory.toFixed(2)}%`),
     chalk.yellow(`${fnumber(bytesToKb(first.memoryEfficiency))}Kb`),
-    chalk.yellow(`${fnumber(bytesToKb(second.memoryEfficiency))}Kb`)
+    chalk.yellow(`${fnumber(bytesToKb(second.memoryEfficiency))}Kb`),
   );
 }
 
@@ -336,5 +341,5 @@ module.exports = {
   runGC,
   listByMemoryEfficiency,
   reportSuiteMemory,
-  reportMemoryEfficincy
+  reportMemoryEfficincy,
 };

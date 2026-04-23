@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const dataPoint = require("../").create();
+const dataPoint = require("..").create();
 
 const throwError = (input, acc, next) => {
   // passing first argument will be
@@ -7,7 +7,7 @@ const throwError = (input, acc, next) => {
   next(new Error("oh noes!!"));
 };
 
-dataPoint.resolve(throwError, "Hello").catch(error => {
+dataPoint.resolve(throwError, "Hello").catch((error) => {
   console.assert(error instanceof Error);
   console.log(error.toString()); // 'Error: oh noes!!'
 });

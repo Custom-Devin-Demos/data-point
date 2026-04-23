@@ -30,7 +30,7 @@ module.exports.use = use;
  */
 function create() {
   const manager = {
-    store: new Map()
+    store: new Map(),
   };
 
   manager.use = use.bind(null, manager);

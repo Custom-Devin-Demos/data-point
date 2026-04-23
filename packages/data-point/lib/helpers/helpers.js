@@ -14,7 +14,7 @@ module.exports.helpers = {
   omit: stubFactories.omit,
   parallel: stubFactories.parallel,
   pick: stubFactories.pick,
-  withDefault: stubFactories.withDefault
+  withDefault: stubFactories.withDefault,
 };
 
 module.exports.entityFactories = require("../entity-types").factories;
@@ -25,14 +25,16 @@ module.exports.createReducer = require("../reducer-types").create;
 
 module.exports.createEntity = require("../entity-types/base-entity").create;
 
-module.exports.resolveEntity = require("../entity-types/base-entity/resolve").resolve;
+module.exports.resolveEntity =
+  require("../entity-types/base-entity/resolve").resolve;
 
-module.exports.validateEntityModifiers = require("../entity-types/validate-modifiers").validateModifiers;
+module.exports.validateEntityModifiers =
+  require("../entity-types/validate-modifiers").validateModifiers;
 
 function reducify(method) {
   return (...args) => {
     const partialArguments = Array.prototype.slice.call(args);
-    return value => {
+    return (value) => {
       const methodArguments = [value].concat(partialArguments);
       return method(...methodArguments);
     };
@@ -63,10 +65,10 @@ function createAccumulator(value, options) {
   return AccumulatorFactory.create(
     Object.assign(
       {
-        value
+        value,
       },
-      options
-    )
+      options,
+    ),
   );
 }
 

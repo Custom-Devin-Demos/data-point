@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 const assert = require("assert");
 
-const dataPoint = require("../").create();
+const dataPoint = require("..").create();
 
-const logError = error => {
+const logError = (error) => {
   console.log(error.toString());
   throw error;
 };
@@ -12,14 +12,14 @@ dataPoint.addEntities({
   "model:getArray": {
     value: "$a",
     outputType: "array",
-    error: logError
-  }
+    error: logError,
+  },
 });
 
 const input = {
   a: {
-    b: "foo"
-  }
+    b: "foo",
+  },
 };
 
 dataPoint
@@ -28,7 +28,7 @@ dataPoint
     // should not execute
     assert.ok(false);
   })
-  .catch(error => {
+  .catch((error) => {
     console.log(error.toString());
     // should execute
     assert.ok(true);

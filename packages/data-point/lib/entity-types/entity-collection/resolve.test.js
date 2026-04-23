@@ -16,10 +16,10 @@ function transform(entityId, value, options) {
     value,
     Object.assign(
       {
-        context: reducer
+        context: reducer,
       },
-      options
-    )
+      options,
+    ),
   );
   return resolveCollectionEntity(accumulator, resolveReducerBound);
 }
@@ -36,18 +36,15 @@ beforeEach(() => {
 describe("Collection entity type checking", () => {
   async function resolveInvalid(entity, data) {
     await expect(
-      dataPoint.resolve(entity, data)
+      dataPoint.resolve(entity, data),
     ).rejects.toThrowErrorMatchingSnapshot();
   }
-  test("should throw error from default outputType reducer when output is not valid", () => {
-    return resolveInvalid("collection:ObjectsNotAllowed", testData);
-  });
-  test("should throw error from a custom outputType reducer", () => {
-    return resolveInvalid("collection:CustomOutputType", []);
-  });
-  test("should execute the default outputType reducer before a custom outputType reducer ", () => {
-    return resolveInvalid("collection:CustomOutputType", {});
-  });
+  test("should throw error from default outputType reducer when output is not valid", () =>
+    resolveInvalid("collection:ObjectsNotAllowed", testData));
+  test("should throw error from a custom outputType reducer", () =>
+    resolveInvalid("collection:CustomOutputType", []));
+  test("should execute the default outputType reducer before a custom outputType reducer ", () =>
+    resolveInvalid("collection:CustomOutputType", {}));
 });
 
 describe("entity.collection.map", () => {
@@ -67,8 +64,8 @@ describe("entity.collection.filter", () => {
     const result = await transform("collection:c.1", testData.a.d);
     expect(result).toEqual([
       {
-        d1: 2
-      }
+        d1: 2,
+      },
     ]);
   });
 
@@ -113,25 +110,25 @@ describe("entity.collection.compose", () => {
 
   test("map should handle error and rethrow with appended information", async () => {
     await expect(
-      transform("collection:j.3", testData)
+      transform("collection:j.3", testData),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Cannot read property 'map' of undefined"`
+      `"Cannot read properties of undefined (reading 'map')"`,
     );
   });
 
   test("find should handle error and rethrow with appended information", async () => {
     await expect(
-      transform("collection:j.4", testData)
+      transform("collection:j.4", testData),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Cannot read property 'length' of undefined"`
+      `"Cannot read properties of undefined (reading 'length')"`,
     );
   });
 
   test("filter should handle error and rethrow with appended information", async () => {
     await expect(
-      transform("collection:j.5", testData)
+      transform("collection:j.5", testData),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Expecting an array or an iterable object but got undefined"`
+      `"Expecting an array or an iterable object but got undefined"`,
     );
   });
 });

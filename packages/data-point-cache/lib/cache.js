@@ -4,7 +4,7 @@ const RedisClient = require("./redis-client");
 const InMemory = require("./in-memory");
 
 const DefaultSettings = {
-  localTTL: ms("2s")
+  localTTL: ms("2s"),
 };
 
 /**
@@ -87,7 +87,7 @@ async function create(options) {
     local: null,
     set: null,
     get: null,
-    del: null
+    del: null,
   };
 
   const redis = await RedisClient.create(cache.settings);
@@ -106,5 +106,5 @@ module.exports = {
   getFromStore,
   set,
   get,
-  del
+  del,
 };

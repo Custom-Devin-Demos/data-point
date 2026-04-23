@@ -70,7 +70,7 @@ function add(manager, errorInfoCb, factory, id, spec, override) {
     item.message = `${item.message}\nEntity "${id}": ${JSON.stringify(
       spec,
       null,
-      2
+      2,
     )}`;
     throw item;
   }
@@ -88,7 +88,7 @@ module.exports.add = add;
  */
 function create(spec) {
   const manager = {
-    store: new Map()
+    store: new Map(),
   };
 
   manager.getStore = getStore.bind(null, manager);

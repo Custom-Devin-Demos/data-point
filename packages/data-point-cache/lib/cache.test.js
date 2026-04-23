@@ -53,8 +53,8 @@ describe("del", () => {
   it("should delete a key", () => {
     const placeholder = {
       redis: {
-        del: jest.fn()
-      }
+        del: jest.fn(),
+      },
     };
     Cache.del(placeholder, "foo");
     expect(placeholder.redis.del).toBeCalledWith("foo");

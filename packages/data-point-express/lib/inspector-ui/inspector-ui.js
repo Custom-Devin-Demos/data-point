@@ -9,5 +9,5 @@ function getInspector() {
 }
 
 module.exports = {
-  getInspector
+  getInspector,
 };

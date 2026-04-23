@@ -18,8 +18,8 @@ describe("factory#parse loose modifiers", () => {
   test("factory#mapKeys", () => {
     const result = factory.create("name", {
       mapKeys: {
-        a: "$a"
-      }
+        a: "$a",
+      },
     });
 
     expect(helpers.isReducer(result.compose)).toBe(true);
@@ -29,8 +29,8 @@ describe("factory#parse loose modifiers", () => {
   test("factory#addKeys", () => {
     const result = factory.create("name", {
       addKeys: {
-        a: "$a"
-      }
+        a: "$a",
+      },
     });
 
     expect(helpers.isReducer(result.compose)).toBe(true);
@@ -39,7 +39,7 @@ describe("factory#parse loose modifiers", () => {
 
   test("factory#omitKeys", () => {
     const result = factory.create("name", {
-      omitKeys: ["a"]
+      omitKeys: ["a"],
     });
 
     expect(helpers.isReducer(result.compose)).toBe(true);
@@ -49,7 +49,7 @@ describe("factory#parse loose modifiers", () => {
 
   test("factory#pickKeys", () => {
     const result = factory.create("name", {
-      pickKeys: ["a"]
+      pickKeys: ["a"],
     });
 
     expect(helpers.isReducer(result.compose)).toBe(true);
@@ -61,7 +61,7 @@ describe("factory#parse loose modifiers", () => {
 describe("factory#parse composed modifiers", () => {
   test("throw error if compose non array", () => {
     const spec = {
-      compose: {}
+      compose: {},
     };
     expect(() => {
       factory.create("hash:invalid", spec);
@@ -73,9 +73,9 @@ describe("factory#parse composed modifiers", () => {
       mapKeys: {},
       compose: [
         {
-          mapKeys: {}
-        }
-      ]
+          mapKeys: {},
+        },
+      ],
     };
     expect(() => {
       factory.create("hash:invalid", spec);
@@ -86,9 +86,9 @@ describe("factory#parse composed modifiers", () => {
     const spec = {
       compose: [
         {
-          invalidKey: {}
-        }
-      ]
+          invalidKey: {},
+        },
+      ],
     };
     expect(() => {
       factory.create("hash:invalid", spec);
@@ -100,10 +100,10 @@ describe("factory#parse composed modifiers", () => {
       compose: [
         {
           mapKeys: {
-            a: "$a"
-          }
-        }
-      ]
+            a: "$a",
+          },
+        },
+      ],
     });
 
     expect(helpers.isReducer(result.compose)).toBe(true);
@@ -115,18 +115,18 @@ describe("factory#parse composed modifiers", () => {
       compose: [
         {
           addKeys: {
-            a: "$a"
-          }
+            a: "$a",
+          },
         },
         {
           mapKeys: {
-            a: "$a"
-          }
+            a: "$a",
+          },
         },
         {
-          omitKeys: ["a"]
-        }
-      ]
+          omitKeys: ["a"],
+        },
+      ],
     });
 
     expect(helpers.isReducer(result.compose)).toBe(true);
@@ -135,7 +135,7 @@ describe("factory#parse composed modifiers", () => {
     expect(result.compose.reducers[0]).toHaveProperty("type", "ReducerAssign");
     expect(result.compose.reducers[0].reducer).toHaveProperty(
       "type",
-      "ReducerObject"
+      "ReducerObject",
     );
 
     expect(result.compose.reducers[1]).toHaveProperty("type", "ReducerObject");
@@ -143,7 +143,7 @@ describe("factory#parse composed modifiers", () => {
     expect(result.compose.reducers[1].reducers).toHaveLength(1);
     expect(result.compose.reducers[1].reducers[0].reducer).toHaveProperty(
       "type",
-      "ReducerPath"
+      "ReducerPath",
     );
 
     expect(result.compose.reducers[2]).toHaveProperty("type", "ReducerOmit");

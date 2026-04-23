@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Factory#create 1`] = `
+"Schema validation failed with the following errors:
+[
+  {
+    "instancePath": "/type",
+    "schemaPath": "#/definitions/simpleTypes/enum",
+    "keyword": "enum",
+    "params": {
+      "allowedValues": [
+        "array",
+        "boolean",
+        "integer",
+        "null",
+        "number",
+        "object",
+        "string"
+      ]
+    },
+    "message": "must be equal to one of the allowed values"
+  },
+  {
+    "instancePath": "/type",
+    "schemaPath": "#/properties/type/anyOf/1/type",
+    "keyword": "type",
+    "params": {
+      "type": "array"
+    },
+    "message": "must be array"
+  },
+  {
+    "instancePath": "/type",
+    "schemaPath": "#/properties/type/anyOf",
+    "keyword": "anyOf",
+    "params": {},
+    "message": "must match a schema in anyOf"
+  }
+]"
+`;
+
+exports[`Factory#validateSchema 1`] = `
+"Schema validation failed with the following errors:
+[
+  {
+    "instancePath": "",
+    "schemaPath": "#/type",
+    "keyword": "type",
+    "params": {
+      "type": [
+        "object",
+        "boolean"
+      ]
+    },
+    "message": "must be object,boolean"
+  }
+]"
+`;
+
+exports[`Factory#validateSchema 2`] = `
+"Schema validation failed with the following errors:
+[
+  {
+    "instancePath": "/type",
+    "schemaPath": "#/definitions/simpleTypes/enum",
+    "keyword": "enum",
+    "params": {
+      "allowedValues": [
+        "array",
+        "boolean",
+        "integer",
+        "null",
+        "number",
+        "object",
+        "string"
+      ]
+    },
+    "message": "must be equal to one of the allowed values"
+  },
+  {
+    "instancePath": "/type",
+    "schemaPath": "#/properties/type/anyOf/1/type",
+    "keyword": "type",
+    "params": {
+      "type": "array"
+    },
+    "message": "must be array"
+  },
+  {
+    "instancePath": "/type",
+    "schemaPath": "#/properties/type/anyOf",
+    "keyword": "anyOf",
+    "params": {},
+    "message": "must match a schema in anyOf"
+  }
+]"
+`;

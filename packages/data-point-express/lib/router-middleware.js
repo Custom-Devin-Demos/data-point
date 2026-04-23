@@ -21,7 +21,7 @@ function createRoutes(app, rootPath, routes, dataPoint) {
     app,
     rootPath,
     routes,
-    createApiRoute(dataPoint)
+    createApiRoute(dataPoint),
   );
 }
 
@@ -42,5 +42,5 @@ module.exports = {
   createApiRoute,
   createRoutes,
   setupRouter,
-  create
+  create,
 };

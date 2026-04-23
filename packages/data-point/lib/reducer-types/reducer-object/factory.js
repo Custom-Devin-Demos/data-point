@@ -35,7 +35,7 @@ module.exports.isType = isType;
 function newProps() {
   return {
     constants: {},
-    reducers: []
+    reducers: [],
   };
 }
 
@@ -49,7 +49,7 @@ module.exports.newProps = newProps;
  * @returns {Array}
  */
 function getProps(createReducer, source, stack = [], props = newProps()) {
-  Object.keys(source).forEach(key => {
+  Object.keys(source).forEach((key) => {
     const path = stack.concat(key);
     const value = source[key];
     if (_.isPlainObject(value)) {

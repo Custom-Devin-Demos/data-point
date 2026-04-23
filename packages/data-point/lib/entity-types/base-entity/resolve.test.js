@@ -3,8 +3,8 @@
 const ResolveEntity = require("./resolve");
 const createReducer = require("../../reducer-types").create;
 const resolveReducer = require("../../reducer-types").resolve;
-const createReducerEntityId = require("../../reducer-types/reducer-entity-id")
-  .create;
+const createReducerEntityId =
+  require("../../reducer-types/reducer-entity-id").create;
 
 const FixtureStore = require("../../../test/utils/fixture-store");
 const helpers = require("../../helpers");
@@ -21,7 +21,7 @@ const resolveEntity = (entityId, input, options) => {
     resolveReducer,
     racc,
     reducer,
-    entity
+    entity,
   );
 };
 
@@ -36,14 +36,14 @@ afterEach(() => {
 describe("getCurrentReducer", () => {
   it("should return reducer as is if type=ReducerEntity", () => {
     const reducer = {
-      spec: "spec"
+      spec: "spec",
     };
     expect(ResolveEntity.getCurrentReducer(reducer)).toEqual(reducer);
   });
   it("should return decorated reducer if type!=ReducerEntity", () => {
     const reducer = {};
     expect(ResolveEntity.getCurrentReducer(reducer, "spec")).toEqual({
-      spec: "spec"
+      spec: "spec",
     });
   });
 });
@@ -58,14 +58,14 @@ describe("ResolveEntity.createCurrentAccumulatorWithOverride", () => {
     reducer = createReducerEntityId(createReducer, "hash:base");
     entity = dataPoint.entities.get("hash:base");
     const accumulator = helpers.createAccumulator({
-      foo: "bar"
+      foo: "bar",
     });
     accumulator.entityOverrides = {
       hash: {
         params: {
-          inspect: true
-        }
-      }
+          inspect: true,
+        },
+      },
     };
     acc = ResolveEntity.createCurrentAccumulator(accumulator, reducer, entity);
   });
@@ -86,7 +86,7 @@ describe("ResolveEntity.createCurrentAccumulator", () => {
     reducer = createReducerEntityId(createReducer, "hash:base");
     entity = dataPoint.entities.get("hash:base");
     const accumulator = helpers.createAccumulator({
-      foo: "bar"
+      foo: "bar",
     });
     acc = ResolveEntity.createCurrentAccumulator(accumulator, reducer, entity);
   });
@@ -104,7 +104,7 @@ describe("ResolveEntity.createCurrentAccumulator", () => {
   });
   test("It should initialValue acc.value", () => {
     expect(acc).toHaveProperty("initialValue", {
-      foo: "bar"
+      foo: "bar",
     });
   });
   test("It should set an initialValue for acc.params", () => {
@@ -124,7 +124,7 @@ describe("ResolveEntity.resolveEntity", () => {
   test("It should attach entityId to error", async () => {
     const rejectResolver = () => Promise.reject(new Error("test"));
     await expect(
-      resolveEntity("hash:asIs", undefined, undefined, rejectResolver)
+      resolveEntity("hash:asIs", undefined, undefined, rejectResolver),
     ).rejects.toHaveProperty("entityId", "hash:asIs");
   });
 
@@ -136,7 +136,7 @@ describe("ResolveEntity.resolveEntity", () => {
     console.timeEnd = jest.fn();
 
     const result = await resolveEntity("model:traced", "foo", {
-      trace: true
+      trace: true,
     });
     expect(console.time).toBeCalled();
     expect(console.timeEnd).toBeCalled();
@@ -163,13 +163,13 @@ describe("ResolveEntity.resolveEntity", () => {
     });
     await expect(resolveEntity("hash:asIs", "foo")).rejects.toHaveProperty(
       "message",
-      "test"
+      "test",
     );
   });
 
   test("inputType - throws error if inputType does not pass", async () => {
     await expect(
-      resolveEntity("model:c.0", "foo")
+      resolveEntity("model:c.0", "foo"),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
@@ -182,13 +182,13 @@ describe("ResolveEntity.resolveEntity", () => {
 describe("ResolveEntity.resolveEntity outputType", () => {
   test("throws error if value does not pass typeCheck", async () => {
     await expect(
-      resolveEntity("model:c.1", 1)
+      resolveEntity("model:c.1", 1),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
   test("throws error if before method returns value that does not pass typeCheck", async () => {
     await expect(
-      resolveEntity("model:c.5", "some string")
+      resolveEntity("model:c.5", "some string"),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
@@ -198,7 +198,7 @@ describe("ResolveEntity.resolveEntity outputType", () => {
     });
 
     await expect(
-      resolveEntity("model:c.1", "some string")
+      resolveEntity("model:c.1", "some string"),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
@@ -208,13 +208,13 @@ describe("ResolveEntity.resolveEntity outputType", () => {
     });
 
     await expect(
-      resolveEntity("model:c.1", "some string")
+      resolveEntity("model:c.1", "some string"),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
   test("throws error if after method returns value that does not pass typeCheck", async () => {
     await expect(
-      resolveEntity("model:c.4", "some string")
+      resolveEntity("model:c.4", "some string"),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
@@ -224,7 +224,7 @@ describe("ResolveEntity.resolveEntity outputType", () => {
     });
 
     await expect(
-      resolveEntity("model:c.1", "some string")
+      resolveEntity("model:c.1", "some string"),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
@@ -234,7 +234,7 @@ describe("ResolveEntity.resolveEntity outputType", () => {
     });
 
     await expect(
-      resolveEntity("model:c.1", "some string")
+      resolveEntity("model:c.1", "some string"),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
@@ -245,13 +245,13 @@ describe("ResolveEntity.resolveEntity outputType", () => {
 
   test("throws if error method does not return value with correct type", async () => {
     await expect(
-      resolveEntity("model:c.7", "string")
+      resolveEntity("model:c.7", "string"),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
   test("is bypassed if error throws error", async () => {
     await expect(
-      resolveEntity("model:c.8", "string")
+      resolveEntity("model:c.8", "string"),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
@@ -262,7 +262,7 @@ describe("ResolveEntity.resolveEntity outputType", () => {
 
   test("fails if error method catches typeCheck errors and returns bad value", async () => {
     await expect(
-      resolveEntity("model:c.10", "string")
+      resolveEntity("model:c.10", "string"),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
@@ -278,7 +278,7 @@ describe("ResolveEntity.resolveEntity outputType", () => {
 
   test("throws error if custom typeCheck fails", async () => {
     await expect(
-      resolveEntity("model:c.3", 123)
+      resolveEntity("model:c.3", 123),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
 
@@ -298,7 +298,7 @@ describe("ResolveEntity.resolve", () => {
       resolveReducer,
       racc,
       reducer,
-      entity
+      entity,
     );
   };
 
@@ -331,7 +331,7 @@ describe("ResolveEntity.resolve", () => {
       undefined,
       "b",
       null,
-      "c"
+      "c",
     ]);
     expect(result).toEqual(["a", undefined, "b", null, "c"]);
   });
@@ -373,8 +373,8 @@ describe("entity lifecycle methods", () => {
         before: () => pushToStack(stack, "before"),
         value: () => pushToStack(stack, "value"),
         after: () => pushToStack(stack, "after"),
-        error: () => pushToStack(stack, "error")
-      }
+        error: () => pushToStack(stack, "error"),
+      },
     });
 
     expect(result).toEqual([
@@ -384,7 +384,7 @@ describe("entity lifecycle methods", () => {
       "value",
       "after",
       "model:after [middleware]",
-      "after [middleware]"
+      "after [middleware]",
     ]);
   });
   test("It should resolve methods in the correct order when error is thrown", async () => {
@@ -402,15 +402,15 @@ describe("entity lifecycle methods", () => {
         before: () => pushToStack(stack, "before"),
         value: () => pushToStack(stack, "value"),
         after: () => pushToStack(stack, "after"),
-        error: () => pushToStack(stack, "error")
-      }
+        error: () => pushToStack(stack, "error"),
+      },
     });
 
     expect(result).toEqual([
       "before [middleware]",
       "model:before [middleware]",
       "model:before [middleware with error]",
-      "error"
+      "error",
     ]);
   });
 });

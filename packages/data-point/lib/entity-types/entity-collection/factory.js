@@ -5,7 +5,7 @@ const BaseEntity = require("../base-entity");
 const reducerHelpers = require("../../reducer-types/reducer-helpers");
 const { validateModifiers } = require("../validate-modifiers");
 const {
-  getTypeCheckSourceWithDefault
+  getTypeCheckSourceWithDefault,
 } = require("../../helpers/type-check-helpers");
 
 const modifierKeys = ["filter", "map", "find"];
@@ -13,7 +13,7 @@ const modifierKeys = ["filter", "map", "find"];
 const modifiers = {
   filter: reducerHelpers.stubFactories.filter,
   find: reducerHelpers.stubFactories.find,
-  map: reducerHelpers.stubFactories.map
+  map: reducerHelpers.stubFactories.map,
 };
 
 /**
@@ -21,7 +21,7 @@ const modifiers = {
  * @return {Reducer}
  */
 function createCompose(composeSpec) {
-  const stubs = composeSpec.map(modifier => {
+  const stubs = composeSpec.map((modifier) => {
     const factory = modifiers[modifier.type];
     return factory(modifier.spec);
   });
@@ -41,7 +41,7 @@ function create(id, spec) {
   const outputType = getTypeCheckSourceWithDefault(
     "collection",
     "array",
-    spec.outputType
+    spec.outputType,
   );
 
   const entity = {};

@@ -17,7 +17,7 @@ test("modelFactory#create default", () => {
 describe("parse loose modifiers", () => {
   test("modelFactory#create default | checks that an entity containing one reducer has that respective property", () => {
     const result = modelFactory.create("name", {
-      map: "$a"
+      map: "$a",
     });
 
     expect(helpers.isReducer(result.compose)).toBe(true);
@@ -29,7 +29,7 @@ describe("parse loose modifiers", () => {
 describe("parse compose modifier", () => {
   test("parses from compose property", () => {
     const result = modelFactory.create("name", {
-      compose: [{ map: "$a" }]
+      compose: [{ map: "$a" }],
     });
 
     expect(helpers.isReducer(result.compose)).toBe(true);
@@ -40,7 +40,7 @@ describe("parse compose modifier", () => {
   test("throw error if compose is not an array", () => {
     expect(() => {
       modelFactory.create("test-id", {
-        compose: { map: "$a" }
+        compose: { map: "$a" },
       });
     }).toThrowErrorMatchingSnapshot();
   });
@@ -50,14 +50,14 @@ describe("parse compose modifier", () => {
       modelFactory.create("test-id", {
         compose: [{ map: "$a" }],
         map: "$a",
-        filter: "$a"
+        filter: "$a",
       });
     }).toThrowErrorMatchingSnapshot();
   });
 
   test("parses multiple modifiers, respect order", () => {
     const result = modelFactory.create("name", {
-      compose: [{ map: "$a" }, { find: "$a" }, { filter: "$a" }]
+      compose: [{ map: "$a" }, { find: "$a" }, { filter: "$a" }],
     });
     expect(helpers.isReducer(result.compose)).toBe(true);
     expect(result.compose).toHaveProperty("type", "ReducerList");

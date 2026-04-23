@@ -27,7 +27,7 @@ function addEntitiesToStore(store, entities) {
   const entitySpecs = _.defaultTo(entities, {});
   const specs = normalizeEntities.normalize(entitySpecs);
 
-  _.forOwn(specs, specItem => {
+  _.forOwn(specs, (specItem) => {
     store.add(specItem.id, specItem.spec);
   });
 
@@ -38,7 +38,7 @@ function create(spec) {
   const options = _.defaultTo(spec, {
     values: {},
     entities: {},
-    entityTypes: {}
+    entityTypes: {},
   });
 
   const entityTypes = storeEntityTypes.create();
@@ -47,7 +47,7 @@ function create(spec) {
     middleware: storeMiddleware.create(),
     values: storeValues.create(),
     entities: storeEntities.create(entityTypes),
-    entityTypes
+    entityTypes,
   };
 
   // add single item (singular)
@@ -79,7 +79,7 @@ function create(spec) {
   // does not support currying
   manager.resolveFromAccumulator = Transform.resolveFromAccumulator.bind(
     null,
-    manager
+    manager,
   );
 
   return manager;

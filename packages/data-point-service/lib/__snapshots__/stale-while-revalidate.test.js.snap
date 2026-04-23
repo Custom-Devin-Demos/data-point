@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`create should create stale while revalidate controller 1`] = `
-Object {
+{
   "addEntry": [Function],
   "addRevalidationFlags": [Function],
   "clearAllRevalidationFlags": [Function],

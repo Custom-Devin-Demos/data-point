@@ -1,6 +1,6 @@
 const _ = require("lodash");
 
-const DataPoint = require("../");
+const DataPoint = require("..");
 
 // Entity Class
 function RenderTemplate() {}
@@ -46,25 +46,25 @@ const dataPoint = DataPoint.create({
   // custom entity Types
   entityTypes: {
     // adds custom entity type 'render'
-    render: RenderEntity
+    render: RenderEntity,
   },
 
   entities: {
     // uses new custom entity type
     "render:HelloWorld": {
       value: "$user",
-      template: "<h1>Hello <%= name %>!!</h1>"
-    }
-  }
+      template: "<h1>Hello <%= name %>!!</h1>",
+    },
+  },
 });
 
 const data = {
   user: {
-    name: "World"
-  }
+    name: "World",
+  },
 };
 
-dataPoint.resolve("render:HelloWorld", data).then(output => {
+dataPoint.resolve("render:HelloWorld", data).then((output) => {
   // eslint-disable-next-line no-console
   console.log(output); // '<h1>Hello World!!</h1>'
 });

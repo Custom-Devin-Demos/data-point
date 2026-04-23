@@ -6,7 +6,7 @@ module.exports = (file, api) => {
   const root = j(file.source);
 
   function replaceWith(target, newObject) {
-    Object.keys(target).forEach(key => {
+    Object.keys(target).forEach((key) => {
       // eslint-disable-next-line no-param-reassign
       delete target[key];
     });
@@ -17,7 +17,7 @@ module.exports = (file, api) => {
   function addValueParam(node) {
     const accReferences = j(node.value.body)
       .find(j.Identifier, {
-        name: "acc"
+        name: "acc",
       })
       .size();
 
@@ -26,8 +26,8 @@ module.exports = (file, api) => {
     const newParams = [
       {
         type: "Identifier",
-        name: "input"
-      }
+        name: "input",
+      },
     ];
 
     // eslint-disable-next-line no-param-reassign
@@ -42,18 +42,18 @@ module.exports = (file, api) => {
       .find(j.MemberExpression, {
         object: {
           object: {
-            name: "acc"
+            name: "acc",
           },
           property: {
-            name: "value"
-          }
-        }
+            name: "value",
+          },
+        },
       })
-      .forEach(nodeItem => {
+      .forEach((nodeItem) => {
         // eslint-disable-next-line no-param-reassign
         nodeItem.value.object = {
           type: "Identifier",
-          name: "input"
+          name: "input",
         };
       });
 
@@ -61,16 +61,16 @@ module.exports = (file, api) => {
     j(node)
       .find(j.MemberExpression, {
         object: {
-          name: "acc"
+          name: "acc",
         },
         property: {
-          name: "value"
-        }
+          name: "value",
+        },
       })
-      .forEach(noteIdem => {
+      .forEach((noteIdem) => {
         replaceWith(noteIdem.value, {
           type: "Identifier",
-          name: "input"
+          name: "input",
         });
       });
 
@@ -80,9 +80,9 @@ module.exports = (file, api) => {
   function checkInputVariable(node) {
     j(node)
       .find(j.Identifier, {
-        name: "input"
+        name: "input",
       })
-      .forEach(nodePath => {
+      .forEach((nodePath) => {
         const parentNode = nodePath.parentPath.value;
         if (parentNode.type !== "MemberExpression") {
           const nodeStart = parentNode.loc.start;
@@ -92,8 +92,8 @@ module.exports = (file, api) => {
               "\nA variable with name `input` already exists in the scope of a reducer function.",
               `\n\n${j(node).toSource()}`,
               `\n^------- ${file.path}:${nodeStart.line}:${nodeStart.column}`,
-              "\n\nTry refactoring this block of code to remove any variable of name 'input' before running the codemod.\n\n"
-            )
+              "\n\nTry refactoring this block of code to remove any variable of name 'input' before running the codemod.\n\n",
+            ),
           );
         }
       });
@@ -125,9 +125,10 @@ module.exports = (file, api) => {
 
     const secondParam = _.get(node, "params[1]", {});
     const secondParamIsCallback = j(node.body)
-      .find(j.CallExpression, nodeItem => {
-        return nodeItem.callee.name === secondParam.name;
-      })
+      .find(
+        j.CallExpression,
+        (nodeItem) => nodeItem.callee.name === secondParam.name,
+      )
       .size();
 
     if (secondParamIsCallback) {

@@ -11,7 +11,7 @@ describe("validateResolve", () => {
   it("should throw error if function does not match arity", () => {
     expect(() => {
       // eslint-disable-next-line no-unused-vars
-      Factory.validateResolve(a => {});
+      Factory.validateResolve((a) => {});
     }).toThrowErrorMatchingSnapshot();
   });
   it("should return true if validation has no errors", () => {
@@ -30,7 +30,7 @@ describe("validateFactory", () => {
   it("should throw error if function does not match arity", () => {
     expect(() => {
       // eslint-disable-next-line no-unused-vars
-      Factory.validateFactory(a => {});
+      Factory.validateFactory((a) => {});
     }).toThrowErrorMatchingSnapshot();
   });
   it("should return true if validation has no errors", () => {
@@ -49,7 +49,7 @@ describe("Factory.createEntityType", () => {
       before: "$",
       value: "$",
       error: "$",
-      after: "$"
+      after: "$",
     };
     const entity = Factory.createEntityType("foo", "bar", entitySource);
 
@@ -67,7 +67,7 @@ describe("Factory.createEntityType", () => {
 describe("createEntityInstance", () => {
   function createEntityInstance() {
     const entity = {
-      id: "foo:myFoo"
+      id: "foo:myFoo",
     };
     return Factory.createEntityInstance(entity);
   }
@@ -80,9 +80,7 @@ describe("create", () => {
   // eslint-disable-next-line no-unused-vars
   const resolve = (acc, resolveReducer) => true;
   // eslint-disable-next-line no-unused-vars
-  const create = (name, spec) => {
-    return {};
-  };
+  const create = (name, spec) => ({});
   it("should throw error if arguments are wrong", () => {
     expect(() => {
       Factory.create();

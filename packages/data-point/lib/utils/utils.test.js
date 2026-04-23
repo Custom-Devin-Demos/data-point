@@ -97,7 +97,7 @@ describe("inspectProperties", () => {
   test("It should inspect each property", () => {
     const obj = {
       a: 1,
-      b: { a: true, b: false }
+      b: { a: true, b: false },
     };
     expect(utils.inspectProperties(obj, ["a", "b", "c"])).toMatchSnapshot();
   });
@@ -105,10 +105,10 @@ describe("inspectProperties", () => {
   test("It should add indent to keys", () => {
     const obj = {
       a: 1,
-      b: true
+      b: true,
     };
     expect(
-      utils.inspectProperties(obj, ["a", "b", "c"], "  ")
+      utils.inspectProperties(obj, ["a", "b", "c"], "  "),
     ).toMatchSnapshot();
   });
 });

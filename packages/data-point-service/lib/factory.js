@@ -11,8 +11,8 @@ const { setupMiddleware } = require("./setup-middleware");
 function getDefaultSettings() {
   return {
     cache: {
-      isRequired: false
-    }
+      isRequired: false,
+    },
   };
 }
 
@@ -24,7 +24,7 @@ function prefixDeprecationError(options) {
   const prefix = _.get(options, "cache.prefix");
   if (typeof prefix !== "undefined") {
     throw new Error(
-      "options.cache.prefix is now deprecated, please use options.cache.redis.keyPrefix instead."
+      "options.cache.prefix is now deprecated, please use options.cache.redis.keyPrefix instead.",
     );
   }
 }
@@ -46,7 +46,7 @@ function createServiceObject(options) {
   const settings = _.merge({}, getDefaultSettings(), options);
   const isCacheRequired = _.defaultTo(
     _.get(settings, "cache.isRequired"),
-    true
+    true,
   );
 
   _.set(settings, "cache.redis.keyPrefix", getCachePrefix(settings));
@@ -56,7 +56,7 @@ function createServiceObject(options) {
     settings,
     isCacheAvailable: false,
     cache: null,
-    dataPoint: null
+    dataPoint: null,
   };
 }
 
@@ -69,7 +69,7 @@ function handleCacheError(err, Service) {
   } else {
     // eslint-disable-next-line no-console
     console.warn(
-      "REDIS is flagged as not required, this is NOT recommended for production environments."
+      "REDIS is flagged as not required, this is NOT recommended for production environments.",
     );
   }
 
@@ -110,7 +110,7 @@ function bootstrapDataPoint(bootstrap, service) {
     // eslint-disable-next-line no-console
     console.warn(
       "REDIS is not available, there will be no cache mechanism for",
-      "DataPoint - we wish you the best of luck in your adventure."
+      "DataPoint - we wish you the best of luck in your adventure.",
     );
     return service;
   }
@@ -151,5 +151,5 @@ module.exports = {
   handleCacheError,
   createDataPoint,
   successDataPoint,
-  bootstrapDataPoint
+  bootstrapDataPoint,
 };

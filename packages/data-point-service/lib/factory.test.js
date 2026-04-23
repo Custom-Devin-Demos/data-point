@@ -1,13 +1,11 @@
 /* eslint-disable no-console */
 /* eslint-env jest */
 
-jest.mock("data-point-cache", () => {
-  return {
-    create() {
-      return Promise.resolve("cache");
-    }
-  };
-});
+jest.mock("data-point-cache", () => ({
+  create() {
+    return Promise.resolve("cache");
+  },
+}));
 
 const os = require("os");
 const DataPoint = require("data-point");
@@ -32,8 +30,8 @@ describe("prefixDeprecationError", () => {
     expect(() => {
       Factory.prefixDeprecationError({
         cache: {
-          prefix: "something"
-        }
+          prefix: "something",
+        },
       });
     }).toThrowErrorMatchingSnapshot();
   });
@@ -57,9 +55,9 @@ describe("getCachePrefix", () => {
     const options = {
       cache: {
         redis: {
-          keyPrefix: "keyPrefix"
-        }
-      }
+          keyPrefix: "keyPrefix",
+        },
+      },
     };
     expect(Factory.getCachePrefix(options)).toEqual("keyPrefix:");
   });
@@ -67,9 +65,9 @@ describe("getCachePrefix", () => {
     const options = {
       cache: {
         redis: {
-          keyPrefix: "keyPrefix"
-        }
-      }
+          keyPrefix: "keyPrefix",
+        },
+      },
     };
     console.warn = () => {};
     expect(Factory.getCachePrefix(options)).toEqual("keyPrefix:");
@@ -78,9 +76,9 @@ describe("getCachePrefix", () => {
     const options = {
       cache: {
         redis: {
-          keyPrefix: "keyPrefix:"
-        }
-      }
+          keyPrefix: "keyPrefix:",
+        },
+      },
     };
     console.warn = () => {};
     expect(Factory.getCachePrefix(options)).toEqual("keyPrefix:");
@@ -99,18 +97,18 @@ describe("createServiceObject", () => {
         cache: {
           isRequired: false,
           redis: {
-            keyPrefix: `${os.hostname()}:`
-          }
-        }
-      }
+            keyPrefix: `${os.hostname()}:`,
+          },
+        },
+      },
     });
   });
 
   test("It should merge given options into default settings", () => {
     const Service = Factory.createServiceObject({
       cache: {
-        isRequired: true
-      }
+        isRequired: true,
+      },
     });
     expect(Service).toEqual({
       cache: null,
@@ -121,10 +119,10 @@ describe("createServiceObject", () => {
         cache: {
           isRequired: true,
           redis: {
-            keyPrefix: `${os.hostname()}:`
-          }
-        }
-      }
+            keyPrefix: `${os.hostname()}:`,
+          },
+        },
+      },
     });
   });
 });
@@ -149,8 +147,8 @@ describe("handleCacheError", () => {
   test("It should not throw error by default", () => {
     expect(
       Factory.handleCacheError(new Error(), {
-        settings: {}
-      })
+        settings: {},
+      }),
     );
   });
 
@@ -159,7 +157,7 @@ describe("handleCacheError", () => {
     console.warn = jest.fn();
 
     Factory.handleCacheError(new Error(), {
-      settings: {}
+      settings: {},
     });
 
     expect(console.error).toBeCalled();
@@ -170,7 +168,7 @@ describe("handleCacheError", () => {
     expect(() => {
       Factory.handleCacheError(new Error("error"), {
         isCacheRequired: true,
-        settings: {}
+        settings: {},
       });
     }).toThrowErrorMatchingSnapshot();
   });
@@ -178,8 +176,8 @@ describe("handleCacheError", () => {
   test("It should set isCacheAvailable as false if not error not thrown", () => {
     expect(
       Factory.handleCacheError(new Error(), {
-        settings: {}
-      })
+        settings: {},
+      }),
     ).toHaveProperty("isCacheAvailable", false);
   });
 });
@@ -196,12 +194,12 @@ describe("createCache", () => {
   test("It should create cache", () => {
     const service = {
       settings: {
-        cache: {}
-      }
+        cache: {},
+      },
     };
     return Factory.createCache(service)
-      .catch(error => error)
-      .then(result => {
+      .catch((error) => error)
+      .then((result) => {
         expect(result).toHaveProperty("isCacheAvailable", true);
         expect(result).toHaveProperty("cache", "cache");
       });
@@ -232,36 +230,31 @@ describe("bootstrapDataPoint", () => {
 
 describe("create", () => {
   saveRestoreLogs();
-  test("It should create new DataPoint instance", () => {
-    return Factory.create({
+  test("It should create new DataPoint instance", () =>
+    Factory.create({
       DataPoint,
       cache: {
-        isRequired: false
+        isRequired: false,
       },
       entities: {
-        "reducer:foo": "$"
-      }
+        "reducer:foo": "$",
+      },
     })
-      .then(service => {
+      .then((service) => {
         expect(service.dataPoint).toHaveProperty("transform");
         return service;
       })
-      .then(service => {
+      .then((service) => {
         if (_.get(service, "cache.redis.redis.disconnect")) {
           service.cache.redis.redis.disconnect();
         }
         return service;
-      });
-  });
+      }));
   test("It throw error if cache is required", () => {
     jest.resetModules();
-    jest.mock("data-point-cache", () => {
-      return {
-        create: () => {
-          return Promise.reject(new Error("FAILED"));
-        }
-      };
-    });
+    jest.mock("data-point-cache", () => ({
+      create: () => Promise.reject(new Error("FAILED")),
+    }));
 
     console.error = jest.fn();
 
@@ -271,20 +264,20 @@ describe("create", () => {
     return FactoryTest.create({
       DataPoint,
       cache: {
-        isRequired: true
+        isRequired: true,
       },
       entities: {
-        "reducer:foo": "$"
-      }
+        "reducer:foo": "$",
+      },
     })
-      .then(service => {
+      .then((service) => {
         if (_.get(service, "cache.redis.redis.disconnect")) {
           service.cache.redis.redis.disconnect();
         }
         return service;
       })
-      .catch(error => error)
-      .then(res => {
+      .catch((error) => error)
+      .then((res) => {
         expect(console.error).toBeCalled();
         expect(res).toHaveProperty("message", "FAILED");
       });

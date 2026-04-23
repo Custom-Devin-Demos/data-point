@@ -12,7 +12,7 @@ let debugIdCounter = 0;
  */
 const REQUEST_DEFAULT_OPTIONS = {
   method: "GET",
-  json: true
+  json: true,
 };
 
 /**
@@ -99,7 +99,7 @@ function toAxiosConfig(options) {
   const config = {
     method: options.method || "GET",
     url: options.url,
-    headers: options.headers
+    headers: options.headers,
   };
 
   if (options.baseUrl) {
@@ -118,7 +118,7 @@ function toAxiosConfig(options) {
   if (options.auth) {
     config.auth = {
       username: options.auth.user,
-      password: options.auth.pass
+      password: options.auth.pass,
     };
   }
 
@@ -144,7 +144,7 @@ function inspect(acc, axiosRequest) {
   if (paramInspect === true) {
     utils.inspect(acc, {
       options: acc.options,
-      value: acc.value
+      value: acc.value,
     });
     return true;
   }
@@ -157,7 +157,7 @@ function inspect(acc, axiosRequest) {
       type: "request",
       uri: acc.options.url || acc.options.uri || "",
       method: (acc.options.method || "GET").toUpperCase(),
-      headers: _.cloneDeep(acc.options.headers || {})
+      headers: _.cloneDeep(acc.options.headers || {}),
     };
     if (acc.options.body) {
       data.body =
@@ -167,21 +167,21 @@ function inspect(acc, axiosRequest) {
     }
     _.attempt(paramInspect, acc, data);
     axiosRequest
-      .then(res => {
+      .then((res) => {
         _.attempt(paramInspect, acc, {
           debugId,
           type: "response",
           statusCode: res.status,
-          headers: res.headers
+          headers: res.headers,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         const statusCode = error.response ? error.response.status : undefined;
         _.attempt(paramInspect, acc, {
           debugId,
           type: "error",
           statusCode,
-          headers: error.response ? error.response.headers : undefined
+          headers: error.response ? error.response.headers : undefined,
         });
       });
     return true;
@@ -217,7 +217,7 @@ async function resolveRequest(acc) {
       message: error.message,
       statusCode,
       options: Object.assign({}, acc.options, { auth: "[omitted]" }),
-      body: responseBody
+      body: responseBody,
     };
 
     const message = [
@@ -228,14 +228,14 @@ async function resolveRequest(acc) {
       utils.inspectProperties(
         redactedAcc,
         ["options", "params", "value"],
-        "  "
+        "  ",
       ),
       "\n  Request:\n",
       utils.inspectProperties(
         errorForDisplay,
         ["error", "message", "statusCode", "options", "body"],
-        "  "
-      )
+        "  ",
+      ),
     ].join("");
 
     // preserve statusCode on the error for downstream consumers

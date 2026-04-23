@@ -9,18 +9,18 @@ const Middleware = require("./middleware");
 
 function createReq() {
   const app = {
-    locals: {}
+    locals: {},
   };
   const req = {
     query: {
-      queryVar: "queryVar"
+      queryVar: "queryVar",
     },
     params: {
       paramVar: "paramVar",
-      queryVar: "queryVarOverriden"
+      queryVar: "queryVarOverriden",
     },
     url: "http://some.domain.com/api/route/?key=value",
-    app
+    app,
   };
   return req;
 }
@@ -36,7 +36,7 @@ describe("buildTransformOptions", () => {
   test("It should have locals expose query", () => {
     const result = Middleware.buildTransformOptions(req);
     expect(result).toHaveProperty("locals.query", {
-      queryVar: "queryVar"
+      queryVar: "queryVar",
     });
   });
 
@@ -49,7 +49,7 @@ describe("buildTransformOptions", () => {
     const result = Middleware.buildTransformOptions(req);
     expect(result).toHaveProperty(
       "locals.url",
-      "http://some.domain.com/api/route/?key=value"
+      "http://some.domain.com/api/route/?key=value",
     );
   });
 
@@ -60,7 +60,7 @@ describe("buildTransformOptions", () => {
 
   test("It should have locals.resetCache true if req.query.resetCache was passed as 'true'", () => {
     const result = Middleware.buildTransformOptions(
-      fp.set("query.resetCache", "true", req)
+      fp.set("query.resetCache", "true", req),
     );
     expect(result).toHaveProperty("locals.resetCache", true);
   });
@@ -69,12 +69,12 @@ describe("buildTransformOptions", () => {
     const result = Middleware.buildTransformOptions(req, {
       routeParams: {
         paramVar: "paramVar",
-        queryVar: "queryVarOverriden"
-      }
+        queryVar: "queryVarOverriden",
+      },
     });
     expect(result).toHaveProperty("locals.queryParams", {
       queryVar: "queryVar",
-      paramVar: "paramVar"
+      paramVar: "paramVar",
     });
   });
 
@@ -82,12 +82,12 @@ describe("buildTransformOptions", () => {
     const result = Middleware.buildTransformOptions(req, {
       routeParams: {
         paramVar: "paramVar",
-        queryVar: "queryVarOverriden"
-      }
+        queryVar: "queryVarOverriden",
+      },
     });
     expect(result).toHaveProperty("locals.paramsQuery", {
       queryVar: "queryVarOverriden",
-      paramVar: "paramVar"
+      paramVar: "paramVar",
     });
   });
 
@@ -103,14 +103,14 @@ describe("buildTransformOptions", () => {
 
   test("It should set locals.routeRequestType", () => {
     const result = Middleware.buildTransformOptions(req, {
-      routeRequestType: "foo"
+      routeRequestType: "foo",
     });
     expect(result).toHaveProperty("locals.routeRequestType", "foo");
   });
 
   test("It should set locals.pathname", () => {
     const result = Middleware.buildTransformOptions(req, {
-      pathname: "route/"
+      pathname: "route/",
     });
     expect(result).toHaveProperty("locals.pathname", "route/");
   });
@@ -122,24 +122,24 @@ describe("getErrorOwnKeys", () => {
     err.name = "name";
     err.test = "test";
     expect(Middleware.getErrorOwnKeys(err)).toEqual({
-      test: "test"
+      test: "test",
     });
   });
   test("It should get own keys from object | where error is an regular object should pass enumerable keys ", () => {
     expect(
       Middleware.getErrorOwnKeys({
         a: 1,
-        b: 2
-      })
+        b: 2,
+      }),
     ).toEqual({
       a: 1,
-      b: 2
+      b: 2,
     });
   });
   test("It should handle circular references, bad keys contain its error instance", () => {
     const object = {
       a: 1,
-      b: 2
+      b: 2,
     };
     object.c = object;
     const safeKeys = Middleware.getErrorOwnKeys(object);
@@ -158,8 +158,8 @@ describe("createErrorMessage", () => {
       type: "name",
       message: "message",
       info: {
-        test: "test"
-      }
+        test: "test",
+      },
     });
   });
 });
@@ -171,60 +171,54 @@ describe("resolveReducer", () => {
       entities: {
         "reducer:string": () => `Test`,
         "reducer:object": () => ({
-          test: `Test`
+          test: `Test`,
         }),
-        "reducer:value": value => `Test ${value}`
-      }
+        "reducer:value": (value) => `Test ${value}`,
+      },
     });
   });
 
-  test("it should resolve text response", done => {
+  test("it should resolve text response", (done) => {
     const app = new Express();
-    app.get("/test", (req, res) => {
-      return Middleware.resolveReducer(dataPoint, "reducer:string", {}, res);
-    });
+    app.get("/test", (req, res) =>
+      Middleware.resolveReducer(dataPoint, "reducer:string", {}, res),
+    );
     request(app)
       .get("/test")
       .expect("Content-Type", /text/)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toEqual("Test");
       })
       .expect(200)
       .end(done);
   });
 
-  test("it should resolve object response", done => {
+  test("it should resolve object response", (done) => {
     const app = new Express();
-    app.get("/test", (req, res) => {
-      return Middleware.resolveReducer(dataPoint, "reducer:object", {}, res);
-    });
+    app.get("/test", (req, res) =>
+      Middleware.resolveReducer(dataPoint, "reducer:object", {}, res),
+    );
     request(app)
       .get("/test")
       .expect("Content-Type", /json/)
-      .expect(response => {
+      .expect((response) => {
         expect(response.body).toEqual({
-          test: "Test"
+          test: "Test",
         });
       })
       .expect(200)
       .end(done);
   });
 
-  test("it should resolve passing initial value", done => {
+  test("it should resolve passing initial value", (done) => {
     const app = new Express();
-    app.get("/test", (req, res) => {
-      return Middleware.resolveReducer(
-        dataPoint,
-        "reducer:value",
-        {},
-        res,
-        "TEST"
-      );
-    });
+    app.get("/test", (req, res) =>
+      Middleware.resolveReducer(dataPoint, "reducer:value", {}, res, "TEST"),
+    );
     request(app)
       .get("/test")
       .expect("Content-Type", /text/)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toEqual("Test TEST");
       })
       .expect(200)

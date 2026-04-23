@@ -1,4 +1,4 @@
-const Ajv = require("ajv").default || require("ajv");
+const Ajv = require("ajv").default;
 const _ = require("lodash");
 const deepFreeze = require("deep-freeze-strict");
 const { resolve } = require("./resolve");
@@ -18,7 +18,7 @@ function validateSchema(schema, options) {
     const msg = `Schema validation failed with the following errors:\n${JSON.stringify(
       ajv.errors,
       null,
-      2
+      2,
     )}`;
     throw new Error(msg);
   }

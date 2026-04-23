@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`lib It should explicity expose set of methods 1`] = `
-Object {
+{
   "Collection": [Function],
   "Control": [Function],
   "Entry": [Function],
@@ -17,7 +17,7 @@ Object {
   "createReducer": [Function],
   "createReducerResolver": [Function],
   "createTypeCheckReducer": [Function],
-  "entities": Object {
+  "entities": {
     "Collection": [Function],
     "Control": [Function],
     "Entry": [Function],
@@ -27,7 +27,7 @@ Object {
     "Request": [Function],
     "Schema": [Function],
   },
-  "entityFactories": Object {
+  "entityFactories": {
     "Collection": [Function],
     "Control": [Function],
     "Entry": [Function],
@@ -39,7 +39,7 @@ Object {
   },
   "filter": [Function],
   "find": [Function],
-  "helpers": Object {
+  "helpers": {
     "assign": [Function],
     "constant": [Function],
     "filter": [Function],

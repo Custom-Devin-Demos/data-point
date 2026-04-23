@@ -10,7 +10,7 @@ const utils = require("../../../utils");
 function resolve(manager, resolveReducer, accumulator, reducerMap) {
   const reducer = reducerMap.reducer;
 
-  const promises = accumulator.value.map(itemValue => {
+  const promises = accumulator.value.map((itemValue) => {
     const itemContext = utils.set(accumulator, "value", itemValue);
     return resolveReducer(manager, itemContext, reducer);
   });

@@ -33,12 +33,12 @@ module.exports = [
     async: false,
     name: "while-loop",
     test: test(whileLoop, expected),
-    benchmark: whileLoop
+    benchmark: whileLoop,
   },
   {
     async: false,
     name: "for-loop",
     test: test(forLoop, expected),
-    benchmark: forLoop
-  }
+    benchmark: forLoop,
+  },
 ];

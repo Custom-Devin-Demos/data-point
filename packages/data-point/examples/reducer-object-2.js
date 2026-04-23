@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
-const dataPoint = require("../").create();
+const dataPoint = require("..").create();
 
 const reducer = {
   x: "$c.x",
   y: "$c.y",
   z: {
     a: "$a",
-    b: "$b"
-  }
+    b: "$b",
+  },
 };
 
 const data = {
@@ -15,10 +15,10 @@ const data = {
   b: "B",
   c: {
     x: "X",
-    y: "Y"
-  }
+    y: "Y",
+  },
 };
 
-dataPoint.resolve(reducer, data).then(output => {
+dataPoint.resolve(reducer, data).then((output) => {
   console.log(output);
 });

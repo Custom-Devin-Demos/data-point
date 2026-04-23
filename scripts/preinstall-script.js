@@ -12,7 +12,7 @@ if (process.env.npm_execpath.indexOf("yarn") === -1) {
     "\x1b[0m",
     "\x1b[36m",
     "\n",
-    setup
+    setup,
   );
   process.exit(1);
 }

@@ -7,7 +7,7 @@ const {
   isFunction,
   isError,
   isArray,
-  isObject
+  isObject,
 } = require("./type-check-functions").defaults;
 
 const { createTypeCheckReducer } = require("./type-check-functions");
@@ -56,13 +56,10 @@ describe("isObject", () => {
 describe("custom type check reducer", () => {
   const expectedType = "non-empty array";
 
-  const check = input => {
-    return Array.isArray(input) && !!input.length;
-  };
+  const check = (input) => Array.isArray(input) && !!input.length;
 
-  const checkWithCustomMessage = input => {
-    return check(input) || "Hello the world is collapsing.";
-  };
+  const checkWithCustomMessage = (input) =>
+    check(input) || "Hello the world is collapsing.";
 
   it("should return the input when it's valid", () => {
     const reducer = createTypeCheckReducer(check, expectedType);

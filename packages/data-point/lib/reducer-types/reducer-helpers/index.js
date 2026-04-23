@@ -40,7 +40,7 @@ const reducers = {
   [reducerMap.type]: reducerMap,
   [reducerOmit.type]: reducerOmit,
   [reducerParallel.type]: reducerParallel,
-  [reducerPick.type]: reducerPick
+  [reducerPick.type]: reducerPick,
 };
 
 module.exports.reducers = reducers;
@@ -58,7 +58,7 @@ const stubFactories = {
   [reducerMap.name]: bindStubFunction(reducerMap.type),
   [reducerOmit.name]: bindStubFunction(reducerOmit.type),
   [reducerParallel.name]: bindStubFunction(reducerParallel.type),
-  [reducerPick.name]: bindStubFunction(reducerPick.type)
+  [reducerPick.name]: bindStubFunction(reducerPick.type),
 };
 
 module.exports.stubFactories = stubFactories;

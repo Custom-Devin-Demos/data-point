@@ -6,7 +6,7 @@ function dataPointEntityRoute(dataPoint, entityId, req, res) {
   const pathname = url.parse(req.url).pathname;
   const transformOptions = Middleware.buildTransformOptions(req, {
     routeRequestType: "api",
-    pathname
+    pathname,
   });
   Middleware.resolveReducer(dataPoint, entityId, transformOptions, res);
 }
@@ -19,5 +19,5 @@ function create(dataPoint, entityId) {
 
 module.exports = {
   dataPointEntityRoute,
-  create
+  create,
 };

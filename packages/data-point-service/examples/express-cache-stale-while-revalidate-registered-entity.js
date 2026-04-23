@@ -7,7 +7,7 @@ const Model = DataPoint.Model("HelloWorld", {
     const person = acc.locals.query.person;
     if (!person) {
       throw new Error(
-        'Url query parameter "person" is missing. Try appending ?person=Darek at the end of the URL'
+        'Url query parameter "person" is missing. Try appending ?person=Darek at the end of the URL',
       );
     }
     return `Hello ${person}!!`;
@@ -15,9 +15,9 @@ const Model = DataPoint.Model("HelloWorld", {
   params: {
     cache: {
       ttl: "30s",
-      staleWhileRevalidate: "3m"
-    }
-  }
+      staleWhileRevalidate: "3m",
+    },
+  },
 });
 
 function server(dataPoint) {
@@ -28,16 +28,16 @@ function server(dataPoint) {
       // exposing query to locals will make this object available to all
       // reducers
       locals: {
-        query: req.query
-      }
+        query: req.query,
+      },
     };
     dataPoint
       .resolve(Model, {}, options)
-      .then(value => {
+      .then((value) => {
         const responseText = `${value} (person = "${req.query.person}")`;
         res.send(responseText);
       })
-      .catch(error => {
+      .catch((error) => {
         res.status(500).send(error.toString());
       });
   });
@@ -50,10 +50,8 @@ function server(dataPoint) {
 
 function createService() {
   return DataPointService.create({
-    DataPoint
-  }).then(service => {
-    return service.dataPoint;
-  });
+    DataPoint,
+  }).then((service) => service.dataPoint);
 }
 
 createService().then(server);

@@ -8,7 +8,7 @@ const utils = require("../utils");
 function getOptions(spec) {
   return _.defaults({}, spec, {
     locals: {},
-    entityOverrides: {}
+    entityOverrides: {},
   });
 }
 
@@ -32,13 +32,13 @@ async function reducerResolve(manager, reducerSource, value, options) {
     locals: contextOptions.locals,
     entityOverrides: contextOptions.entityOverrides,
     trace: contextOptions.trace,
-    values: manager.values.getStore()
+    values: manager.values.getStore(),
   });
 
   const resolvedValue = await resolveFromAccumulator(
     manager,
     reducerSource,
-    context
+    context,
   );
 
   const resolvedContext = utils.set(context, "value", resolvedValue);

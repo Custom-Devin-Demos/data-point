@@ -2,14 +2,14 @@
 
 const {
   validateProperties,
-  validateModifiers
+  validateModifiers,
 } = require("./validate-modifiers");
 
 describe("validateProperties", () => {
   test("It should throw error if keys do not match", () => {
     expect(() => {
       const spec = {
-        foo: true
+        foo: true,
       };
       validateProperties("foo:test", spec, ["bar"]);
     }).toThrowErrorMatchingSnapshot();
@@ -17,7 +17,7 @@ describe("validateProperties", () => {
     expect(() => {
       const spec = {
         bar: true,
-        foo: true
+        foo: true,
       };
       validateProperties("foo:test", spec, ["bar"]);
     }).toThrowErrorMatchingSnapshot();
@@ -25,7 +25,7 @@ describe("validateProperties", () => {
 
   test("It should do nothing if using all valid keys", () => {
     let spec = {
-      bar: true
+      bar: true,
     };
     expect(validateProperties("foo:test", spec, ["bar"])).toBeTruthy();
 
@@ -44,7 +44,7 @@ describe("validateModifiers", () => {
         after: true,
         error: true,
         value: true,
-        foo: true
+        foo: true,
       };
       validateModifiers("foo:test", spec, ["bar"]);
     }).toThrowErrorMatchingSnapshot();

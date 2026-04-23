@@ -47,37 +47,37 @@ describe("utils#isFalsy", () => {
 describe("utils#reducerPredicateIsTruthy with ReducerList", () => {
   test("returns false when output is undefined", () => {
     expect(
-      utils.reducerPredicateIsTruthy({ type: "ReducerList" }, undefined)
+      utils.reducerPredicateIsTruthy({ type: "ReducerList" }, undefined),
     ).toBe(false);
   });
 
   test("returns false when output is false", () => {
     expect(utils.reducerPredicateIsTruthy({ type: "ReducerList" }, false)).toBe(
-      false
+      false,
     );
   });
 
   test("returns false when output is ''", () => {
     expect(utils.reducerPredicateIsTruthy({ type: "ReducerList" }, "")).toBe(
-      false
+      false,
     );
   });
 
   test("returns false when output is 0", () => {
     expect(utils.reducerPredicateIsTruthy({ type: "ReducerList" }, 0)).toBe(
-      false
+      false,
     );
   });
 
   test("returns true when output is true", () => {
     expect(utils.reducerPredicateIsTruthy({ type: "ReducerList" }, true)).toBe(
-      true
+      true,
     );
   });
 
   test("returns true when output is 'undefined'", () => {
     expect(
-      utils.reducerPredicateIsTruthy({ type: "ReducerList" }, "undefined")
+      utils.reducerPredicateIsTruthy({ type: "ReducerList" }, "undefined"),
     ).toBe(true);
   });
 });
@@ -85,7 +85,7 @@ describe("utils#reducerPredicateIsTruthy with ReducerList", () => {
 describe("utils#reducerPredicateIsTruthy with ReducerObject", () => {
   test("returns false when output is {}", () => {
     expect(utils.reducerPredicateIsTruthy({ type: "ReducerObject" }, {})).toBe(
-      false
+      false,
     );
   });
 
@@ -95,9 +95,9 @@ describe("utils#reducerPredicateIsTruthy with ReducerObject", () => {
         { type: "ReducerObject" },
         {
           a: true,
-          b: ""
-        }
-      )
+          b: "",
+        },
+      ),
     ).toBe(false);
   });
 
@@ -107,9 +107,9 @@ describe("utils#reducerPredicateIsTruthy with ReducerObject", () => {
         { type: "ReducerObject" },
         {
           a: true,
-          b: undefined
-        }
-      )
+          b: undefined,
+        },
+      ),
     ).toBe(false);
   });
 
@@ -119,9 +119,9 @@ describe("utils#reducerPredicateIsTruthy with ReducerObject", () => {
         { type: "ReducerObject" },
         {
           a: true,
-          b: true
-        }
-      )
+          b: true,
+        },
+      ),
     ).toBe(true);
   });
 
@@ -131,9 +131,9 @@ describe("utils#reducerPredicateIsTruthy with ReducerObject", () => {
         { type: "ReducerObject" },
         {
           a: false,
-          b: true
-        }
-      )
+          b: true,
+        },
+      ),
     ).toBe(true);
   });
 
@@ -142,12 +142,12 @@ describe("utils#reducerPredicateIsTruthy with ReducerObject", () => {
       type: "ReducerList",
       reducers: [
         {
-          type: "ReducerObject"
+          type: "ReducerObject",
         },
         {
-          type: "ReducerPath"
-        }
-      ]
+          type: "ReducerPath",
+        },
+      ],
     };
     expect(utils.reducerPredicateIsTruthy(reducer, {})).toBe(true);
   });
@@ -157,12 +157,12 @@ describe("utils#reducerPredicateIsTruthy with ReducerObject", () => {
       type: "ReducerList",
       reducers: [
         {
-          type: "ReducerPath"
+          type: "ReducerPath",
         },
         {
-          type: "ReducerObject"
-        }
-      ]
+          type: "ReducerObject",
+        },
+      ],
     };
     expect(utils.reducerPredicateIsTruthy(reducer, {})).toBe(false);
   });

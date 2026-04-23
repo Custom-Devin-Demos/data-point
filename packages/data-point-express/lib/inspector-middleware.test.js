@@ -15,15 +15,15 @@ describe("create - inspect middleware", () => {
     dataPoint = DataPoint.create({
       entities: {
         "reducer:test-params": (value, acc) => ({
-          message: `Hello ${acc.locals.params.name}`
+          message: `Hello ${acc.locals.params.name}`,
         }),
         "reducer:test-query": (value, acc) => ({
-          message: `Hello ${acc.locals.query.name}`
+          message: `Hello ${acc.locals.query.name}`,
         }),
-        "reducer:test-value": value => ({
-          message: `Hello ${value}`
-        })
-      }
+        "reducer:test-value": (value) => ({
+          message: `Hello ${value}`,
+        }),
+      },
     });
   });
 
@@ -31,25 +31,25 @@ describe("create - inspect middleware", () => {
     console.warn = consoleWarn;
   });
 
-  test("Create an inspect HTML route", done => {
+  test("Create an inspect HTML route", (done) => {
     const app = new Express();
     app.use("/inspect", InspectorMiddleware.create(dataPoint));
     request(app)
       .get("/inspect")
       .expect("Content-Type", /html/)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toContain("inspect");
       })
       .expect(200)
       .end(done);
   });
 
-  test("it should pass query value", done => {
+  test("it should pass query value", (done) => {
     const body = {
       entityId: "reducer:test-query",
       query: {
-        name: "Foo"
-      }
+        name: "Foo",
+      },
     };
     const app = new Express();
     app.use("/inspect", InspectorMiddleware.create(dataPoint));
@@ -57,21 +57,21 @@ describe("create - inspect middleware", () => {
       .post("/inspect")
       .send(body)
       .expect("Content-Type", /json/)
-      .expect(response => {
+      .expect((response) => {
         expect(response.body).toEqual({
-          message: "Hello Foo"
+          message: "Hello Foo",
         });
       })
       .expect(200)
       .end(done);
   });
 
-  test("it should pass params value", done => {
+  test("it should pass params value", (done) => {
     const body = {
       entityId: "reducer:test-params",
       params: {
-        name: "Foo"
-      }
+        name: "Foo",
+      },
     };
     const app = new Express();
     app.use("/inspect", InspectorMiddleware.create(dataPoint));
@@ -79,19 +79,19 @@ describe("create - inspect middleware", () => {
       .post("/inspect")
       .send(body)
       .expect("Content-Type", /json/)
-      .expect(response => {
+      .expect((response) => {
         expect(response.body).toEqual({
-          message: "Hello Foo"
+          message: "Hello Foo",
         });
       })
       .expect(200)
       .end(done);
   });
 
-  test("it should pass value to transform", done => {
+  test("it should pass value to transform", (done) => {
     const body = {
       entityId: "reducer:test-value",
-      value: "Foo"
+      value: "Foo",
     };
     const app = new Express();
     app.use("/inspect", InspectorMiddleware.create(dataPoint));
@@ -99,26 +99,26 @@ describe("create - inspect middleware", () => {
       .post("/inspect")
       .send(body)
       .expect("Content-Type", /json/)
-      .expect(response => {
+      .expect((response) => {
         expect(response.body).toEqual({
-          message: "Hello Foo"
+          message: "Hello Foo",
         });
       })
       .expect(200)
       .end(done);
   });
 
-  test("it should serve entities service", done => {
+  test("it should serve entities service", (done) => {
     const app = new Express();
     app.use("/inspect", InspectorMiddleware.create(dataPoint));
     request(app)
       .get("/inspect/entities")
       .expect("Content-Type", /json/)
-      .expect(response => {
+      .expect((response) => {
         expect(response.body).toEqual([
           "reducer:test-params",
           "reducer:test-query",
-          "reducer:test-value"
+          "reducer:test-value",
         ]);
       })
       .expect(200)

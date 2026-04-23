@@ -5,7 +5,7 @@ module.exports = () => {
   nock("https://swapi.co")
     .get("/api/people")
     .query({
-      search: "r2"
+      search: "r2",
     })
     .reply(200, {
       count: 1,
@@ -13,8 +13,8 @@ module.exports = () => {
       previous: null,
       results: [
         {
-          name: "R2-D2"
-        }
-      ]
+          name: "R2-D2",
+        },
+      ],
     });
 };

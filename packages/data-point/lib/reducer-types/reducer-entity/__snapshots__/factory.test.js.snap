@@ -8,7 +8,7 @@ ReducerEntity {
     "id": "reducer:foo",
     "isEntityInstance": true,
     "name": "foo",
-    "params": Object {},
+    "params": {},
     "resolve": [Function],
     "value": ReducerPath {
       "asCollection": false,
@@ -27,7 +27,7 @@ ReducerEntity {
     "id": "reducer:foo",
     "isEntityInstance": true,
     "name": "foo",
-    "params": Object {},
+    "params": {},
     "resolve": [Function],
     "value": ReducerPath {
       "asCollection": false,

@@ -12,55 +12,55 @@ beforeAll(() => {
       before: "$before",
       value: "$a",
       params: {
-        t: "base"
-      }
+        t: "base",
+      },
     },
     "hash:extendA -> hash:base": {
       params: {
-        t: "extendA"
-      }
+        t: "extendA",
+      },
     },
     "hash:extendB -> hash:base": {
       value: "$c",
-      after: "$a"
+      after: "$a",
     },
     "hash:extendC -> hash:extendB": {
       value: "$a",
       params: {
-        t: 1
-      }
+        t: 1,
+      },
     },
     "hash:extendD -> hash:extendX": {
       value: "$a",
       params: {
-        t: 1
-      }
+        t: 1,
+      },
     },
     "hash:extendE -> hash:extendE": {
       value: "$a",
       params: {
-        t: 1
-      }
+        t: 1,
+      },
     },
     "hash:extendF -> hash:extendF1": {
       value: "$a",
       params: {
-        t: 1
-      }
+        t: 1,
+      },
     },
     "hash:extendF1 -> hash:extendF": {
       value: "$a",
       params: {
-        t: 1
-      }
-    }
+        t: 1,
+      },
+    },
   };
 
   validEntities = _.omit(entities, [
     "hash:extendD -> hash:extendX",
     "hash:extendE -> hash:extendE",
     "hash:extendF -> hash:extendF1",
-    "hash:extendF1 -> hash:extendF"
+    "hash:extendF1 -> hash:extendF",
   ]);
 });
 
@@ -75,13 +75,13 @@ describe("normalizeSpec", () => {
   test("extracts spec that extends parent", () => {
     const result = normalizeEntities.normalizeSpec(
       "hash:extendA -> hash:base",
-      entities
+      entities,
     );
     expect(result).toHaveProperty("id", "hash:extendA");
     expect(result).toHaveProperty("parentId", "hash:base");
     expect(result).toHaveProperty(
       "spec",
-      entities["hash:extendA -> hash:base"]
+      entities["hash:extendA -> hash:base"],
     );
     expect(result).toHaveProperty("ancestors", []);
   });
@@ -115,7 +115,7 @@ describe("getParentSpec", () => {
   test("parent if found", () => {
     const result = normalizeEntities.getParentSpec(
       specs["hash:extendA"],
-      specs
+      specs,
     );
     expect(result).toHaveProperty("id", "hash:base");
   });
@@ -156,15 +156,15 @@ describe("extendSpec", () => {
     const result = normalizeEntities.extendSpec(
       specs["hash:extendC"].spec,
       ancestors,
-      specs
+      specs,
     );
     expect(result).toEqual({
       before: "$before",
       after: "$a",
       value: "$a",
       params: {
-        t: 1
-      }
+        t: 1,
+      },
     });
   });
 });
@@ -174,15 +174,15 @@ describe("extendSpecItem", () => {
     const specs = normalizeEntities.normalizeEntitySpecs(validEntities);
     const result = normalizeEntities.extendSpecItem(
       specs["hash:extendC"],
-      specs
+      specs,
     );
     expect(result.spec).toEqual({
       before: "$before",
       after: "$a",
       value: "$a",
       params: {
-        t: 1
-      }
+        t: 1,
+      },
     });
   });
 });
@@ -196,8 +196,8 @@ describe("extendSpecs", () => {
       after: "$a",
       value: "$a",
       params: {
-        t: 1
-      }
+        t: 1,
+      },
     });
   });
 });
@@ -210,8 +210,8 @@ describe("normalize", () => {
       after: "$a",
       value: "$a",
       params: {
-        t: 1
-      }
+        t: 1,
+      },
     });
   });
 });

@@ -33,7 +33,7 @@ async function resolve(acc, resolveReducer) {
   const caseStatement = await getMatchingCaseStatement(
     caseStatements,
     acc,
-    resolveReducer
+    resolveReducer,
   );
 
   if (caseStatement) {

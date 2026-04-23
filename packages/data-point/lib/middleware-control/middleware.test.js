@@ -6,7 +6,7 @@ test("middleware#run - with no middleware", async () => {
   const stack = [];
 
   const expected = {
-    foo: "foo"
+    foo: "foo",
   };
 
   const context = await middleware.execute(expected, stack);
@@ -18,12 +18,12 @@ test("middleware#run - execute 1 middleware", async () => {
     (acc, next) => {
       acc.bar = "bar";
       next(null);
-    }
+    },
   ];
 
   const expected = {
     foo: "foo",
-    bar: "bar"
+    bar: "bar",
   };
 
   const context = await middleware.execute(expected, stack);
@@ -34,34 +34,34 @@ test("middleware#run - catch unhandled error", async () => {
   const stack = [
     () => {
       throw new Error("unhandled");
-    }
+    },
   ];
 
   const expected = {
     foo: "foo",
-    bar: "bar"
+    bar: "bar",
   };
 
   await expect(
-    middleware.execute(expected, stack)
-  ).toThrowErrorMatchingInlineSnapshot(`"received is not a function"`);
+    middleware.execute(expected, stack),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(`"unhandled"`);
 });
 
 test("middleware#run - pass programmed middleware error", async () => {
   const stack = [
     (acc, next) => {
       next(new Error("planned"));
-    }
+    },
   ];
 
   const expected = {
     foo: "foo",
-    bar: "bar"
+    bar: "bar",
   };
 
   await expect(
-    middleware.execute(expected, stack)
-  ).toThrowErrorMatchingInlineSnapshot(`"received is not a function"`);
+    middleware.execute(expected, stack),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(`"planned"`);
 });
 
 test("middleware#run - with multiple middleware methods", async () => {
@@ -77,13 +77,13 @@ test("middleware#run - with multiple middleware methods", async () => {
     (acc, next) => {
       acc.c = "c";
       next(null);
-    }
+    },
   ];
 
   const expected = {
     a: "a",
     b: "b",
-    c: "c"
+    c: "c",
   };
 
   const context = await middleware.execute(expected, stack);
@@ -107,12 +107,12 @@ test("middleware#run - exit chain when ___done set to true", async () => {
       acc.c = "c";
       /* istanbul ignore next */
       next(null);
-    }
+    },
   ];
 
   const expected = {
     a: "a",
-    b: "b"
+    b: "b",
   };
 
   const context = await middleware.execute(expected, stack);
@@ -130,7 +130,7 @@ test("middleware#run - exit when next is called with two parameters, value shoul
     (acc, next) => {
       /* istanbul ignore next */
       next(null, "c");
-    }
+    },
   ];
 
   const acc = {};
@@ -147,13 +147,13 @@ test("middleware#run - only one call to next with resolved value should be used"
     (acc, next) => {
       next(null, "a");
       setInterval(next, null, "b");
-    }
+    },
   ];
 
   const acc = {};
   await expect(middleware.execute(acc, stack)).resolves.toHaveProperty(
     "value",
-    "a"
+    "a",
   );
 });
 
@@ -172,15 +172,15 @@ test("middleware#run - exit chain on error", async () => {
       acc.c = "c";
       /* istanbul ignore next */
       next(null);
-    }
+    },
   ];
 
   const expected = {
     a: "a",
-    b: "b"
+    b: "b",
   };
 
   await expect(
-    middleware.execute(expected, stack)
+    middleware.execute(expected, stack),
   ).rejects.toThrowErrorMatchingInlineSnapshot(`"planned"`);
 });

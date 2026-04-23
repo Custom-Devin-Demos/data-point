@@ -11,14 +11,14 @@ const definitions = {
   Hash: require("./entity-hash"),
   Request: require("./entity-request"),
   Control: require("./entity-control"),
-  Schema: require("./entity-schema")
+  Schema: require("./entity-schema"),
 };
 
 module.exports = {
   definitions,
   // this creates a factory for each entity type, which
   // will be exposed through DataPoint.entityHelpers
-  factories: mapValues(definitions, (value, key) => {
-    return createEntityFactory(key.toLowerCase());
-  })
+  factories: mapValues(definitions, (value, key) =>
+    createEntityFactory(key.toLowerCase()),
+  ),
 };

@@ -24,7 +24,7 @@ const debugEntity = memoize(createDebugEntity);
 function getCurrentReducer(reducer, entity) {
   if (!reducer.spec) {
     return utils.assign(reducer, {
-      spec: entity
+      spec: entity,
     });
   }
 
@@ -43,7 +43,7 @@ function assignParamsHelper(accumulator, entity) {
     return merge(
       {},
       entity.params,
-      accumulator.entityOverrides[entity.entityType].params
+      accumulator.entityOverrides[entity.entityType].params,
     );
   }
   return entity.params;
@@ -69,7 +69,7 @@ function createCurrentAccumulator(accumulator, reducer, entity) {
     reducer: currentReducer,
     initialValue: accumulator.value,
     params: assignParamsHelper(accumulator, entity),
-    debug: debugEntity(reducer.entityType)
+    debug: debugEntity(reducer.entityType),
   });
 
   return currentAccumulator;
@@ -81,7 +81,7 @@ function resolveMiddleware(manager, middlewareName, accumulator, value) {
   return middleware.resolve(
     manager,
     middlewareName,
-    utils.set(accumulator, "value", value)
+    utils.set(accumulator, "value", value),
   );
 }
 
@@ -98,12 +98,12 @@ async function resolveEntity(
   resolveReducer,
   accumulator,
   reducer,
-  entity
+  entity,
 ) {
   const currentAccumulator = createCurrentAccumulator(
     accumulator,
     reducer,
-    entity
+    entity,
   );
 
   const spec = currentAccumulator.reducer.spec;
@@ -133,7 +133,7 @@ async function resolveEntity(
         manager,
         "before",
         currentAccumulator,
-        value
+        value,
       );
 
       // eslint-disable-next-line no-underscore-dangle
@@ -149,7 +149,7 @@ async function resolveEntity(
         manager,
         middlewareEntityBefore,
         currentAccumulator,
-        value
+        value,
       );
 
       // eslint-disable-next-line no-underscore-dangle
@@ -164,7 +164,7 @@ async function resolveEntity(
         value = await resolveReducer(
           manager,
           utils.set(currentAccumulator, "value", value),
-          spec.before
+          spec.before,
         );
       }
 
@@ -172,21 +172,21 @@ async function resolveEntity(
         value = await resolveReducer(
           manager,
           utils.set(currentAccumulator, "value", value),
-          spec.value
+          spec.value,
         );
       }
 
       currentAccumulator.debug(currentAccumulator.uid, "- resolve");
       value = await entity.resolve(
         utils.set(currentAccumulator, "value", value),
-        resolveReducer.bind(null, manager)
+        resolveReducer.bind(null, manager),
       );
 
       if (spec.after) {
         value = await resolveReducer(
           manager,
           utils.set(currentAccumulator, "value", value),
-          spec.after
+          spec.after,
         );
       }
     }
@@ -197,7 +197,7 @@ async function resolveEntity(
         manager,
         middlewareEntityAfter,
         currentAccumulator,
-        value
+        value,
       );
 
       // eslint-disable-next-line no-underscore-dangle
@@ -212,7 +212,7 @@ async function resolveEntity(
         manager,
         "after",
         currentAccumulator,
-        value
+        value,
       );
 
       // eslint-disable-next-line no-underscore-dangle
@@ -226,7 +226,7 @@ async function resolveEntity(
       await resolveReducer(
         manager,
         utils.set(currentAccumulator, "value", value),
-        spec.outputType
+        spec.outputType,
       );
     }
   } catch (error) {
@@ -241,14 +241,14 @@ async function resolveEntity(
     value = await resolveReducer(
       manager,
       utils.set(currentAccumulator, "value", error),
-      spec.error
+      spec.error,
     );
 
     if (spec.outputType) {
       await resolveReducer(
         manager,
         utils.set(currentAccumulator, "value", value),
-        spec.outputType
+        spec.outputType,
       );
     }
   } finally {
@@ -287,7 +287,7 @@ async function resolve(manager, resolveReducer, accumulator, reducer, entity) {
     return undefined;
   }
 
-  const promises = accumulator.value.map(itemValue => {
+  const promises = accumulator.value.map((itemValue) => {
     if (hasEmptyConditional && utils.isFalsy(itemValue)) {
       return itemValue;
     }

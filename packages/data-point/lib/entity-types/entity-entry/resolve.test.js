@@ -16,10 +16,10 @@ async function transform(entityId, value, options) {
     value,
     Object.assign(
       {
-        context: reducer
+        context: reducer,
       },
-      options
-    )
+      options,
+    ),
   );
 
   return resolveEntryEntity(accumulator, resolveReducerBound);

@@ -20,7 +20,7 @@ beforeAll(() => {
 describe("resolve#reducer.resolve - with valid reducers", () => {
   test("empty reducer list should return undefined", async () => {
     const accumulator = AccumulatorFactory.create({
-      value: true
+      value: true,
     });
 
     const reducerList = createReducerList(createReducer, []);
@@ -29,14 +29,14 @@ describe("resolve#reducer.resolve - with valid reducers", () => {
       manager,
       resolveReducer,
       accumulator,
-      reducerList
+      reducerList,
     );
     expect(result).toBeUndefined();
   });
 
   test("one reducer", async () => {
     const accumulator = AccumulatorFactory.create({
-      value: testData
+      value: testData,
     });
 
     const reducerList = createReducerList(createReducer, "$a.g");
@@ -45,14 +45,14 @@ describe("resolve#reducer.resolve - with valid reducers", () => {
       manager,
       resolveReducer,
       accumulator,
-      reducerList
+      reducerList,
     );
     expect(result).toEqual(testData.a.g);
   });
 
   test("multiple reducers", async () => {
     const accumulator = AccumulatorFactory.create({
-      value: testData
+      value: testData,
     });
 
     const reducerList = createReducerList(createReducer, "$a.g | $g1");
@@ -61,7 +61,7 @@ describe("resolve#reducer.resolve - with valid reducers", () => {
       manager,
       resolveReducer,
       accumulator,
-      reducerList
+      reducerList,
     );
     expect(result).toBe(1);
   });
@@ -70,7 +70,7 @@ describe("resolve#reducer.resolve - with valid reducers", () => {
 describe("resolve#reducer.resolve - reducer model", () => {
   test("simplest model", async () => {
     const accumulator = AccumulatorFactory.create({
-      value: testData
+      value: testData,
     });
 
     const reducerList = createReducerList(createReducer, "hash:asIs");
@@ -79,26 +79,26 @@ describe("resolve#reducer.resolve - reducer model", () => {
       manager,
       resolveReducer,
       accumulator,
-      reducerList
+      reducerList,
     );
     expect(result).toEqual(testData);
   });
 
   test("it returns original input after piping through hash:asIs", async () => {
     const accumulator = AccumulatorFactory.create({
-      value: testData
+      value: testData,
     });
 
     const reducerList = createReducerList(
       createReducer,
-      "hash:asIs | hash:a.1"
+      "hash:asIs | hash:a.1",
     );
 
     const result = await resolveReducerList(
       manager,
       resolveReducer,
       accumulator,
-      reducerList
+      reducerList,
     );
     expect(result).toEqual(testData.a.h);
   });
@@ -106,14 +106,12 @@ describe("resolve#reducer.resolve - reducer model", () => {
 
 describe("resolve#reducer.resolve - reducer request", () => {
   test("simplest request", async () => {
-    nock("http://remote.test")
-      .get("/source1")
-      .reply(200, {
-        ok: true
-      });
+    nock("http://remote.test").get("/source1").reply(200, {
+      ok: true,
+    });
 
     const accumulator = AccumulatorFactory.create({
-      value: testData.foo
+      value: testData.foo,
     });
 
     const reducerList = createReducerList(createReducer, "request:a1");
@@ -122,10 +120,10 @@ describe("resolve#reducer.resolve - reducer request", () => {
       manager,
       resolveReducer,
       accumulator,
-      reducerList
+      reducerList,
     );
     expect(result).toEqual({
-      ok: true
+      ok: true,
     });
   });
 
@@ -134,14 +132,12 @@ describe("resolve#reducer.resolve - reducer request", () => {
       .get("/source1")
       .reply(200, "http://remote.test/source2");
 
-    nock("http://remote.test")
-      .get("/source2")
-      .reply(200, {
-        ok: true
-      });
+    nock("http://remote.test").get("/source2").reply(200, {
+      ok: true,
+    });
 
     const accumulator = AccumulatorFactory.create({
-      value: testData
+      value: testData,
     });
 
     const reducer = createReducerList(createReducer, "request:a1 | request:a3");
@@ -150,10 +146,10 @@ describe("resolve#reducer.resolve - reducer request", () => {
       manager,
       resolveReducer,
       accumulator,
-      reducer
+      reducer,
     );
     expect(result).toEqual({
-      ok: true
+      ok: true,
     });
   });
 });
@@ -161,41 +157,33 @@ describe("resolve#reducer.resolve - reducer request", () => {
 describe("resolve#reducer.resolve - with falsy input", () => {
   const testFalsyInput = async (inputValue, expectedValue) => {
     const accumulator = AccumulatorFactory.create({
-      value: inputValue
+      value: inputValue,
     });
 
-    const functionA = jest.fn(input => `${input}1`);
-    const functionB = jest.fn(input => `${input}2`);
+    const functionA = jest.fn((input) => `${input}1`);
+    const functionB = jest.fn((input) => `${input}2`);
 
     const reducerList = createReducerList(createReducer, [
       functionA,
-      functionB
+      functionB,
     ]);
 
     const result = await resolveReducerList(
       manager,
       resolveReducer,
       accumulator,
-      reducerList
+      reducerList,
     );
     expect(result).toBe(expectedValue);
     expect(functionA).toHaveBeenCalledTimes(1);
     expect(functionB).toHaveBeenCalledTimes(1);
   };
 
-  test("with undefined as input", () => {
-    return testFalsyInput(undefined, "null12");
-  });
+  test("with undefined as input", () => testFalsyInput(undefined, "null12"));
 
-  test("with null as input", () => {
-    return testFalsyInput(null, "null12");
-  });
+  test("with null as input", () => testFalsyInput(null, "null12"));
 
-  test("with zero as input", () => {
-    return testFalsyInput(0, "012");
-  });
+  test("with zero as input", () => testFalsyInput(0, "012"));
 
-  test("with an empty string as input", () => {
-    return testFalsyInput("", "12");
-  });
+  test("with an empty string as input", () => testFalsyInput("", "12"));
 });

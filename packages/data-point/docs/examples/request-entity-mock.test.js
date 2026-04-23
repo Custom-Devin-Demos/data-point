@@ -5,7 +5,7 @@ const DataPoint = require("data-point");
 const nock = require("nock");
 
 const PersonByIdRequest = DataPoint.Request("PersonByIdRequest", {
-  url: "https://swapi.co/api/people/{value}/"
+  url: "https://swapi.co/api/people/{value}/",
 });
 
 describe("PersonByIdRequest", () => {
@@ -13,12 +13,10 @@ describe("PersonByIdRequest", () => {
     const dataPoint = DataPoint.create();
 
     const response = {
-      name: "Obi-Wan Kenobi"
+      name: "Obi-Wan Kenobi",
     };
 
-    nock("https://swapi.co")
-      .get("/api/people/10/")
-      .reply(200, response);
+    nock("https://swapi.co").get("/api/people/10/").reply(200, response);
 
     const result = await dataPoint.resolve(PersonByIdRequest, 10);
 

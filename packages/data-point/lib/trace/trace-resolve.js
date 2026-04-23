@@ -9,7 +9,7 @@ module.exports.getDurationNs = getDurationNs;
  * @returns {Function} returns (acc):acc
  */
 function augmentTraceNodeDuration(traceNode) {
-  return acc => {
+  return (acc) => {
     // eslint-disable-next-line no-param-reassign
     traceNode.durationNs = module.exports.getDurationNs(traceNode.hrtime);
     return acc;
@@ -31,7 +31,7 @@ function createTracedAccumulator(accumulator, reducer) {
     reducer,
     hrtime,
     timeStartNs: hrtimeTotNanosec(hrtime),
-    parent: accumulator.traceNode
+    parent: accumulator.traceNode,
   };
   return Object.assign({}, accumulator, { traceNode });
 }

@@ -7,9 +7,9 @@ const app = new Express();
 Service.create({
   // add entries using
   // Shorthand property names (ES2015)
-  entities
+  entities,
 })
-  .then(service => {
+  .then((service) => {
     // create Express routes
 
     // creates an inspect route
@@ -21,18 +21,18 @@ Service.create({
     app.get("/api/hello-world", service.mapTo("reducer:HelloWorld"));
     app.get("/api/person/:personId", service.mapTo("entry:getPerson"));
 
-    app.listen(3000, err => {
+    app.listen(3000, (err) => {
       if (err) {
         throw err;
       }
       // eslint-disable-next-line no-console
       console.info(
         "Inspector available at",
-        "http://localhost:3000/api/inspect"
+        "http://localhost:3000/api/inspect",
       );
     });
   })
-  .catch(error => {
+  .catch((error) => {
     // eslint-disable-next-line no-console
     console.info("Failed to Create Service");
     // eslint-disable-next-line no-console

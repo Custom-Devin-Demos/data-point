@@ -10,52 +10,52 @@ const routes = {
     path: "/a/:b",
     middleware: (route, next) => {
       next(null, "a");
-    }
+    },
   },
   b: {
     priority: 100,
     path: "/",
     middleware: (route, next) => {
       next(null, "b");
-    }
+    },
   },
   c: {
     priority: 300,
     path: "/a/:b/:c",
-    middleware: "c"
+    middleware: "c",
   },
   d: {
     priority: 150,
     path: "/a",
     middleware: (route, next) => {
       next(null, false);
-    }
+    },
   },
   e: {
     priority: 180,
     path: "/a",
     middleware: (route, next) => {
       next(null, "e");
-    }
+    },
   },
   f: {
     priority: 400,
     path: "/error",
     middleware: (route, next) => {
       next(new Error("bad"));
-    }
+    },
   },
   g: {
     priority: 250,
     path: "/throw",
     middleware: () => {
       throw new Error("error");
-    }
+    },
   },
   j: {
     priority: 250,
-    enabled: false
-  }
+    enabled: false,
+  },
 };
 
 describe("toCollection", () => {
@@ -63,7 +63,7 @@ describe("toCollection", () => {
     const result = RouteMap.toCollection({
       a: {},
       b: {},
-      c: {}
+      c: {},
     });
     expect(_.map(result, "id")).toEqual(["a", "b", "c"]);
   });
@@ -74,16 +74,16 @@ describe("sortByPriority", () => {
     const result = RouteMap.sortByPriority([
       {
         id: "a",
-        priority: 200
+        priority: 200,
       },
       {
         id: "b",
-        priority: 100
+        priority: 100,
       },
       {
         id: "c",
-        priority: 300
-      }
+        priority: 300,
+      },
     ]);
     expect(_.map(result, "id")).toEqual(["b", "a", "c"]);
   });
@@ -94,15 +94,15 @@ describe("filterEnabled", () => {
     const result = RouteMap.filterEnabled([
       {
         id: "a",
-        enabled: false
+        enabled: false,
       },
       {
         id: "b",
-        enabled: true
+        enabled: true,
       },
       {
-        id: "c"
-      }
+        id: "c",
+      },
     ]);
     expect(_.map(result, "id")).toEqual(["b", "c"]);
   });
@@ -112,7 +112,7 @@ describe("normalizeRoutesMiddleware", () => {
   test("it will create an array of normalized routes", () => {
     const result = RouteMap.normalizeRoutesMiddleware([
       { middleware: "a" },
-      { middleware: ["a"] }
+      { middleware: ["a"] },
     ]);
     expect(_.map(result, "middleware")).toEqual([["a"], ["a"]]);
   });
@@ -122,12 +122,12 @@ describe("verifyMiddlewareFormat", () => {
   function createRoute(id, middleware) {
     return {
       id,
-      middleware
+      middleware,
     };
   }
   test("accepts non string middleware", () => {
     expect(
-      RouteMap.verifyMiddlewareFormat(createRoute("Foo", [() => {}]))
+      RouteMap.verifyMiddlewareFormat(createRoute("Foo", [() => {}])),
     ).toEqual(true);
   });
   test("should not be empty", () => {
@@ -137,13 +137,13 @@ describe("verifyMiddlewareFormat", () => {
   });
   test("accepts string entityId", () => {
     expect(
-      RouteMap.verifyMiddlewareFormat(createRoute("Foo", ["entityId"]))
+      RouteMap.verifyMiddlewareFormat(createRoute("Foo", ["entityId"])),
     ).toEqual(true);
   });
   test("throw error if more than one entityId", () => {
     expect(() => {
       RouteMap.verifyMiddlewareFormat(
-        createRoute("Foo", ["entityId1", "entityId2"])
+        createRoute("Foo", ["entityId1", "entityId2"]),
       );
     }).toThrowErrorMatchingSnapshot();
   });
@@ -154,7 +154,7 @@ describe("verifyMiddlewareFormat", () => {
   });
   test("allow entityId to be the last middleware", () => {
     expect(
-      RouteMap.verifyMiddlewareFormat(createRoute("Foo", [1, 2, "entityId1"]))
+      RouteMap.verifyMiddlewareFormat(createRoute("Foo", [1, 2, "entityId1"])),
     ).toEqual(true);
   });
 });
@@ -189,11 +189,11 @@ describe("sendResponseFromValue", () => {
     const value = "value";
     const send = jest.fn();
     const req = {
-      value
+      value,
     };
 
     const res = {
-      send
+      send,
     };
 
     RouteMap.sendResponseFromValue(req, res);
@@ -202,15 +202,15 @@ describe("sendResponseFromValue", () => {
 
   test('It should use "req.json" if value is string', () => {
     const value = {
-      value: "value"
+      value: "value",
     };
     const json = jest.fn();
     const req = {
-      value
+      value,
     };
 
     const res = {
-      json
+      json,
     };
 
     RouteMap.sendResponseFromValue(req, res);
@@ -238,15 +238,15 @@ describe("getRouteMethod", () => {
 
 const createApp = () => ({
   locals: {
-    dataPoint: {}
-  }
+    dataPoint: {},
+  },
 });
 
 describe("addRoute", () => {
   test("It should throw error if invalid method", () => {
     expect(() => {
       const route = {
-        method: "foo"
+        method: "foo",
       };
       RouteMap.addRoute(createApp(), "/api", route, () => {});
     }).toThrowErrorMatchingSnapshot();
@@ -257,7 +257,7 @@ describe("addRoute", () => {
     const route = {
       path: "/test",
       method: "get",
-      middleware: [mid, "dp"]
+      middleware: [mid, "dp"],
     };
     const app = createApp();
     app.get = jest.fn();
@@ -275,13 +275,13 @@ describe("createRoutes", () => {
       a: {
         path: "/a",
         method: "get",
-        middleware: [mid, "dp"]
+        middleware: [mid, "dp"],
       },
       b: {
         path: "/b",
         method: "put",
-        middleware: [mid]
-      }
+        middleware: [mid],
+      },
     };
     const app = createApp();
     app.get = jest.fn();

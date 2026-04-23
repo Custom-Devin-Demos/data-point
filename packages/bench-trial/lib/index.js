@@ -5,8 +5,8 @@ function testSync(method, expected) {
 }
 
 function testAsync(method, expected) {
-  return done => {
-    return method((err, value) => {
+  return (done) =>
+    method((err, value) => {
       if (err) {
         done(err);
         return;
@@ -18,13 +18,12 @@ function testAsync(method, expected) {
         done(e);
       }
     });
-  };
 }
 
 function test(method, expected) {
   return {
     test: method,
-    expected
+    expected,
   };
 }
 
@@ -36,20 +35,19 @@ function benchmarkSync(method) {
 }
 
 function benchmarkAsync(method) {
-  return deferred => {
-    return method(err => {
+  return (deferred) =>
+    method((err) => {
       if (err) {
         throw err;
       }
       deferred.resolve();
     });
-  };
 }
 
 module.exports = {
   test,
   benchmark: {
     sync: benchmarkSync,
-    async: benchmarkAsync
-  }
+    async: benchmarkAsync,
+  },
 };
